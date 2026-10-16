@@ -1,4 +1,4 @@
-import { ActiveModuleId, StepFrame } from '../types/engine';
+import { ActiveModuleId, AlgorithmId, StepFrame } from '../types/engine';
 import { parseIntegerList } from '../utils/inputValidator';
 import { generateQuickSortFrames } from './sorting/quickSort';
 import { generateMergeSortFrames } from './sorting/mergeSort';
@@ -41,7 +41,7 @@ export function getDefaultInputForModule(module: ActiveModuleId): string {
 
 export function compileEngineFrames(
   module: ActiveModuleId,
-  algo: string,
+  algo: AlgorithmId | string,
   rawInput: string,
   targetValue: number = 42,
   operation?: any
@@ -58,6 +58,27 @@ export function compileEngineFrames(
     const grid = createInitialGrid();
     const start = { row: 7, col: 5 };
     const target = { row: 7, col: 30 };
+
+    if (rawInput === 'labyrinth') {
+      for (let r = 2; r <= 13; r++) {
+        if (r !== 7 && r !== 8) grid[r][15].type = 'wall';
+      }
+      for (let r = 2; r <= 13; r++) {
+        if (r !== 4 && r !== 11) grid[r][22].type = 'wall';
+      }
+      const weightCoords = [
+        [7, 10], [7, 11], [7, 12], [6, 11], [8, 11],
+        [7, 18], [7, 19], [8, 18], [8, 19],
+        [4, 25], [5, 25], [6, 25], [7, 25],
+      ];
+      for (const [r, c] of weightCoords) {
+        if (grid[r] && grid[r][c] && grid[r][c].type === 'empty') {
+          grid[r][c].type = 'weight';
+          grid[r][c].weight = 5;
+        }
+      }
+    }
+
     const algoType =
       algo === 'aStarGrid'
         ? 'aStar'
@@ -69,12 +90,16 @@ export function compileEngineFrames(
     return generatePathfindingFrames(grid, algoType, start, target);
   }
 
-  // Parse integer input with fallback
-  let valResult = parseIntegerList(rawInput);
+  // Parse integer input with fallback: allow 0 elements for flexible structures (stack/queue, linked list, tree)
+  const isFlexible = module === 'stacksQueues' || module === 'linkedList' || module === 'trees';
+  const minLength = isFlexible ? 0 : 1;
+  const allowEmpty = isFlexible;
+
+  let valResult = parseIntegerList(rawInput, { allowEmpty, minLength, maxLength: 32, minVal: 1, maxVal: 999 });
   if (!valResult.isValid) {
-    valResult = parseIntegerList(getDefaultInputForModule(module));
+    valResult = parseIntegerList(getDefaultInputForModule(module), { allowEmpty, minLength });
   }
-  const nums = valResult.isValid ? valResult.values : [64, 34, 25, 12, 22, 11, 90];
+  const nums = valResult.isValid ? valResult.values : (isFlexible ? [] : [64, 34, 25, 12, 22, 11, 90]);
 
   // 1. Sorting & Search
   if (module === 'sorting') {
@@ -132,10 +157,13 @@ export function compileEngineFrames(
       case 'singlyLinkedList':
         return generateLinkedListFrames('singly', nums, operation);
       case 'doubly':
+      case 'doublyLinkedList':
         return generateLinkedListFrames('doubly', nums, operation);
       case 'circularSingly':
+      case 'circularSinglyLinkedList':
         return generateLinkedListFrames('circularSingly', nums, operation);
       case 'circularDoubly':
+      case 'circularDoublyLinkedList':
         return generateLinkedListFrames('circularDoubly', nums, operation);
       default:
         return generateLinkedListFrames('singly', nums, operation);

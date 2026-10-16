@@ -24,6 +24,8 @@ import { createInitialGrid, generatePathfindingFrames } from '../src/engines/gra
 import { generateNetworkGraphFrames, generatePrimMSTFrames } from '../src/engines/graphs/networkGraph';
 import { compileEngineFrames, getDefaultInputForModule } from '../src/engines/compileEngine';
 import { CODE_SNIPPETS } from '../src/data/codeSnippets';
+import { ALGORITHM_CATALOG } from '../src/data/algorithmCatalog';
+import { usePlaygroundStore } from '../src/store/usePlaygroundStore';
 
 describe('Algorithm Generator Engine Suite', () => {
   const sampleData = [64, 34, 25, 12, 22, 11, 90];
@@ -480,5 +482,216 @@ describe('Algorithm Generator Engine Suite', () => {
     expect(faviconContent).toContain('cx="14"');
     expect(faviconContent).toContain('cx="8"');
     expect(faviconContent).toContain('cx="20"');
+  });
+
+  // ---------------- MODULE AUDIT REGRESSION TESTS (REQ-13) ----------------
+  describe('Audit Regression & Pointer Invariant Verifications (REQ-13)', () => {
+    it('1. Exhaustive Catalog-to-Engine Routing: Every algorithm in ALGORITHM_CATALOG compiles without fallthrough', () => {
+      for (const [, meta] of Object.entries(ALGORITHM_CATALOG)) {
+        const frames = compileEngineFrames(meta.module, meta.id, meta.defaultInput);
+        expect(frames.length, `Algorithm ${meta.id} in module ${meta.module} must produce >= 1 frame`).toBeGreaterThan(0);
+        expect(frames[0].snapshot, `Algorithm ${meta.id} frame 0 must have valid snapshot`).toBeDefined();
+
+        // Specific routing verification for Linked List variants
+        if (meta.id === 'doublyLinkedList') {
+          expect((frames[0].snapshot as any).listType).toBe('doubly');
+        } else if (meta.id === 'circularSinglyLinkedList') {
+          expect((frames[0].snapshot as any).listType).toBe('circularSingly');
+        } else if (meta.id === 'circularDoublyLinkedList') {
+          expect((frames[0].snapshot as any).listType).toBe('circularDoubly');
+        } else if (meta.id === 'singlyLinkedList') {
+          expect((frames[0].snapshot as any).listType).toBe('singly');
+        }
+      }
+    });
+
+    it('2. Preset Integrity: Empty Stack, zero-element datasets and all presets compile properly', () => {
+      // 2.1 Verify empty stack preset renders 0 elements
+      const emptyStackFrames = compileEngineFrames('stacksQueues', 'stack', '');
+      expect(emptyStackFrames.length).toBeGreaterThan(0);
+      expect((emptyStackFrames[0].snapshot as any).items.length).toBe(0);
+      expect(emptyStackFrames[0].pointers.SP).toBe('NULL');
+
+      // 2.2 Verify empty linked list renders 0 nodes
+      const emptyListFrames = compileEngineFrames('linkedList', 'singlyLinkedList', '');
+      expect(emptyListFrames.length).toBeGreaterThan(0);
+      expect((emptyListFrames[0].snapshot as any).nodes.length).toBe(0);
+
+      // 2.3 Verify empty tree renders rootId = null
+      const emptyTreeFrames = compileEngineFrames('trees', 'bst', '');
+      expect(emptyTreeFrames.length).toBeGreaterThan(0);
+      expect((emptyTreeFrames[0].snapshot as any).rootId).toBeNull();
+
+      // 2.4 Verify all presets in ALGORITHM_CATALOG compile successfully
+      for (const meta of Object.values(ALGORITHM_CATALOG)) {
+        for (const preset of meta.presets) {
+          const frames = compileEngineFrames(meta.module, meta.id, preset.values);
+          expect(frames.length, `Preset "${preset.label}" for ${meta.id} must compile`).toBeGreaterThan(0);
+        }
+      }
+    });
+
+    it('3. Edge-Case Input Sizes: Single-element [42] sorting/searching and empty deletions', () => {
+      const single = [42];
+
+      // Sorting & Searching algorithms with single-element input
+      const qsFrames = generateQuickSortFrames(single);
+      expect(qsFrames[qsFrames.length - 1].snapshot.bars[0].value).toBe(42);
+      expect(qsFrames[qsFrames.length - 1].snapshot.bars[0].state).toBe('sorted');
+
+      const msFrames = generateMergeSortFrames(single);
+      expect(msFrames[msFrames.length - 1].snapshot.bars[0].value).toBe(42);
+      expect(msFrames[msFrames.length - 1].snapshot.bars[0].state).toBe('sorted');
+
+      const hsFrames = generateHeapSortFrames(single);
+      expect(hsFrames[hsFrames.length - 1].snapshot.bars[0].value).toBe(42);
+      expect(hsFrames[hsFrames.length - 1].snapshot.bars[0].state).toBe('sorted');
+
+      const bsFrames = generateBubbleSortFrames(single);
+      expect(bsFrames[bsFrames.length - 1].snapshot.bars[0].value).toBe(42);
+      expect(bsFrames[bsFrames.length - 1].snapshot.bars[0].state).toBe('sorted');
+
+      const isFrames = generateInsertionSortFrames(single);
+      expect(isFrames[isFrames.length - 1].snapshot.bars[0].value).toBe(42);
+      expect(isFrames[isFrames.length - 1].snapshot.bars[0].state).toBe('sorted');
+
+      const ssFrames = generateSelectionSortFrames(single);
+      expect(ssFrames[ssFrames.length - 1].snapshot.bars[0].value).toBe(42);
+      expect(ssFrames[ssFrames.length - 1].snapshot.bars[0].state).toBe('sorted');
+
+      const linSearchFrames = generateLinearSearchFrames(single, 42);
+      expect(linSearchFrames.some((f) => f.snapshot.foundIndex === 0)).toBe(true);
+
+      const binSearchFrames = generateBinarySearchFrames(single, 42);
+      expect(binSearchFrames.some((f) => f.snapshot.foundIndex === 0)).toBe(true);
+
+      // Empty mutation edge cases (must emit graceful telemetry/narration without crashing)
+      const popEmpty = generateStackFrames([], { type: 'pop' });
+      expect(popEmpty[popEmpty.length - 1].narration).toContain('UNDERFLOW');
+
+      const deqEmpty = generateLinearQueueFrames([], { type: 'dequeue' });
+      expect(deqEmpty[deqEmpty.length - 1].narration).toContain('UNDERFLOW');
+
+      const delHeadEmpty = generateLinkedListFrames('singly', [], { type: 'deleteHead' });
+      expect(delHeadEmpty[delHeadEmpty.length - 1].narration).toContain('FAILED');
+
+      const delTailEmpty = generateLinkedListFrames('singly', [], { type: 'deleteTail' });
+      expect(delTailEmpty[delTailEmpty.length - 1].narration).toContain('FAILED');
+    });
+
+    it('4. Weighted Pathfinding Cost Accuracy: Dijkstra & A* accumulate true cell entry weights', () => {
+      const grid = createInitialGrid(16, 36, { row: 7, col: 5 }, { row: 7, col: 9 });
+      grid[7][6].type = 'weight';
+      grid[7][6].weight = 5;
+      grid[7][7].type = 'weight';
+      grid[7][7].weight = 5;
+
+      const dijkstraFrames = generatePathfindingFrames(grid, 'dijkstra', { row: 7, col: 5 }, { row: 7, col: 9 });
+      const lastDijkstra = dijkstraFrames[dijkstraFrames.length - 1];
+      expect(lastDijkstra.metrics.swaps).toBeGreaterThan(4);
+      expect(lastDijkstra.narration).toMatch(/Total Path Cost: \d+/);
+
+      const aStarFrames = generatePathfindingFrames(grid, 'aStar', { row: 7, col: 5 }, { row: 7, col: 9 });
+      const lastAStar = aStarFrames[aStarFrames.length - 1];
+      expect(lastAStar.metrics.swaps).toBeGreaterThan(4);
+      expect(lastAStar.narration).toMatch(/Total Path Cost: \d+/);
+    });
+
+    it('5. Linked-List Pointer Invariant Test across Multi-Step Mutations', () => {
+      const checkDoublyInvariants = (nodes: any[]) => {
+        if (nodes.length === 0) return;
+        expect(nodes[0].prevAddress).toBeNull();
+        expect(nodes[nodes.length - 1].nextAddress).toBeNull();
+        for (let i = 0; i < nodes.length - 1; i++) {
+          expect(nodes[i].nextAddress).toBe(nodes[i + 1].address);
+          expect(nodes[i + 1].prevAddress).toBe(nodes[i].address);
+        }
+      };
+
+      const checkCircularDoublyInvariants = (nodes: any[]) => {
+        if (nodes.length === 0) return;
+        const head = nodes[0];
+        const tail = nodes[nodes.length - 1];
+        expect(tail.nextAddress).toBe(head.address);
+        expect(head.prevAddress).toBe(tail.address);
+        for (let i = 0; i < nodes.length - 1; i++) {
+          expect(nodes[i].nextAddress).toBe(nodes[i + 1].address);
+          expect(nodes[i + 1].prevAddress).toBe(nodes[i].address);
+        }
+      };
+
+      // Initial doubly chain
+      const baseDoubly = generateLinkedListFrames('doubly', [10, 20, 30, 40]);
+      checkDoublyInvariants(baseDoubly[0].snapshot.nodes);
+
+      // Insert head mutation
+      const insHeadDoubly = generateLinkedListFrames('doubly', [10, 20, 30, 40], { type: 'insertHead', value: 99 });
+      checkDoublyInvariants(insHeadDoubly[insHeadDoubly.length - 1].snapshot.nodes);
+
+      // Insert tail mutation
+      const insTailDoubly = generateLinkedListFrames('doubly', [10, 20, 30, 40], { type: 'insertTail', value: 88 });
+      checkDoublyInvariants(insTailDoubly[insTailDoubly.length - 1].snapshot.nodes);
+
+      // Delete head mutation
+      const delHeadDoubly = generateLinkedListFrames('doubly', [10, 20, 30, 40], { type: 'deleteHead' });
+      checkDoublyInvariants(delHeadDoubly[delHeadDoubly.length - 1].snapshot.nodes);
+
+      // Delete tail mutation
+      const delTailDoubly = generateLinkedListFrames('doubly', [10, 20, 30, 40], { type: 'deleteTail' });
+      checkDoublyInvariants(delTailDoubly[delTailDoubly.length - 1].snapshot.nodes);
+
+      // Circular Singly invariant
+      const circSingly = generateLinkedListFrames('circularSingly', [10, 20, 30]);
+      const csNodes = circSingly[0].snapshot.nodes;
+      expect(csNodes[csNodes.length - 1].nextAddress).toBe(csNodes[0].address);
+
+      // Circular Doubly invariants across mutations
+      const baseCircDoubly = generateLinkedListFrames('circularDoubly', [10, 20, 30]);
+      checkCircularDoublyInvariants(baseCircDoubly[0].snapshot.nodes);
+
+      const insHeadCircDoubly = generateLinkedListFrames('circularDoubly', [10, 20, 30], { type: 'insertHead', value: 55 });
+      checkCircularDoublyInvariants(insHeadCircDoubly[insHeadCircDoubly.length - 1].snapshot.nodes);
+    });
+
+    it('6. Rapid State Transition & Playback Safety in usePlaygroundStore', () => {
+      const store = usePlaygroundStore.getState();
+
+      // Module switch
+      store.setActiveModule('stacksQueues');
+      expect(usePlaygroundStore.getState().activeModule).toBe('stacksQueues');
+      expect(usePlaygroundStore.getState().frames.length).toBeGreaterThan(0);
+      expect(usePlaygroundStore.getState().currentStepIndex).toBe(0);
+
+      // Algo switch
+      store.setActiveAlgo('circularQueue');
+      expect(usePlaygroundStore.getState().activeAlgo).toBe('circularQueue');
+      expect(usePlaygroundStore.getState().frames.length).toBeGreaterThan(0);
+      expect(usePlaygroundStore.getState().currentStepIndex).toBe(0);
+
+      // Preset switch
+      store.applyPreset('10, 20, 30');
+      expect(usePlaygroundStore.getState().frames.length).toBeGreaterThan(0);
+
+      // Step controls & boundaries
+      const maxFrames = usePlaygroundStore.getState().frames.length;
+      store.stepForward();
+      if (maxFrames > 1) {
+        expect(usePlaygroundStore.getState().currentStepIndex).toBe(1);
+      }
+      store.stepBackward();
+      expect(usePlaygroundStore.getState().currentStepIndex).toBe(0);
+
+      store.jumpToEnd();
+      expect(usePlaygroundStore.getState().currentStepIndex).toBe(maxFrames - 1);
+
+      store.jumpToStart();
+      expect(usePlaygroundStore.getState().currentStepIndex).toBe(0);
+
+      // Theme toggle
+      const currentTheme = usePlaygroundStore.getState().theme;
+      store.toggleTheme();
+      expect(usePlaygroundStore.getState().theme).not.toBe(currentTheme);
+      store.toggleTheme(); // revert
+    });
   });
 });

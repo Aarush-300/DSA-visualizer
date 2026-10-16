@@ -131,6 +131,7 @@ export function generatePathfindingFrames(
       hScore: 0,
       previousCell: null,
       type: (c.type === 'visited' || c.type === 'path') ? 'empty' : c.type,
+      weight: c.weight ?? (c.type === 'weight' ? 5 : 1),
     }))
   );
 
@@ -334,7 +335,7 @@ export function generatePathfindingFrames(
         const nKey = `${neighbor.row},${neighbor.col}`;
         if (closedSet.has(nKey)) continue;
 
-        const stepCost = neighbor.type === 'weight' ? 5 : 1;
+        const stepCost = neighbor.weight ?? (neighbor.type === 'weight' ? 5 : 1);
         const tentativeG = current.g + stepCost;
         if (tentativeG < (neighbor.gScore ?? Infinity)) {
           neighbor.previousCell = { row: current.row, col: current.col };
@@ -390,7 +391,7 @@ export function generatePathfindingFrames(
         const nKey = `${neighbor.row},${neighbor.col}`;
         if (visitedSet.has(nKey)) continue;
 
-        const stepCost = neighbor.type === 'weight' ? 5 : 1;
+        const stepCost = neighbor.weight ?? (neighbor.type === 'weight' ? 5 : 1);
         const newDist = current.dist + stepCost;
         if (newDist < neighbor.distance) {
           neighbor.distance = newDist;
@@ -412,7 +413,19 @@ export function generatePathfindingFrames(
     }
     path.reverse();
 
-    metrics.swaps = path.length;
+    let totalCost = 0;
+    let weightedCount = 0;
+    for (let i = 1; i < path.length; i++) {
+      const p = path[i];
+      const cell = grid[p.row][p.col];
+      const cost = cell.weight ?? (cell.type === 'weight' ? 5 : 1);
+      totalCost += cost;
+      if (cost > 1) {
+        weightedCount++;
+      }
+    }
+
+    metrics.swaps = totalCost;
 
     for (let i = 0; i < path.length; i++) {
       const p = path[i];
@@ -429,7 +442,7 @@ export function generatePathfindingFrames(
     }
 
     emitFrame(
-      `Optimal Shortest Path verified! Total cost: ${path.length - 1} steps. Visited cells: ${metrics.comparisons}.`,
+      `Optimal Shortest Path verified! Total Path Cost: ${totalCost} (${path.length - 1} steps across ${weightedCount} weighted nodes). Visited cells: ${metrics.comparisons}.`,
       null,
       { cpp: 7, python: 6, pseudo: 5 },
       []

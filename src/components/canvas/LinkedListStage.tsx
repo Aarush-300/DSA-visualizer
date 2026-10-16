@@ -13,8 +13,15 @@ export const LinkedListStage: React.FC = () => {
 
   if (nodes.length === 0) {
     return (
-      <div className="flex items-center justify-center h-full text-[var(--text-muted)] font-mono text-xs">
-        INITIALIZING MEMORY POINTER BUS...
+      <div className="flex flex-col items-center justify-center h-full text-[var(--text-muted)] font-mono text-xs gap-3">
+        <div className="flex items-center gap-2 px-4 py-2 border border-[var(--border-hairline)] bg-[var(--bg-panel)] shadow-sm">
+          <span className="text-[var(--accent-primary)] font-bold">HEAD</span>
+          <span className="text-[var(--text-secondary)]">➔</span>
+          <span className="text-[var(--text-muted)]">NULL / 0x0000</span>
+        </div>
+        <p className="text-[11px] text-[var(--text-secondary)]">
+          List is empty (0 nodes). Use + INS HEAD or + INS TAIL to allocate memory.
+        </p>
       </div>
     );
   }

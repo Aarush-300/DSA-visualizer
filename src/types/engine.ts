@@ -2,6 +2,48 @@ export type ExecutionStatus = 'idle' | 'running' | 'paused' | 'completed';
 
 export type ActiveModuleId = 'sorting' | 'stacksQueues' | 'linkedList' | 'trees' | 'graphs';
 
+export type AlgorithmId =
+  // 01 Sorting & Search
+  | 'quick'
+  | 'merge'
+  | 'heap'
+  | 'bubble'
+  | 'insertion'
+  | 'selection'
+  | 'binarySearch'
+  | 'linearSearch'
+  // 02 Stacks & Queues
+  | 'stack'
+  | 'linearQueue'
+  | 'circularQueue'
+  | 'priorityQueue'
+  | 'deque'
+  // 03 Linked Lists
+  | 'singlyLinkedList'
+  | 'doublyLinkedList'
+  | 'circularSinglyLinkedList'
+  | 'circularDoublyLinkedList'
+  | 'singly'
+  | 'doubly'
+  | 'circularSingly'
+  | 'circularDoubly'
+  // 04 Trees
+  | 'bst'
+  | 'avl'
+  | 'mWay'
+  | 'bTree'
+  | 'bPlusTree'
+  | 'mway'
+  | 'btree'
+  | 'bplus'
+  // 05 Graphs
+  | 'dijkstraGrid'
+  | 'aStarGrid'
+  | 'bfsGrid'
+  | 'networkPrim'
+  | 'networkDijkstra'
+  | 'networkBfs';
+
 export type CodeLanguage = 'c' | 'cpp' | 'java' | 'python' | 'pseudo' | 'algorithm';
 
 export interface TelemetryMetrics {

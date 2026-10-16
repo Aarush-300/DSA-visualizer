@@ -16,8 +16,14 @@ export const TreeStage: React.FC = () => {
 
   if (!rootId && Object.keys(nodes).length === 0 && Object.keys(multiKeyNodes).length === 0) {
     return (
-      <div className="flex items-center justify-center h-full text-[var(--text-muted)] font-mono text-xs">
-        INITIALIZING TREE REGISTER STAGE...
+      <div className="flex flex-col items-center justify-center h-full text-[var(--text-muted)] font-mono text-xs gap-3">
+        <div className="flex items-center gap-2 px-4 py-2 border border-[var(--border-hairline)] bg-[var(--bg-panel)] shadow-sm">
+          <span className="text-[var(--accent-primary)] font-bold">TREE ROOT:</span>
+          <span className="text-[var(--text-muted)]">NULL / 0x0000</span>
+        </div>
+        <p className="text-[11px] text-[var(--text-secondary)]">
+          Tree contains 0 keys. Use + INSERT to balance keys.
+        </p>
       </div>
     );
   }

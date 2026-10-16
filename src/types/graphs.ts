@@ -14,6 +14,7 @@ export interface GridCell {
   col: number;
   type: GridCellType;
   distance: number;
+  weight?: number;
   fScore?: number;
   gScore?: number;
   hScore?: number;

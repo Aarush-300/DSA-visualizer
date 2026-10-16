@@ -104,8 +104,9 @@ export const StackQueueStage: React.FC = () => {
             </div>
 
             {items.length === 0 && (
-              <div className="h-full flex items-center justify-center font-mono text-xs text-[var(--text-muted)]">
-                [EMPTY STACK CHAMBER]
+              <div className="h-full flex flex-col items-center justify-center font-mono text-xs text-[var(--text-muted)] gap-1">
+                <span>[EMPTY STACK CHAMBER]</span>
+                <span className="text-[10px] text-[var(--text-muted)]">SP = NULL // TOP = -1</span>
               </div>
             )}
           </div>

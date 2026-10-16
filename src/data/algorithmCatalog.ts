@@ -1,4 +1,4 @@
-import { ActiveModuleId } from '../types/engine';
+import { ActiveModuleId, AlgorithmId } from '../types/engine';
 
 export interface BigOComplexity {
   bestTime: string;
@@ -8,7 +8,7 @@ export interface BigOComplexity {
 }
 
 export interface AlgorithmMetadata {
-  id: string;
+  id: AlgorithmId;
   name: string;
   module: ActiveModuleId;
   category: string;
@@ -19,7 +19,7 @@ export interface AlgorithmMetadata {
   presets: { label: string; values: string }[];
 }
 
-export const ALGORITHM_CATALOG: Record<string, AlgorithmMetadata> = {
+export const ALGORITHM_CATALOG: Record<AlgorithmId | string, AlgorithmMetadata> = {
   // ================= 01 SORTING & SEARCH =================
   quick: {
     id: 'quick',
