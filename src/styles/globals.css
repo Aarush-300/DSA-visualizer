@@ -1,0 +1,178 @@
+@import "tailwindcss";
+@import "./tokens.css";
+
+@layer base {
+  * {
+    border-color: var(--border-hairline);
+  }
+  
+  body {
+    background-color: var(--bg-canvas);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+  }
+
+  /* Precision Industrial Scrollbars */
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #090908;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #2E2D2A;
+    border-radius: 0px;
+  }
+  /* Remove native white number spinners */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+  font-feature-settings: "tnum" 1, "zero" 1;
+}
+
+/* Industrial Solid Surfaces (Teenage Engineering / Linear Aesthetic) */
+.industrial-panel {
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-hairline);
+}
+
+.tactile-surface {
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border-hairline);
+}
+
+.tactile-surface-hover:hover {
+  background-color: var(--bg-hover);
+}
+
+/* Mechanical Hardware Button */
+.btn-hardware-primary {
+  background-color: var(--accent-signal);
+  color: var(--accent-signal-text);
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 2px 4px rgba(0, 0, 0, 0.4);
+  border: 1px solid #FF6622;
+  transition: all 0.1s ease;
+}
+.btn-hardware-primary:hover {
+  background-color: var(--accent-signal-hover);
+}
+.btn-hardware-primary:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.btn-hardware-secondary {
+  background-color: var(--bg-elevated);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  border: 1px solid var(--border-hairline);
+  transition: all 0.1s ease;
+}
+.btn-hardware-secondary:hover {
+  background-color: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+.btn-hardware-secondary:active {
+  transform: translateY(1px);
+}
+
+/* Diagonal Hatch Pattern for Active Partitions */
+.diagonal-hatch {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(212, 255, 0, 0.06),
+    rgba(212, 255, 0, 0.06) 6px,
+    transparent 6px,
+    transparent 12px
+  );
+}
+
+/* Architectural Dot Grid */
+.canvas-grid-pattern {
+  background-color: var(--bg-canvas);
+  background-image: radial-gradient(var(--dot-color, rgba(243, 242, 238, 0.08)) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Laser Highlight Bar for Code Inspector */
+.laser-code-highlight {
+  background-color: rgba(255, 79, 0, 0.12);
+  border-left: 3px solid #FF4F00;
+}
+
+/* Algorithmic Keyframe Animations */
+@keyframes pulse-amber {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(255, 184, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 22px rgba(255, 184, 0, 0.7);
+  }
+}
+
+.animate-pulse-amber {
+  animation: pulse-amber 900ms infinite ease-in-out;
+}
+
+@keyframes wavefront-industrial {
+  0% {
+    transform: scale(0.3);
+    background-color: rgba(255, 46, 147, 0.85);
+  }
+  60% {
+    transform: scale(1.1);
+    background-color: rgba(212, 255, 0, 0.4);
+  }
+  100% {
+    transform: scale(1.0);
+    background-color: rgba(212, 255, 0, 0.15);
+  }
+}
+
+.animate-wavefront-industrial {
+  animation: wavefront-industrial 350ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes beacon-emerald {
+  0% {
+    transform: scale(0.6);
+    background-color: #FFB800;
+  }
+  50% {
+    transform: scale(1.12);
+    background-color: #D4FF00;
+  }
+  100% {
+    transform: scale(1.0);
+    background-color: #00E676;
+    box-shadow: 0 0 14px rgba(0, 230, 118, 0.7);
+  }
+}
+
+.animate-beacon-emerald {
+  animation: beacon-emerald 450ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

@@ -1,0 +1,108 @@
+:root {
+  /* Surfaces & Structural Grid (Dark / Carbon Mode) */
+  --bg-canvas: #090908;
+  --bg-panel: #111110;
+  --bg-elevated: #181816;
+  --bg-hover: #22221F;
+  --border-hairline: #262522;
+  --border-strong: #3B3935;
+  --dot-color: rgba(243, 242, 238, 0.08);
+
+  /* Typography Colors */
+  --text-primary: #F3F2EE;
+  --text-secondary: #9E9B93;
+  --text-muted: #5C5952;
+
+  /* Font Families */
+  --font-display: 'Chakra Petch', sans-serif;
+  --font-sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  /* Brand Primary Accent */
+  --accent-signal: #FF4F00;
+  --accent-signal-hover: #FF6622;
+  --accent-signal-text: #090908;
+
+  /* State 1: Idle / Unvisited */
+  --state-idle-bg: #1C1B19;
+  --state-idle-border: #33312D;
+  --state-idle-text: #D6D3CD;
+
+  /* State 2: Active Comparison (Phosphor Amber) */
+  --state-active-compare-bg: rgba(255, 184, 0, 0.14);
+  --state-active-compare-border: #FFB800;
+  --state-active-compare-text: #FFD666;
+  --state-active-compare-glow: 0 0 16px rgba(255, 184, 0, 0.35);
+
+  /* State 3: Mutation / Swap / Rotation (International Orange) */
+  --state-mutate-swap-bg: rgba(255, 79, 0, 0.18);
+  --state-mutate-swap-border: #FF4F00;
+  --state-mutate-swap-text: #FF9466;
+  --state-mutate-swap-glow: 0 0 20px rgba(255, 79, 0, 0.40);
+
+  /* State 4: Active Sub-Array Partition / Queue (Acid Chartreuse) */
+  --state-active-window-bg: rgba(212, 255, 0, 0.10);
+  --state-active-window-border: #D4FF00;
+  --state-active-window-text: #E8FF7A;
+  --state-active-window-glow: 0 0 14px rgba(212, 255, 0, 0.30);
+
+  /* State 5: Pivot / Search Target (Signal Magenta) */
+  --state-pivot-target-bg: rgba(255, 46, 147, 0.16);
+  --state-pivot-target-border: #FF2E93;
+  --state-pivot-target-text: #FF85BF;
+  --state-pivot-target-glow: 0 0 18px rgba(255, 46, 147, 0.40);
+
+  /* State 6: Verified / Sorted / Shortest Path (Oscilloscope Emerald) */
+  --state-sorted-verified-bg: rgba(0, 230, 118, 0.14);
+  --state-sorted-verified-border: #00E676;
+  --state-sorted-verified-text: #66FFA6;
+  --state-sorted-verified-glow: 0 0 16px rgba(0, 230, 118, 0.35);
+}
+
+/* Dieter Rams / Teenage Engineering Warm Paper Light Mode */
+[data-theme="light"] {
+  --bg-canvas: #F2F0E8;
+  --bg-panel: #FAF9F5;
+  --bg-elevated: #E6E3D8;
+  --bg-hover: #DCD8CB;
+  --border-hairline: #D0CCC0;
+  --border-strong: #A8A396;
+  --dot-color: rgba(18, 18, 16, 0.12);
+
+  --text-primary: #121210;
+  --text-secondary: #4A4842;
+  --text-muted: #7D7970;
+
+  --accent-signal: #FF4F00;
+  --accent-signal-hover: #E04500;
+  --accent-signal-text: #FAF9F5;
+
+  --state-idle-bg: #EAE6D9;
+  --state-idle-border: #C2BDAF;
+  --state-idle-text: #4A4842;
+
+  --state-active-compare-bg: rgba(217, 119, 6, 0.15);
+  --state-active-compare-border: #D97706;
+  --state-active-compare-text: #B45309;
+  --state-active-compare-glow: 0 0 12px rgba(217, 119, 6, 0.25);
+
+  --state-mutate-swap-bg: rgba(255, 79, 0, 0.15);
+  --state-mutate-swap-border: #FF4F00;
+  --state-mutate-swap-text: #EA580C;
+  --state-mutate-swap-glow: 0 0 14px rgba(255, 79, 0, 0.28);
+
+  --state-active-window-bg: rgba(2, 132, 199, 0.12);
+  --state-active-window-border: #0284C7;
+  --state-active-window-text: #0369A1;
+  --state-active-window-glow: 0 0 12px rgba(2, 132, 199, 0.25);
+
+  --state-pivot-target-bg: rgba(219, 39, 119, 0.14);
+  --state-pivot-target-border: #DB2777;
+  --state-pivot-target-text: #BE185D;
+  --state-pivot-target-glow: 0 0 14px rgba(219, 39, 119, 0.30);
+
+  --state-sorted-verified-bg: rgba(5, 150, 105, 0.15);
+  --state-sorted-verified-border: #059669;
+  --state-sorted-verified-text: #047857;
+  --state-sorted-verified-glow: 0 0 12px rgba(5, 150, 105, 0.25);
+}

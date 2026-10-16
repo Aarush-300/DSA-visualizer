@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <defs>
+    <radialGradient id="ogGlow" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#161B26" />
+      <stop offset="60%" stop-color="#0F131C" />
+      <stop offset="100%" stop-color="#07090E" />
+    </radialGradient>
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="50%" stop-color="#A855F7" />
+      <stop offset="100%" stop-color="#10B981" />
+    </linearGradient>
+    <pattern id="dotGrid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.5" fill="rgba(255, 255, 255, 0.08)" />
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#ogGlow)" />
+  <rect width="1200" height="630" fill="url(#dotGrid)" />
+  
+  <g transform="translate(600, 240)">
+    <!-- Central Hex Emblem -->
+    <polygon points="0,-90 78,-45 78,45 0,90 -78,45 -78,-45" stroke="url(#textGrad)" stroke-width="4" fill="rgba(15, 19, 28, 0.9)" />
+    <circle cx="0" cy="0" r="14" fill="#38BDF8" />
+  </g>
+
+  <!-- Typography -->
+  <text x="600" y="380" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="64" fill="#F8FAFC" text-anchor="middle" letter-spacing="-0.03em">
+    ALGOFORGE
+  </text>
+  <text x="600" y="430" font-family="'JetBrains Mono', monospace" font-weight="500" font-size="20" fill="#38BDF8" text-anchor="middle" letter-spacing="0.1em">
+    v2.4 // VISUAL DATA STRUCTURE &amp; ALGORITHM ENGINE
+  </text>
+  <text x="600" y="480" font-family="'Plus Jakarta Sans', sans-serif" font-weight="400" font-size="18" fill="#94A3B8" text-anchor="middle">
+    Obsidian Kinetic Laboratory • Sorting • Pointers • AVL Balancing • Pathfinding
+  </text>
+</svg>
+
