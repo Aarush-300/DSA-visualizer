@@ -21,9 +21,11 @@ export const App: React.FC = () => {
     theme,
   } = usePlaygroundStore();
 
-  // Synchronize documentElement theme attribute
+  // Synchronize documentElement theme attribute and class
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.classList.toggle('light', theme === 'light');
+    document.documentElement.classList.toggle('dark', theme === 'dark');
   }, [theme]);
 
   // Global Keyboard Navigation

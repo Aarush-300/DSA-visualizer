@@ -36,23 +36,23 @@ export const TopNavbar: React.FC = () => {
   ];
 
   return (
-    <header className="h-13 border-b border-[#262522] bg-[#111110] flex items-center justify-between px-4 select-none z-30 shrink-0">
+    <header className="h-13 border-b border-[var(--border-hairline)] bg-[var(--bg-panel)] text-[var(--text-primary)] flex items-center justify-between px-4 select-none z-30 shrink-0">
       {/* Left: Brand Identity with Circuit Emblem & Chakra Petch */}
       <div className="flex items-center gap-3">
         <LogoMark className="w-7 h-7" />
 
         <div className="flex items-baseline gap-2.5">
-          <span className="font-display font-bold text-[17px] tracking-[0.04em] text-[#F3F2EE] uppercase">
+          <span className="font-display font-bold text-[17px] tracking-[0.04em] text-[var(--text-primary)] uppercase">
             ALGOFORGE
           </span>
-          <span className="font-mono font-medium text-[10px] text-[#FF4F00] px-1.5 py-0.2 bg-[#FF4F00]/10 border border-[#FF4F00]/30 tracking-widest uppercase">
+          <span className="font-mono font-medium text-[10px] text-[var(--accent-primary)] px-1.5 py-0.2 bg-[var(--accent-primary)]/10 border border-[var(--accent-primary)]/30 tracking-widest uppercase">
             HARDWARE DSA LAB
           </span>
         </div>
       </div>
 
       {/* Center: 5 Core Module Switchers with Sliding Active Indicator */}
-      <nav className="hidden lg:flex items-center bg-[#090908] border border-[#262522] p-0.5">
+      <nav className="hidden lg:flex items-center bg-[var(--bg-canvas)] border border-[var(--border-hairline)] p-0.5">
         {modules.map((m) => {
           const isActive = activeModule === m.id;
           return (
@@ -60,17 +60,17 @@ export const TopNavbar: React.FC = () => {
               key={m.id}
               onClick={() => setActiveModule(m.id)}
               className={`relative px-3.5 py-1.5 text-xs font-display tracking-wider font-semibold transition-colors duration-150 flex items-center gap-2 ${
-                isActive ? 'text-[#F3F2EE]' : 'text-[#9E9B93] hover:text-[#F3F2EE]'
+                isActive ? 'text-[var(--text-primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
               }`}
             >
               {isActive && (
                 <motion.div
                   layoutId="active-module-tab"
                   transition={{ type: 'spring', stiffness: 500, damping: 35 }}
-                  className="absolute inset-0 bg-[#181816] border border-[#3B3935] border-t-2 border-t-[#FF4F00]"
+                  className="absolute inset-0 bg-[var(--bg-elevated)] border border-[var(--border-strong)] border-t-2 border-t-[var(--accent-primary)]"
                 />
               )}
-              <span className="relative z-10 font-mono text-[10px] text-[#FF4F00]">
+              <span className="relative z-10 font-mono text-[10px] text-[var(--accent-primary)]">
                 {m.code}
               </span>
               <span className="relative z-10">{m.label}</span>
@@ -88,16 +88,16 @@ export const TopNavbar: React.FC = () => {
         <div className="relative">
           <button
             onClick={() => setIsPresetsOpen(!isPresetsOpen)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#181816] border border-[#262522] hover:border-[#3B3935] text-xs font-sans text-[#F3F2EE] transition-colors"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[var(--bg-elevated)] border border-[var(--border-strong)] hover:border-[var(--accent-primary)] text-xs font-sans text-[var(--text-primary)] transition-colors"
           >
-            <span className="font-display uppercase text-[11px] tracking-wider text-[#9E9B93]">PRESET:</span>
+            <span className="font-display uppercase text-[11px] tracking-wider text-[var(--text-secondary)]">PRESET:</span>
             <span className="truncate max-w-[110px] text-[11px] font-mono">{presets[0]?.label ?? 'Standard'}</span>
-            <ChevronDown size={13} className="text-[#9E9B93]" />
+            <ChevronDown size={13} className="text-[var(--text-secondary)]" />
           </button>
 
           {isPresetsOpen && (
-            <div className="absolute right-0 mt-1 w-64 bg-[#111110] border border-[#3B3935] shadow-2xl py-1 z-50">
-              <div className="px-3 py-1 text-[9px] font-mono uppercase tracking-widest text-[#5C5952] border-b border-[#262522]">
+            <div className="absolute right-0 mt-1 w-64 bg-[var(--bg-panel)] border border-[var(--border-strong)] shadow-2xl py-1 z-50">
+              <div className="px-3 py-1 text-[9px] font-mono uppercase tracking-widest text-[var(--text-muted)] border-b border-[var(--border-hairline)]">
                 STANDARDIZED DATASETS
               </div>
               {presets.map((preset) => (
@@ -107,10 +107,10 @@ export const TopNavbar: React.FC = () => {
                     applyPreset(preset.values);
                     setIsPresetsOpen(false);
                   }}
-                  className="w-full text-left px-3 py-1.5 hover:bg-[#181816] flex flex-col transition-colors border-b border-[#262522]/50 last:border-b-0"
+                  className="w-full text-left px-3 py-1.5 hover:bg-[var(--bg-hover)] flex flex-col transition-colors border-b border-[var(--border-hairline)] last:border-b-0"
                 >
-                  <span className="font-sans text-xs text-[#F3F2EE] font-medium">{preset.label}</span>
-                  <span className="font-mono text-[10px] text-[#9E9B93] truncate">{preset.values}</span>
+                  <span className="font-sans text-xs text-[var(--text-primary)] font-medium">{preset.label}</span>
+                  <span className="font-mono text-[10px] text-[var(--text-secondary)] truncate">{preset.values}</span>
                 </button>
               ))}
             </div>
@@ -121,7 +121,7 @@ export const TopNavbar: React.FC = () => {
         <button
           onClick={() => setShortcutsOpen(true)}
           title="Keyboard Shortcuts (?)"
-          className="p-1.5 bg-[#181816] border border-[#262522] hover:border-[#3B3935] text-[#9E9B93] hover:text-[#F3F2EE] transition-colors"
+          className="p-1.5 bg-[var(--bg-elevated)] border border-[var(--border-strong)] hover:border-[var(--accent-primary)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
         >
           <Keyboard size={15} />
         </button>
@@ -130,7 +130,7 @@ export const TopNavbar: React.FC = () => {
         <button
           onClick={resetWorkspace}
           title="Reset Environment (Ctrl+R)"
-          className="p-1.5 bg-[#181816] border border-[#262522] hover:border-[#3B3935] text-[#9E9B93] hover:text-[#FF4F00] transition-colors"
+          className="p-1.5 bg-[var(--bg-elevated)] border border-[var(--border-strong)] hover:border-[var(--accent-primary)] text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-colors"
         >
           <RotateCcw size={15} />
         </button>

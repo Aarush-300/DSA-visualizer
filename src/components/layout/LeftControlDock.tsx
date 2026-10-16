@@ -78,32 +78,16 @@ export const LeftControlDock: React.FC = () => {
   const handleGenerateMaze = () => {
     const mazeGrid = generateRecursiveMaze();
     const start = { row: 7, col: 5 };
-    const target = { row: 7, col: 30 };
-    const algoType =
-      activeAlgo === 'aStarGrid'
-        ? 'aStar'
-        : activeAlgo === 'bfsGrid'
-        ? 'bfs'
-        : activeAlgo === 'dfsGrid'
-        ? 'dfs'
-        : 'dijkstra';
-    const frames = generatePathfindingFrames(mazeGrid, algoType, start, target);
+    const target = { row: 7, col: 23 };
+    const frames = generatePathfindingFrames(mazeGrid, activeAlgo as any, start, target);
     setFrames(frames);
   };
 
   const handleClearWalls = () => {
     const cleanGrid = createInitialGrid();
     const start = { row: 7, col: 5 };
-    const target = { row: 7, col: 30 };
-    const algoType =
-      activeAlgo === 'aStarGrid'
-        ? 'aStar'
-        : activeAlgo === 'bfsGrid'
-        ? 'bfs'
-        : activeAlgo === 'dfsGrid'
-        ? 'dfs'
-        : 'dijkstra';
-    const frames = generatePathfindingFrames(cleanGrid, algoType, start, target);
+    const target = { row: 7, col: 23 };
+    const frames = generatePathfindingFrames(cleanGrid, activeAlgo as any, start, target);
     setFrames(frames);
   };
 
@@ -111,18 +95,15 @@ export const LeftControlDock: React.FC = () => {
     (a) => a.module === activeModule
   );
 
-  const isNetworkGraph =
-    activeAlgo === 'networkPrim' ||
-    activeAlgo === 'networkDijkstra' ||
-    activeAlgo === 'networkBfs';
+  const isNetworkGraph = activeAlgo === 'networkPrim' || activeAlgo === 'networkKruskal';
 
   if (isLeftDockCollapsed) {
     return (
-      <div className="h-full border-r border-[#262522] bg-[#111110] flex flex-col items-center py-4 px-1.5 z-20 shrink-0">
+      <div className="h-full border-r border-[var(--border-hairline)] bg-[var(--bg-panel)] flex flex-col items-center py-4 px-1.5 z-20 shrink-0">
         <button
           onClick={toggleLeftDock}
           title="Expand Control Dock"
-          className="p-1.5 hover:bg-[#181816] text-[#9E9B93] hover:text-[#F3F2EE] border border-transparent hover:border-[#3B3935]"
+          className="p-1.5 hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-transparent hover:border-[var(--border-strong)] transition-colors"
         >
           <ChevronRight size={16} />
         </button>
@@ -131,20 +112,20 @@ export const LeftControlDock: React.FC = () => {
   }
 
   return (
-    <aside className="w-80 h-full border-r border-[#262522] bg-[#111110] flex flex-col justify-between p-4 z-20 overflow-y-auto shrink-0 select-none">
+    <aside className="w-80 h-full border-r border-[var(--border-hairline)] bg-[var(--bg-panel)] text-[var(--text-primary)] flex flex-col justify-between p-4 z-20 overflow-y-auto shrink-0 select-none">
       <div className="space-y-4">
         {/* Dock Header */}
-        <div className="flex items-center justify-between pb-2 border-b border-[#262522]">
+        <div className="flex items-center justify-between pb-2 border-b border-[var(--border-hairline)]">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 bg-[#FF4F00]" />
-            <span className="font-display text-[11px] uppercase tracking-[0.08em] text-[#9E9B93] font-bold">
+            <span className="w-2 h-2 bg-[var(--accent-primary)]" />
+            <span className="font-display text-[11px] uppercase tracking-[0.08em] text-[var(--text-secondary)] font-bold">
               CONTROL UNIT // CONFIG
             </span>
           </div>
           <button
             onClick={toggleLeftDock}
             title="Collapse Dock"
-            className="p-1 text-[#9E9B93] hover:text-[#F3F2EE] hover:bg-[#181816]"
+            className="p-1 text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)] transition-colors"
           >
             <ChevronLeft size={15} />
           </button>
@@ -152,7 +133,7 @@ export const LeftControlDock: React.FC = () => {
 
         {/* Algorithm Selectors */}
         <div>
-          <label className="block text-[10px] font-mono font-semibold text-[#5C5952] uppercase tracking-wider mb-2">
+          <label className="block text-[10px] font-mono font-semibold text-[var(--text-muted)] uppercase tracking-wider mb-2">
             SELECT ALGORITHM
           </label>
           <div className="space-y-1">
@@ -166,19 +147,19 @@ export const LeftControlDock: React.FC = () => {
                   }}
                   className={`relative w-full text-left px-3 py-2 text-xs font-sans transition-colors duration-150 flex items-center justify-between border ${
                     isSelected
-                      ? 'border-[#3B3935] text-[#F3F2EE] font-semibold'
-                      : 'border-transparent text-[#9E9B93] hover:bg-[#181816] hover:text-[#F3F2EE]'
+                      ? 'border-[var(--border-strong)] text-[var(--text-primary)] font-semibold'
+                      : 'border-transparent text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)]'
                   }`}
                 >
                   {isSelected && (
                     <motion.div
                       layoutId="active-algo-card"
                       transition={{ type: 'spring', stiffness: 500, damping: 35 }}
-                      className="absolute inset-0 bg-[#181816] border-l-2 border-l-[#FF4F00] -z-0"
+                      className="absolute inset-0 bg-[var(--bg-elevated)] border-l-2 border-l-[var(--accent-primary)] -z-0"
                     />
                   )}
                   <span className="relative z-10 font-sans tracking-tight truncate">{algo.name}</span>
-                  <span className="relative z-10 font-mono text-[10px] text-[#5C5952] shrink-0">
+                  <span className="relative z-10 font-mono text-[10px] text-[var(--text-muted)] shrink-0">
                     {algo.category}
                   </span>
                 </button>
@@ -191,20 +172,20 @@ export const LeftControlDock: React.FC = () => {
         {activeModule !== 'graphs' && (
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <label className="text-[10px] font-mono font-semibold text-[#5C5952] uppercase tracking-wider">
+              <label className="text-[10px] font-mono font-semibold text-[var(--text-muted)] uppercase tracking-wider">
                 INITIAL DATASET [ARRAY]
               </label>
-              <span className="font-mono text-[9px] text-[#5C5952]">1–999 INT</span>
+              <span className="font-mono text-[9px] text-[var(--text-muted)]">1–999 INT</span>
             </div>
             <textarea
               rows={2}
               value={customInput}
               onChange={(e) => setCustomInput(e.target.value)}
               placeholder="e.g. 64, 34, 25, 12, 22, 11, 90"
-              className="w-full px-2.5 py-2 text-xs font-mono bg-[#090908] border border-[#262522] focus:border-[#FF4F00] text-[#F3F2EE] focus:outline-none resize-none leading-relaxed"
+              className="w-full px-2.5 py-2 text-xs font-mono bg-[var(--bg-input)] border border-[var(--border-strong)] focus:border-[var(--accent-primary)] text-[var(--text-primary)] focus:outline-none resize-none leading-relaxed"
             />
             {inputError && (
-              <p className="text-[11px] font-mono text-[#FF4F00] mt-1 leading-snug">
+              <p className="text-[11px] font-mono text-[var(--accent-primary)] mt-1 leading-snug">
                 {inputError}
               </p>
             )}
@@ -215,8 +196,8 @@ export const LeftControlDock: React.FC = () => {
 
         {/* 1. SORTING & SEARCH MODULE CONTROLS */}
         {activeModule === 'sorting' && (
-          <div className="p-3 bg-[#181816] border border-[#262522] space-y-2.5">
-            <span className="text-[10px] font-mono uppercase text-[#9E9B93] font-semibold block">
+          <div className="p-3 bg-[var(--bg-elevated)] border border-[var(--border-hairline)] space-y-2.5">
+            <span className="text-[10px] font-mono uppercase text-[var(--text-secondary)] font-semibold block">
               ARRAY DATASET MUTATIONS
             </span>
 
@@ -244,7 +225,7 @@ export const LeftControlDock: React.FC = () => {
             </div>
 
             {(activeAlgo === 'linearSearch' || activeAlgo === 'binarySearch') && (
-              <div className="pt-2 border-t border-[#262522] space-y-1.5">
+              <div className="pt-2 border-t border-[var(--border-hairline)] space-y-1.5">
                 <HardwareNumberInput
                   value={targetValue}
                   onChange={setTargetValue}
@@ -265,8 +246,8 @@ export const LeftControlDock: React.FC = () => {
 
         {/* 2. STACKS & QUEUES CONTROLS */}
         {activeModule === 'stacksQueues' && (
-          <div className="p-3 bg-[#181816] border border-[#262522] space-y-2.5">
-            <span className="text-[10px] font-mono uppercase text-[#9E9B93] font-semibold block">
+          <div className="p-3 bg-[var(--bg-elevated)] border border-[var(--border-hairline)] space-y-2.5">
+            <span className="text-[10px] font-mono uppercase text-[var(--text-secondary)] font-semibold block">
               HARDWARE BUFFER OPS
             </span>
 
@@ -296,7 +277,7 @@ export const LeftControlDock: React.FC = () => {
                     onClick={() => executeOperation({ type: 'push', value: operandVal })}
                     className="btn-hardware-secondary flex items-center justify-center gap-1 py-1.5 text-[11px]"
                   >
-                    <Plus size={11} className="text-[#FF4F00]" /> PUSH TOP
+                    <Plus size={11} className="text-[var(--accent-primary)]" /> PUSH TOP
                   </button>
                   <button
                     onClick={() => executeOperation({ type: 'pop' })}
@@ -321,7 +302,7 @@ export const LeftControlDock: React.FC = () => {
                     onClick={() => executeOperation({ type: 'enqueue', value: operandVal })}
                     className="btn-hardware-secondary flex items-center justify-center gap-1 py-1.5 text-[11px]"
                   >
-                    <Plus size={11} className="text-[#FF4F00]" /> ENQUEUE
+                    <Plus size={11} className="text-[var(--accent-primary)]" /> ENQUEUE
                   </button>
                   <button
                     onClick={() => executeOperation({ type: 'dequeue' })}
@@ -345,7 +326,7 @@ export const LeftControlDock: React.FC = () => {
                   onClick={() => executeOperation({ type: 'enqueue', value: operandVal })}
                   className="btn-hardware-secondary flex items-center justify-center gap-1 py-1.5 text-[11px]"
                 >
-                  <Plus size={11} className="text-[#FF4F00]" /> RING ENQUEUE
+                  <Plus size={11} className="text-[var(--accent-primary)]" /> RING ENQUEUE
                 </button>
                 <button
                   onClick={() => executeOperation({ type: 'dequeue' })}
@@ -368,7 +349,7 @@ export const LeftControlDock: React.FC = () => {
                   }
                   className="btn-hardware-secondary flex items-center justify-center gap-1 py-1.5 text-[11px]"
                 >
-                  <Plus size={11} className="text-[#FF4F00]" /> ENQUEUE HEAP
+                  <Plus size={11} className="text-[var(--accent-primary)]" /> ENQUEUE HEAP
                 </button>
                 <button
                   onClick={() => executeOperation({ type: 'extract' })}
@@ -391,7 +372,7 @@ export const LeftControlDock: React.FC = () => {
                   onClick={() => executeOperation({ type: 'insertRear', value: operandVal })}
                   className="btn-hardware-secondary flex items-center justify-center gap-1 py-1.5 text-[11px]"
                 >
-                  <Plus size={11} className="text-[#FF4F00]" /> INS REAR
+                  <Plus size={11} className="text-[var(--accent-primary)]" /> INS REAR
                 </button>
                 <button
                   onClick={() => executeOperation({ type: 'deleteFront' })}
@@ -412,8 +393,8 @@ export const LeftControlDock: React.FC = () => {
 
         {/* 3. LINKED LISTS CONTROLS */}
         {activeModule === 'linkedList' && (
-          <div className="p-3 bg-[#181816] border border-[#262522] space-y-2.5">
-            <span className="text-[10px] font-mono uppercase text-[#9E9B93] font-semibold block">
+          <div className="p-3 bg-[var(--bg-elevated)] border border-[var(--border-hairline)] space-y-2.5">
+            <span className="text-[10px] font-mono uppercase text-[var(--text-secondary)] font-semibold block">
               POINTER MUTATIONS
             </span>
 
@@ -444,7 +425,7 @@ export const LeftControlDock: React.FC = () => {
                 onClick={() => executeOperation({ type: 'insertTail', value: operandVal })}
                 className="btn-hardware-secondary flex items-center justify-center gap-1 py-1.5 text-[11px]"
               >
-                <Plus size={11} className="text-[#FF4F00]" /> INS TAIL
+                <Plus size={11} className="text-[var(--accent-primary)]" /> INS TAIL
               </button>
               <button
                 onClick={() =>
@@ -478,12 +459,12 @@ export const LeftControlDock: React.FC = () => {
               </button>
             </div>
 
-            <div className="grid grid-cols-2 gap-1.5 pt-1 border-t border-[#262522]">
+            <div className="grid grid-cols-2 gap-1.5 pt-1 border-t border-[var(--border-hairline)]">
               <button
                 onClick={() => executeOperation({ type: 'reverse' })}
                 className="btn-hardware-secondary flex items-center justify-center gap-1 py-1.5 text-[11px]"
               >
-                <RotateCw size={11} className="text-[#FF4F00]" /> REVERSE
+                <RotateCw size={11} className="text-[var(--accent-primary)]" /> REVERSE
               </button>
               <button
                 onClick={() => executeOperation({ type: 'search', value: operandVal })}
@@ -497,24 +478,24 @@ export const LeftControlDock: React.FC = () => {
 
         {/* 4. TREES CONTROLS */}
         {activeModule === 'trees' && (
-          <div className="p-3 bg-[#181816] border border-[#262522] space-y-2.5">
-            <span className="text-[10px] font-mono uppercase text-[#9E9B93] font-semibold block">
+          <div className="p-3 bg-[var(--bg-elevated)] border border-[var(--border-hairline)] space-y-2.5">
+            <span className="text-[10px] font-mono uppercase text-[var(--text-secondary)] font-semibold block">
               TREE KEY BALANCING
             </span>
 
             {(activeAlgo === 'mWay' || activeAlgo === 'bTree' || activeAlgo === 'bPlusTree' || activeAlgo === 'mway' || activeAlgo === 'btree' || activeAlgo === 'bplus') && (
-              <div className="flex items-center justify-between border-b border-[#262522] pb-2">
-                <span className="text-[10px] font-mono text-[#9E9B93]">ORDER (M):</span>
+              <div className="flex items-center justify-between border-b border-[var(--border-hairline)] pb-2">
+                <span className="text-[10px] font-mono text-[var(--text-secondary)]">ORDER (M):</span>
                 <div className="flex items-center gap-1">
                   <button
                     onClick={() => setTreeOrder(3)}
-                    className={`px-2 py-0.5 text-[10px] font-mono border ${treeOrder === 3 ? 'bg-[#FF4F00] text-[#090908] border-[#FF4F00] font-bold' : 'border-[#262522] text-[#9E9B93] hover:text-[#F3F2EE]'}`}
+                    className={`px-2 py-0.5 text-[10px] font-mono border ${treeOrder === 3 ? 'bg-[var(--accent-primary)] text-[var(--text-on-accent)] border-[var(--accent-primary)] font-bold' : 'border-[var(--border-hairline)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)]'}`}
                   >
                     M = 3
                   </button>
                   <button
                     onClick={() => setTreeOrder(4)}
-                    className={`px-2 py-0.5 text-[10px] font-mono border ${treeOrder === 4 ? 'bg-[#FF4F00] text-[#090908] border-[#FF4F00] font-bold' : 'border-[#262522] text-[#9E9B93] hover:text-[#F3F2EE]'}`}
+                    className={`px-2 py-0.5 text-[10px] font-mono border ${treeOrder === 4 ? 'bg-[var(--accent-primary)] text-[var(--text-on-accent)] border-[var(--accent-primary)] font-bold' : 'border-[var(--border-hairline)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)]'}`}
                   >
                     M = 4
                   </button>
@@ -555,8 +536,8 @@ export const LeftControlDock: React.FC = () => {
 
         {/* 5. GRAPHS CONTROLS */}
         {activeModule === 'graphs' && (
-          <div className="p-3 bg-[#181816] border border-[#262522] space-y-2.5">
-            <span className="text-[10px] font-mono uppercase text-[#9E9B93] font-semibold block">
+          <div className="p-3 bg-[var(--bg-elevated)] border border-[var(--border-hairline)] space-y-2.5">
+            <span className="text-[10px] font-mono uppercase text-[var(--text-secondary)] font-semibold block">
               {isNetworkGraph ? 'NETWORK TOPOLOGY OPS' : 'GRID TOPOLOGY TOOLS'}
             </span>
 
@@ -581,7 +562,7 @@ export const LeftControlDock: React.FC = () => {
                     onClick={() => executeOperation({ type: 'insertEdge' })}
                     className="btn-hardware-secondary flex items-center justify-center gap-1 py-1.5 text-[11px]"
                   >
-                    <Plus size={11} className="text-[#FF4F00]" /> + EDGE
+                    <Plus size={11} className="text-[var(--accent-primary)]" /> + EDGE
                   </button>
                   <button
                     onClick={() => executeOperation({ type: 'deleteEdge' })}
@@ -594,7 +575,7 @@ export const LeftControlDock: React.FC = () => {
                   onClick={() => executeOperation({ type: 'mst' })}
                   className="w-full btn-hardware-primary flex items-center justify-center gap-1 py-2 text-[11px]"
                 >
-                  <Play size={11} fill="#090908" /> RUN PRIM MST
+                  <Play size={11} fill="currentColor" /> RUN PRIM MST
                 </button>
               </div>
             ) : (
@@ -603,11 +584,11 @@ export const LeftControlDock: React.FC = () => {
                   onClick={handleGenerateMaze}
                   className="btn-hardware-secondary flex items-center justify-center gap-1.5 py-2 text-xs"
                 >
-                  <Cpu size={13} className="text-[#FF4F00]" /> GENERATE MAZE
+                  <Cpu size={13} className="text-[var(--accent-primary)]" /> GENERATE MAZE
                 </button>
                 <button
                   onClick={handleClearWalls}
-                  className="btn-hardware-secondary flex items-center justify-center gap-1.5 py-1.5 text-xs text-[#9E9B93]"
+                  className="btn-hardware-secondary flex items-center justify-center gap-1.5 py-1.5 text-xs text-[var(--text-secondary)]"
                 >
                   <Trash2 size={12} /> CLEAR WALLS &amp; WEIGHTS
                 </button>
@@ -622,7 +603,7 @@ export const LeftControlDock: React.FC = () => {
             onClick={() => handleCompile()}
             className="w-full btn-hardware-primary flex items-center justify-center gap-2 py-3 text-xs"
           >
-            <Play size={13} fill="#090908" />
+            <Play size={13} fill="currentColor" />
             <span>COMPILE &amp; RUN [ENTER]</span>
           </button>
 
@@ -639,7 +620,7 @@ export const LeftControlDock: React.FC = () => {
       </div>
 
       {/* Dock Footer */}
-      <div className="pt-3 border-t border-[#262522] text-[10px] font-mono text-[#5C5952] flex items-center justify-between">
+      <div className="mt-4 pt-3 border-t border-[var(--border-hairline)] bg-[var(--bg-hud)] -mx-4 -mb-4 px-4 py-2.5 text-[10px] font-mono text-[var(--text-secondary)] flex items-center justify-between">
         <span className="flex items-center gap-1.5">
           <span className="w-1.5 h-1.5 rounded-full bg-[#00E676]" />
           HARDWARE DMA READY

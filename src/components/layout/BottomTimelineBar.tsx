@@ -49,19 +49,19 @@ export const BottomTimelineBar: React.FC = () => {
   const speedOptions: PlaybackSpeed[] = [0.25, 0.5, 1, 2, 4, 8];
 
   return (
-    <footer className="h-14 border-t border-[#262522] bg-[#111110] flex items-center justify-between px-4 z-30 shrink-0 select-none">
+    <footer className="h-14 border-t border-[var(--border-hairline)] bg-[var(--bg-panel)] text-[var(--text-primary)] flex items-center justify-between px-4 z-30 shrink-0 select-none">
       {/* Left: Status Indicator LED */}
       <div className="flex items-center gap-2.5 min-w-[170px]">
         <span
           className={`w-2 h-2 ${
             isPlaying
-              ? 'bg-[#FF4F00] shadow-[0_0_8px_#FF4F00] animate-pulse'
+              ? 'bg-[var(--accent-primary)] shadow-[0_0_8px_var(--accent-primary)] animate-pulse'
               : isCompleted
               ? 'bg-[#00E676] shadow-[0_0_8px_#00E676]'
               : 'bg-[#FFB800] shadow-[0_0_8px_#FFB800]'
           }`}
         />
-        <span className="font-mono text-xs font-semibold tracking-wider text-[#F3F2EE]">
+        <span className="font-mono text-xs font-semibold tracking-wider text-[var(--text-primary)]">
           {isPlaying
             ? 'STATUS: EXECUTING'
             : isCompleted
@@ -78,7 +78,7 @@ export const BottomTimelineBar: React.FC = () => {
             onClick={jumpToStart}
             disabled={totalFrames === 0 || currentStepIndex === 0}
             title="Jump to Start (Home)"
-            className="p-1.5 hover:bg-[#181816] text-[#9E9B93] hover:text-[#F3F2EE] disabled:opacity-20 disabled:pointer-events-none border border-transparent hover:border-[#3B3935]"
+            className="p-1.5 hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] disabled:opacity-20 disabled:pointer-events-none border border-transparent hover:border-[var(--border-strong)] transition-colors"
           >
             <SkipBack size={13} />
           </button>
@@ -87,7 +87,7 @@ export const BottomTimelineBar: React.FC = () => {
             onClick={stepBackward}
             disabled={totalFrames === 0 || currentStepIndex === 0}
             title="Step Backward (ArrowLeft)"
-            className="p-1.5 hover:bg-[#181816] text-[#9E9B93] hover:text-[#F3F2EE] disabled:opacity-20 disabled:pointer-events-none border border-transparent hover:border-[#3B3935]"
+            className="p-1.5 hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] disabled:opacity-20 disabled:pointer-events-none border border-transparent hover:border-[var(--border-strong)] transition-colors"
           >
             <ChevronLeft size={15} />
           </button>
@@ -97,16 +97,16 @@ export const BottomTimelineBar: React.FC = () => {
             onClick={togglePlay}
             disabled={totalFrames === 0}
             title={isPlaying ? 'Pause (Space)' : 'Play (Space)'}
-            className="w-8 h-8 bg-[#FF4F00] hover:bg-[#FF6622] text-[#090908] flex items-center justify-center font-bold shadow-md active:translate-y-[1px] disabled:opacity-20 disabled:pointer-events-none mx-1"
+            className="w-8 h-8 bg-[var(--accent-primary)] hover:bg-[var(--accent-primary-hover)] text-[var(--text-on-accent)] flex items-center justify-center font-bold shadow-md active:translate-y-[1px] disabled:opacity-20 disabled:pointer-events-none mx-1 transition-colors"
           >
-            {isPlaying ? <Pause size={14} fill="#090908" /> : <Play size={14} fill="#090908" className="ml-0.5" />}
+            {isPlaying ? <Pause size={14} fill="currentColor" /> : <Play size={14} fill="currentColor" className="ml-0.5" />}
           </button>
 
           <button
             onClick={stepForward}
             disabled={totalFrames === 0 || isCompleted}
             title="Step Forward (ArrowRight)"
-            className="p-1.5 hover:bg-[#181816] text-[#9E9B93] hover:text-[#F3F2EE] disabled:opacity-20 disabled:pointer-events-none border border-transparent hover:border-[#3B3935]"
+            className="p-1.5 hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] disabled:opacity-20 disabled:pointer-events-none border border-transparent hover:border-[var(--border-strong)] transition-colors"
           >
             <ChevronRight size={15} />
           </button>
@@ -115,7 +115,7 @@ export const BottomTimelineBar: React.FC = () => {
             onClick={jumpToEnd}
             disabled={totalFrames === 0 || isCompleted}
             title="Jump to End (End)"
-            className="p-1.5 hover:bg-[#181816] text-[#9E9B93] hover:text-[#F3F2EE] disabled:opacity-20 disabled:pointer-events-none border border-transparent hover:border-[#3B3935]"
+            className="p-1.5 hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] disabled:opacity-20 disabled:pointer-events-none border border-transparent hover:border-[var(--border-strong)] transition-colors"
           >
             <SkipForward size={13} />
           </button>
@@ -123,7 +123,7 @@ export const BottomTimelineBar: React.FC = () => {
 
         {/* Tabular Scrubber Slider */}
         <div className="flex items-center gap-3 flex-1">
-          <span className="font-mono text-[11px] text-[#FF4F00] font-bold w-16 text-right tabular-nums">
+          <span className="font-mono text-[11px] text-[var(--accent-primary)] font-bold w-16 text-right tabular-nums">
             STEP {String(currentStepIndex + 1).padStart(3, '0')}
           </span>
 
@@ -135,18 +135,18 @@ export const BottomTimelineBar: React.FC = () => {
               value={currentStepIndex}
               onChange={(e) => setStepIndex(Number(e.target.value))}
               disabled={totalFrames === 0}
-              className="w-full h-1 bg-[#1C1B19] appearance-none cursor-pointer accent-[#FF4F00] disabled:opacity-20 border border-[#262522]"
+              className="w-full h-1 bg-[var(--border-strong)] appearance-none cursor-pointer accent-[var(--accent-primary)] disabled:opacity-20 border border-[var(--border-hairline)]"
             />
           </div>
 
-          <span className="font-mono text-[11px] text-[#5C5952] w-12 tabular-nums">
+          <span className="font-mono text-[11px] text-[var(--text-muted)] w-12 tabular-nums">
             / {String(Math.max(1, totalFrames)).padStart(3, '0')}
           </span>
         </div>
       </div>
 
       {/* Right: Hardware Playback Speed Selector with layoutId Indicator */}
-      <div className="flex items-center bg-[#090908] border border-[#262522] p-0.5">
+      <div className="flex items-center bg-[var(--bg-elevated)] border border-[var(--border-strong)] text-[var(--text-secondary)] p-0.5">
         {speedOptions.map((speed) => {
           const isActive = playbackSpeed === speed;
           return (
@@ -154,14 +154,14 @@ export const BottomTimelineBar: React.FC = () => {
               key={speed}
               onClick={() => setPlaybackSpeed(speed)}
               className={`relative px-2 py-0.5 text-[10px] font-mono tracking-wider font-bold transition-colors ${
-                isActive ? 'text-[#FF4F00]' : 'text-[#9E9B93] hover:text-[#F3F2EE]'
+                isActive ? 'text-[var(--accent-primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
               }`}
             >
               {isActive && (
                 <motion.div
                   layoutId="active-speed-pill"
                   transition={{ type: 'spring', stiffness: 500, damping: 35 }}
-                  className="absolute inset-0 bg-[#181816] border border-[#3B3935]"
+                  className="absolute inset-0 bg-[var(--bg-panel)] border border-[var(--border-strong)]"
                 />
               )}
               <span className="relative z-10">{speed}x</span>

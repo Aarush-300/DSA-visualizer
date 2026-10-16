@@ -13,7 +13,7 @@ export const LinkedListStage: React.FC = () => {
 
   if (nodes.length === 0) {
     return (
-      <div className="flex items-center justify-center h-full text-stone-500 font-mono text-xs">
+      <div className="flex items-center justify-center h-full text-[var(--text-muted)] font-mono text-xs">
         INITIALIZING MEMORY POINTER BUS...
       </div>
     );
@@ -38,13 +38,13 @@ export const LinkedListStage: React.FC = () => {
   });
 
   function getNodeStyle(node: MemoryNode) {
-    let border = '#262522';
-    let bg = '#111110';
-    let text = '#F3F2EE';
+    let border = 'var(--node-idle-border)';
+    let bg = 'var(--node-idle-bg)';
+    let text = 'var(--node-idle-text)';
 
     if (node.state === 'sorted') {
       border = '#00E676';
-      bg = 'rgba(0, 230, 118, 0.12)';
+      bg = 'rgba(0, 230, 118, 0.14)';
       text = '#00E676';
     } else if (node.state === 'active' || node.state === 'swap') {
       border = '#FF4F00';
@@ -121,7 +121,7 @@ export const LinkedListStage: React.FC = () => {
                 return (
                   <g key="tail-gnd">
                     <line x1={endX} y1={endY} x2={endX + 26} y2={endY} stroke="#FF4F00" strokeWidth="2" markerEnd="url(#arrow-next)" />
-                    <text x={endX + 32} y={endY + 3} fill="#5C5952" fontSize="9" fontFamily="monospace" fontWeight="bold">
+                    <text x={endX + 32} y={endY + 3} fill="var(--text-muted)" fontSize="9" fontFamily="monospace" fontWeight="bold">
                       NULL/GND
                     </text>
                   </g>
@@ -136,7 +136,7 @@ export const LinkedListStage: React.FC = () => {
                 return (
                   <g key="head-prev-gnd">
                     <line x1={startX - 26} y1={startY} x2={startX} y2={startY} stroke="#FFB800" strokeWidth="2" markerEnd="url(#arrow-prev)" />
-                    <text x={startX - 72} y={startY + 3} fill="#5C5952" fontSize="9" fontFamily="monospace" fontWeight="bold">
+                    <text x={startX - 72} y={startY + 3} fill="var(--text-muted)" fontSize="9" fontFamily="monospace" fontWeight="bold">
                       NULL/GND
                     </text>
                   </g>
@@ -356,14 +356,14 @@ export const LinkedListStage: React.FC = () => {
             >
               {/* Pointer Badges on Top */}
               <div className="absolute -top-5 left-0 right-0 flex items-center justify-between text-[8px] font-bold pointer-events-none">
-                {isPrev && <span className="bg-[#FFB800] text-[#090908] px-1 py-0.2">PREV</span>}
-                {isCurr && <span className="bg-[#FF2E93] text-[#090908] px-1 py-0.2">CURR</span>}
-                {isNext && <span className="bg-[#D4FF00] text-[#090908] px-1 py-0.2">NEXT</span>}
+                {isPrev && <span className="bg-[#FFB800] text-[var(--text-on-accent)] px-1 py-0.2">PREV</span>}
+                {isCurr && <span className="bg-[#FF2E93] text-[var(--text-on-accent)] px-1 py-0.2">CURR</span>}
+                {isNext && <span className="bg-[#D4FF00] text-[#141413] px-1 py-0.2">NEXT</span>}
               </div>
 
               {/* Node Header Bar: Address + Indicator Badge */}
-              <div className="flex items-center justify-between px-2 py-0.5 bg-[#181816] border-t border-x border-[#262522] text-[9px] text-[#9E9B93]">
-                <span className="font-semibold text-[#D6D3CD]">ADDR: {node.address}</span>
+              <div className="flex items-center justify-between px-2 py-0.5 bg-[var(--node-header-bg)] border-t border-x border-[var(--border-hairline)] text-[9px] text-[var(--node-subtext)]">
+                <span className="font-semibold text-[var(--node-idle-text)]">ADDR: {node.address}</span>
                 {listType === 'circularDoubly' && isHead && (
                   <span className="text-[8px] font-bold text-[#FF4F00] bg-[#FF4F00]/10 px-1 border border-[#FF4F00]/30">
                     [HEAD ⇄ TAIL RING]
@@ -385,29 +385,29 @@ export const LinkedListStage: React.FC = () => {
               {isDoubly ? (
                 /* Doubly & Circular Doubly: 3 Compartments [ *PREV | DATA | *NEXT ] */
                 <div
-                  className="flex items-stretch border h-full shadow-lg"
+                  className="flex items-stretch border h-full shadow-md"
                   style={{ backgroundColor: style.bg, borderColor: style.border }}
                 >
                   {/* Left Compartment: *PREV */}
-                  <div className="w-[72px] border-r border-[#262522] flex flex-col items-center justify-center px-1 bg-[#141412] text-center">
+                  <div className="w-[72px] border-r border-[var(--border-hairline)] flex flex-col items-center justify-center px-1 bg-[var(--node-header-bg)] text-center">
                     <span className="text-[7.5px] uppercase font-bold text-[#FFB800]">*PREV</span>
-                    <span className="text-[8.5px] font-mono text-[#FFD666] truncate max-w-full">
+                    <span className="text-[8.5px] font-mono text-[#D97706] truncate max-w-full font-semibold">
                       {node.prevAddress ?? 'NULL'}
                     </span>
                   </div>
 
                   {/* Center Compartment: DATA */}
                   <div className="flex-1 flex flex-col items-center justify-center px-1">
-                    <span className="text-[7.5px] uppercase text-[#5C5952] font-semibold">DATA</span>
+                    <span className="text-[7.5px] uppercase text-[var(--node-subtext)] font-semibold">DATA</span>
                     <span className="text-base font-bold tracking-tight" style={{ color: style.text }}>
                       {node.value}
                     </span>
                   </div>
 
                   {/* Right Compartment: *NEXT */}
-                  <div className="w-[72px] border-l border-[#262522] flex flex-col items-center justify-center px-1 bg-[#141412] text-center">
+                  <div className="w-[72px] border-l border-[var(--border-hairline)] flex flex-col items-center justify-center px-1 bg-[var(--node-header-bg)] text-center">
                     <span className="text-[7.5px] uppercase font-bold text-[#FF4F00]">*NEXT</span>
-                    <span className="text-[8.5px] font-mono text-[#FF9466] truncate max-w-full">
+                    <span className="text-[8.5px] font-mono text-[#FF4F00] truncate max-w-full font-semibold">
                       {node.nextAddress ?? 'NULL'}
                     </span>
                   </div>
@@ -415,21 +415,21 @@ export const LinkedListStage: React.FC = () => {
               ) : (
                 /* Singly & Circular Singly: 2 Compartments [ DATA | *NEXT ] */
                 <div
-                  className="flex items-stretch border h-full shadow-lg"
+                  className="flex items-stretch border h-full shadow-md"
                   style={{ backgroundColor: style.bg, borderColor: style.border }}
                 >
                   {/* Left Compartment: DATA */}
                   <div className="flex-1 flex flex-col items-center justify-center px-2">
-                    <span className="text-[7.5px] uppercase text-[#5C5952] font-semibold">DATA</span>
+                    <span className="text-[7.5px] uppercase text-[var(--node-subtext)] font-semibold">DATA</span>
                     <span className="text-base font-bold tracking-tight" style={{ color: style.text }}>
                       {node.value}
                     </span>
                   </div>
 
                   {/* Right Compartment: *NEXT */}
-                  <div className="w-[76px] border-l border-[#262522] flex flex-col items-center justify-center px-1 bg-[#141412] text-center">
+                  <div className="w-[76px] border-l border-[var(--border-hairline)] flex flex-col items-center justify-center px-1 bg-[var(--node-header-bg)] text-center">
                     <span className="text-[7.5px] uppercase font-bold text-[#FF4F00]">*NEXT</span>
-                    <span className="text-[8.5px] font-mono text-[#FF9466] truncate max-w-full">
+                    <span className="text-[8.5px] font-mono text-[#FF4F00] truncate max-w-full font-semibold">
                       {node.nextAddress ?? 'NULL'}
                     </span>
                   </div>

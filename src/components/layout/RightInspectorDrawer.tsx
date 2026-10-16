@@ -47,11 +47,11 @@ export const RightInspectorDrawer: React.FC = () => {
 
   if (isRightDrawerCollapsed) {
     return (
-      <div className="h-full border-l border-[#262522] bg-[#111110] flex flex-col items-center py-4 px-1.5 z-20 shrink-0">
+      <div className="h-full border-l border-[var(--border-hairline)] bg-[var(--bg-panel)] flex flex-col items-center py-4 px-1.5 z-20 shrink-0">
         <button
           onClick={toggleRightDrawer}
           title="Expand Inspector Drawer"
-          className="p-1.5 hover:bg-[#181816] text-[#9E9B93] hover:text-[#F3F2EE] border border-transparent hover:border-[#3B3935]"
+          className="p-1.5 hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-transparent hover:border-[var(--border-strong)] transition-colors"
         >
           <ChevronLeft size={16} />
         </button>
@@ -69,16 +69,16 @@ export const RightInspectorDrawer: React.FC = () => {
   ];
 
   return (
-    <aside className="w-[380px] min-w-[360px] h-full border-l border-[#262522] bg-[#111110] flex flex-col z-20 shrink-0 select-none">
+    <aside className="w-[380px] min-w-[360px] h-full border-l border-[var(--border-hairline)] bg-[var(--bg-panel)] text-[var(--text-primary)] flex flex-col z-20 shrink-0 select-none">
       {/* Drawer Tab Headers with Hardware Keycaps */}
-      <div className="flex items-center justify-between border-b border-[#262522] px-3 py-2 bg-[#0D0D0C]">
+      <div className="flex items-center justify-between border-b border-[var(--border-hairline)] px-3 py-2 bg-[var(--bg-hud)]">
         <div className="flex items-center gap-1">
           <button
             onClick={() => setActiveInspectorTab('code')}
             className={`flex items-center gap-1.5 px-2.5 py-1 text-xs font-display tracking-wider font-semibold transition-all ${
               activeInspectorTab === 'code'
-                ? 'bg-[#181816] text-[#FF4F00] border-t-2 border-t-[#FF4F00] border-x border-b border-[#3B3935]'
-                : 'text-[#9E9B93] hover:text-[#F3F2EE]'
+                ? 'bg-[var(--bg-elevated)] text-[var(--accent-primary)] border-t-2 border-t-[var(--accent-primary)] border-x border-b border-[var(--border-strong)]'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
             }`}
           >
             <Code size={12} />
@@ -89,8 +89,8 @@ export const RightInspectorDrawer: React.FC = () => {
             onClick={() => setActiveInspectorTab('telemetry')}
             className={`flex items-center gap-1.5 px-2.5 py-1 text-xs font-display tracking-wider font-semibold transition-all ${
               activeInspectorTab === 'telemetry'
-                ? 'bg-[#181816] text-[#FF4F00] border-t-2 border-t-[#FF4F00] border-x border-b border-[#3B3935]'
-                : 'text-[#9E9B93] hover:text-[#F3F2EE]'
+                ? 'bg-[var(--bg-elevated)] text-[var(--accent-primary)] border-t-2 border-t-[var(--accent-primary)] border-x border-b border-[var(--border-strong)]'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
             }`}
           >
             <Activity size={12} />
@@ -101,8 +101,8 @@ export const RightInspectorDrawer: React.FC = () => {
             onClick={() => setActiveInspectorTab('stack')}
             className={`flex items-center gap-1.5 px-2.5 py-1 text-xs font-display tracking-wider font-semibold transition-all ${
               activeInspectorTab === 'stack'
-                ? 'bg-[#181816] text-[#FF4F00] border-t-2 border-t-[#FF4F00] border-x border-b border-[#3B3935]'
-                : 'text-[#9E9B93] hover:text-[#F3F2EE]'
+                ? 'bg-[var(--bg-elevated)] text-[var(--accent-primary)] border-t-2 border-t-[var(--accent-primary)] border-x border-b border-[var(--border-strong)]'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
             }`}
           >
             <Layers size={12} />
@@ -113,7 +113,7 @@ export const RightInspectorDrawer: React.FC = () => {
         <button
           onClick={toggleRightDrawer}
           title="Collapse Drawer"
-          className="p-1 text-[#9E9B93] hover:text-[#F3F2EE] hover:bg-[#181816]"
+          className="p-1 text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)] transition-colors"
         >
           <ChevronRight size={15} />
         </button>
@@ -121,13 +121,13 @@ export const RightInspectorDrawer: React.FC = () => {
 
       {/* Tab 1: Live Code Trace */}
       {activeInspectorTab === 'code' && (
-        <div className="flex-1 flex flex-col min-h-0 bg-[#090908]">
+        <div className="flex-1 flex flex-col min-h-0 bg-[var(--bg-canvas)]">
           {/* Language Switcher Bar with Sliding layoutId Active Indicator */}
-          <div className="px-3 py-1.5 border-b border-[#262522] flex items-center justify-between bg-[#111110]">
-            <span className="text-[10px] font-mono uppercase font-bold text-[#5C5952]">
+          <div className="px-3 py-1.5 border-b border-[var(--border-hairline)] flex items-center justify-between bg-[var(--bg-hud)]">
+            <span className="text-[10px] font-mono uppercase font-bold text-[var(--text-muted)]">
               TARGET SYNTAX
             </span>
-            <div className="flex items-center bg-[#090908] border border-[#262522] p-0.5">
+            <div className="flex items-center bg-[var(--bg-panel)] border border-[var(--border-hairline)] p-0.5">
               {languages.map((lang) => {
                 const isActive = codeLanguage === lang.id;
                 return (
@@ -135,14 +135,14 @@ export const RightInspectorDrawer: React.FC = () => {
                     key={lang.id}
                     onClick={() => setCodeLanguage(lang.id)}
                     className={`relative px-2 py-0.5 text-[10px] font-mono tracking-wider font-bold transition-colors ${
-                      isActive ? 'text-[#FF4F00]' : 'text-[#9E9B93] hover:text-[#F3F2EE]'
+                      isActive ? 'text-[var(--accent-primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                     }`}
                   >
                     {isActive && (
                       <motion.div
                         layoutId="active-lang-tab"
                         transition={{ type: 'spring', stiffness: 500, damping: 35 }}
-                        className="absolute inset-0 bg-[#181816] border border-[#3B3935]"
+                        className="absolute inset-0 bg-[var(--bg-elevated)] border border-[var(--border-strong)]"
                       />
                     )}
                     <span className="relative z-10">{lang.label}</span>
@@ -152,13 +152,13 @@ export const RightInspectorDrawer: React.FC = () => {
             </div>
           </div>
 
-          <div className="px-3 py-1 bg-[#111110] text-[10px] font-mono text-[#5C5952] border-b border-[#262522] flex items-center justify-between">
+          <div className="px-3 py-1 bg-[var(--bg-hud)] text-[10px] font-mono text-[var(--text-muted)] border-b border-[var(--border-hairline)] flex items-center justify-between">
             <span>SYNCED EXECUTION TRACE</span>
-            <span className="text-[#FF4F00]">LINE: {String(activeLineNumber).padStart(2, '0')}</span>
+            <span className="text-[var(--accent-primary)]">LINE: {String(activeLineNumber).padStart(2, '0')}</span>
           </div>
 
           {/* Line-by-Line Code Viewer with Laser Bar Indicator */}
-          <div className="flex-1 overflow-auto p-2 font-mono text-[12.5px] leading-relaxed bg-[#090908]">
+          <div className="flex-1 overflow-auto p-2 font-mono text-[12.5px] leading-relaxed bg-[var(--bg-canvas)]">
             {currentLines.map((line, idx) => {
               const lineNum = idx + 1;
               const isCurrent = lineNum === activeLineNumber;
@@ -177,15 +177,15 @@ export const RightInspectorDrawer: React.FC = () => {
                   )}
 
                   {/* Execution Gutter Arrow & Sticky Line Number */}
-                  <span className="relative z-10 w-4 text-center text-[10px] font-bold text-[#FF4F00]">
+                  <span className="relative z-10 w-4 text-center text-[10px] font-bold text-[var(--accent-primary)]">
                     {isCurrent ? '▶' : ''}
                   </span>
-                  <span className="relative z-10 w-7 shrink-0 text-right pr-2 text-[#5C5952] select-none text-[10px] font-mono sticky left-0 bg-[#090908]">
+                  <span className="relative z-10 w-7 shrink-0 text-right pr-2 text-[var(--text-muted)] select-none text-[10px] font-mono sticky left-0 bg-[var(--bg-code-gutter)]">
                     {String(lineNum).padStart(2, '0')}
                   </span>
 
                   {/* Code Line */}
-                  <pre className="relative z-10 font-mono text-[12px] whitespace-pre pl-1 text-[#F3F2EE] m-0">
+                  <pre className="relative z-10 font-mono text-[12px] whitespace-pre pl-1 text-[var(--text-primary)] m-0">
                     {line}
                   </pre>
                 </div>
@@ -197,7 +197,7 @@ export const RightInspectorDrawer: React.FC = () => {
 
       {/* Tab 2: Runtime Telemetry & Complexity */}
       {activeInspectorTab === 'telemetry' && (
-        <div className="flex-1 overflow-y-auto p-3 space-y-3 bg-[#090908]">
+        <div className="flex-1 overflow-y-auto p-3 space-y-3 bg-[var(--bg-canvas)]">
           <div className="grid grid-cols-2 gap-2">
             <MetricCounterCard
               label="COMPARISONS"
@@ -209,7 +209,7 @@ export const RightInspectorDrawer: React.FC = () => {
               label="MUTATIONS / SWAPS"
               value={metrics.swaps}
               subtext="Memory Reassignments"
-              color="#FF4F00"
+              color="var(--accent-primary)"
             />
             <MetricCounterCard
               label="AUX MEMORY"
@@ -227,36 +227,36 @@ export const RightInspectorDrawer: React.FC = () => {
 
           {/* Complexity Reference Matrix */}
           {algoMeta && (
-            <div className="p-3 bg-[#111110] border border-[#262522] space-y-2.5">
-              <div className="flex items-center justify-between pb-1.5 border-b border-[#262522]">
-                <span className="text-[10px] font-display uppercase tracking-wider font-bold text-[#F3F2EE]">
+            <div className="p-3 bg-[var(--bg-panel)] border border-[var(--border-hairline)] space-y-2.5">
+              <div className="flex items-center justify-between pb-1.5 border-b border-[var(--border-hairline)]">
+                <span className="text-[10px] font-display uppercase tracking-wider font-bold text-[var(--text-primary)]">
                   ASYMPTOTIC SPECIFICATION
                 </span>
-                <span className="font-mono text-[9px] text-[#FF4F00] font-bold">
+                <span className="font-mono text-[9px] text-[var(--accent-primary)] font-bold">
                   {algoMeta.name}
                 </span>
               </div>
 
               <div className="grid grid-cols-2 gap-1.5 text-xs font-mono">
-                <div className="p-2 bg-[#181816] border border-[#262522]">
-                  <span className="text-[9px] text-[#5C5952] block font-mono">BEST CASE</span>
+                <div className="p-2 bg-[var(--bg-elevated)] border border-[var(--border-hairline)]">
+                  <span className="text-[9px] text-[var(--text-muted)] block font-mono">BEST CASE</span>
                   <span className="text-[#00E676] font-bold">{algoMeta.complexity.bestTime}</span>
                 </div>
-                <div className="p-2 bg-[#181816] border border-[#262522]">
-                  <span className="text-[9px] text-[#5C5952] block font-mono">AVERAGE CASE</span>
+                <div className="p-2 bg-[var(--bg-elevated)] border border-[var(--border-hairline)]">
+                  <span className="text-[9px] text-[var(--text-muted)] block font-mono">AVERAGE CASE</span>
                   <span className="text-[#FFB800] font-bold">{algoMeta.complexity.averageTime}</span>
                 </div>
-                <div className="p-2 bg-[#181816] border border-[#262522]">
-                  <span className="text-[9px] text-[#5C5952] block font-mono">WORST CASE</span>
-                  <span className="text-[#FF4F00] font-bold">{algoMeta.complexity.worstTime}</span>
+                <div className="p-2 bg-[var(--bg-elevated)] border border-[var(--border-hairline)]">
+                  <span className="text-[9px] text-[var(--text-muted)] block font-mono">WORST CASE</span>
+                  <span className="text-[var(--accent-primary)] font-bold">{algoMeta.complexity.worstTime}</span>
                 </div>
-                <div className="p-2 bg-[#181816] border border-[#262522]">
-                  <span className="text-[9px] text-[#5C5952] block font-mono">AUX SPACE</span>
+                <div className="p-2 bg-[var(--bg-elevated)] border border-[var(--border-hairline)]">
+                  <span className="text-[9px] text-[var(--text-muted)] block font-mono">AUX SPACE</span>
                   <span className="text-[#D4FF00] font-bold">{algoMeta.complexity.space}</span>
                 </div>
               </div>
 
-              <p className="text-[11px] font-sans text-[#9E9B93] leading-relaxed pt-1 border-t border-[#262522]">
+              <p className="text-[11px] font-sans text-[var(--text-secondary)] leading-relaxed pt-1 border-t border-[var(--border-hairline)]">
                 {algoMeta.description}
               </p>
             </div>
@@ -266,19 +266,19 @@ export const RightInspectorDrawer: React.FC = () => {
 
       {/* Tab 3: Call Stack */}
       {activeInspectorTab === 'stack' && (
-        <div className="flex-1 overflow-y-auto p-3 space-y-2 bg-[#090908]">
-          <div className="flex items-center justify-between pb-2 border-b border-[#262522]">
-            <span className="text-[10px] font-display uppercase tracking-wider font-bold text-[#9E9B93]">
+        <div className="flex-1 overflow-y-auto p-3 space-y-2 bg-[var(--bg-canvas)]">
+          <div className="flex items-center justify-between pb-2 border-b border-[var(--border-hairline)]">
+            <span className="text-[10px] font-display uppercase tracking-wider font-bold text-[var(--text-secondary)]">
               LIFO RECURSION CALL STACK
             </span>
-            <span className="font-mono text-[10px] text-[#FF4F00]">
+            <span className="font-mono text-[10px] text-[var(--accent-primary)]">
               DEPTH: {String(currentFrame?.callStack.length ?? 0).padStart(2, '0')}
             </span>
           </div>
 
           <div className="space-y-1">
             {(!currentFrame?.callStack || currentFrame.callStack.length === 0) ? (
-              <div className="text-center py-8 text-xs text-[#5C5952] font-mono">
+              <div className="text-center py-8 text-xs text-[var(--text-muted)] font-mono">
                 [STACK IDLE]
               </div>
             ) : (
@@ -287,11 +287,11 @@ export const RightInspectorDrawer: React.FC = () => {
                   key={idx}
                   className={`p-2 border text-xs font-mono flex items-center gap-2 ${
                     idx === 0
-                      ? 'bg-[#181816] border-[#FF4F00] text-[#F3F2EE]'
-                      : 'bg-[#111110] border-[#262522] text-[#9E9B93]'
+                      ? 'bg-[var(--bg-elevated)] border-[var(--accent-primary)] text-[var(--text-primary)]'
+                      : 'bg-[var(--bg-panel)] border-[var(--border-hairline)] text-[var(--text-secondary)]'
                   }`}
                 >
-                  <GitBranch size={12} className={idx === 0 ? 'text-[#FF4F00]' : 'text-[#5C5952]'} />
+                  <GitBranch size={12} className={idx === 0 ? 'text-[var(--accent-primary)]' : 'text-[var(--text-muted)]'} />
                   <span className="truncate">{call}</span>
                 </div>
               ))

@@ -1,17 +1,31 @@
-:root {
+:root,
+[data-theme="dark"] {
   /* Surfaces & Structural Grid (Dark / Carbon Mode) */
   --bg-canvas: #090908;
   --bg-panel: #111110;
+  --bg-hud: #0D0D0C;
   --bg-elevated: #181816;
+  --bg-input: #0B0B0A;
   --bg-hover: #22221F;
+  --bg-code-gutter: #0D0D0C;
+
   --border-hairline: #262522;
   --border-strong: #3B3935;
-  --dot-color: rgba(243, 242, 238, 0.08);
+  --canvas-dot: rgba(255, 255, 255, 0.09);
+  --dot-color: rgba(255, 255, 255, 0.09);
 
   /* Typography Colors */
   --text-primary: #F3F2EE;
   --text-secondary: #9E9B93;
   --text-muted: #5C5952;
+  --text-on-accent: #090908;
+
+  /* Data Structure Node & Bar Tokens (Dark) */
+  --node-idle-bg: #1C1B19;
+  --node-idle-border: #383632;
+  --node-idle-text: #F3F2EE;
+  --node-subtext: #9E9B93;
+  --node-header-bg: #141311;
 
   /* Font Families */
   --font-display: 'Chakra Petch', sans-serif;
@@ -19,6 +33,8 @@
   --font-mono: 'IBM Plex Mono', monospace;
 
   /* Brand Primary Accent */
+  --accent-primary: #FF4F00;
+  --accent-primary-hover: #FF6622;
   --accent-signal: #FF4F00;
   --accent-signal-hover: #FF6622;
   --accent-signal-text: #090908;
@@ -60,22 +76,38 @@
 }
 
 /* Dieter Rams / Teenage Engineering Warm Paper Light Mode */
-[data-theme="light"] {
-  --bg-canvas: #F2F0E8;
-  --bg-panel: #FAF9F5;
-  --bg-elevated: #E6E3D8;
-  --bg-hover: #DCD8CB;
-  --border-hairline: #D0CCC0;
-  --border-strong: #A8A396;
-  --dot-color: rgba(18, 18, 16, 0.12);
+[data-theme="light"],
+.light {
+  --bg-canvas: #EFECE6;          /* Warm architectural drafting grid paper */
+  --bg-panel: #F8F6F0;           /* Crisp matte ivory structural panels */
+  --bg-hud: #F2EFE9;             /* Sub-header & telemetry HUD surface */
+  --bg-elevated: #E6E2D8;        /* Tactile anodized warm grey cards & buttons */
+  --bg-input: #FFFFFF;           /* Crisp white input fields */
+  --bg-hover: #DBD6C9;           /* Warm stone hover state */
+  --bg-code-gutter: #EAE6DC;     /* Code line-number gutter */
 
-  --text-primary: #121210;
-  --text-secondary: #4A4842;
-  --text-muted: #7D7970;
+  --border-hairline: #D4CFC3;    /* Crisp 1px drafting grid lines */
+  --border-strong: #B5AFA0;      /* Defined structural borders */
+  --canvas-dot: rgba(18, 18, 16, 0.14); /* Crisp dark dots on light canvas */
+  --dot-color: rgba(18, 18, 16, 0.14);
 
+  --text-primary: #141413;       /* Deep drafting ink black */
+  --text-secondary: #52504A;     /* High-contrast charcoal slate */
+  --text-muted: #858075;         /* Muted warm graphite */
+  --text-on-accent: #FFFFFF;
+
+  /* Data Structure Node & Bar Tokens (Light — NEVER use black bars in light mode!) */
+  --node-idle-bg: #FFFFFF;       /* Crisp white/ivory card & bar fill */
+  --node-idle-border: #ABA598;   /* Distinct architectural border on idle bars/nodes */
+  --node-idle-text: #141413;     /* Deep ink-black numbers above/inside bars and nodes */
+  --node-subtext: #57534E;       /* Legible hex addresses and indices */
+  --node-header-bg: #E6E2D8;     /* Linked-list/Tree node header strip */
+
+  --accent-primary: #FF4F00;
+  --accent-primary-hover: #E04500;
   --accent-signal: #FF4F00;
   --accent-signal-hover: #E04500;
-  --accent-signal-text: #FAF9F5;
+  --accent-signal-text: #FFFFFF;
 
   --state-idle-bg: #EAE6D9;
   --state-idle-border: #C2BDAF;

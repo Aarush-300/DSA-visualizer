@@ -13,15 +13,15 @@ export const MetricCounterCard: React.FC<MetricCounterCardProps> = ({
   label,
   value,
   subtext,
-  color = '#FF4F00',
+  color = 'var(--accent-primary)',
   icon,
 }) => {
   const displayVal = typeof value === 'number' ? String(value).padStart(4, '0') : value;
 
   return (
-    <div className="flex flex-col p-3 bg-[#181816] border border-[#262522] relative overflow-hidden group select-none">
+    <div className="flex flex-col p-3 bg-[var(--bg-elevated)] border border-[var(--border-hairline)] relative overflow-hidden group select-none">
       <div className="flex items-center justify-between text-xs mb-1.5">
-        <span className="font-display uppercase text-[10px] font-bold tracking-wider text-[#9E9B93]">
+        <span className="font-display uppercase text-[10px] font-bold tracking-wider text-[var(--text-secondary)]">
           {label}
         </span>
         {icon && <span style={{ color }}>{icon}</span>}
@@ -35,7 +35,7 @@ export const MetricCounterCard: React.FC<MetricCounterCardProps> = ({
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -12, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-            className="font-mono text-xl font-bold tracking-tight text-[#F3F2EE]"
+            className="font-mono text-xl font-bold tracking-tight text-[var(--text-primary)]"
           >
             {displayVal}
           </motion.span>
@@ -43,7 +43,7 @@ export const MetricCounterCard: React.FC<MetricCounterCardProps> = ({
       </div>
 
       {subtext && (
-        <span className="font-mono text-[9px] text-[#5C5952] mt-1 truncate">
+        <span className="font-mono text-[9px] text-[var(--text-muted)] mt-1 truncate">
           {subtext}
         </span>
       )}

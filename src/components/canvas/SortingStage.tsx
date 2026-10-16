@@ -45,10 +45,11 @@ export const SortingStage: React.FC = () => {
   };
 
   function getBarVisuals(bar: ArrayBarItem, index: number) {
-    let bg = '#1C1B19';
-    let border = '#33312D';
-    let text = '#D6D3CD';
+    let bg = 'var(--node-idle-bg)';
+    let border = 'var(--node-idle-border)';
+    let text = 'var(--node-idle-text)';
     let isHatched = false;
+    let isIdle = true;
 
     const isMutating = currentFrame?.mutateIds?.includes(bar.id);
     const isActive = currentFrame?.activeIds?.includes(bar.id);
@@ -56,31 +57,36 @@ export const SortingStage: React.FC = () => {
     const isSorted = currentFrame?.sortedIds?.includes(index) || bar.state === 'sorted';
 
     if (isSorted) {
-      bg = 'rgba(0, 230, 118, 0.14)';
+      bg = 'rgba(0, 230, 118, 0.16)';
       border = '#00E676';
-      text = '#66FFA6';
+      text = '#00E676';
+      isIdle = false;
     } else if (isMutating || bar.state === 'swap') {
       bg = 'rgba(255, 79, 0, 0.22)';
       border = '#FF4F00';
-      text = '#FF9466';
+      text = '#FF4F00';
       isHatched = true;
+      isIdle = false;
     } else if (isPivot || bar.state === 'pivot') {
       bg = 'rgba(255, 46, 147, 0.20)';
       border = '#FF2E93';
-      text = '#FF85BF';
+      text = '#FF2E93';
+      isIdle = false;
     } else if (isActive || bar.state === 'compare') {
       bg = 'rgba(255, 184, 0, 0.18)';
       border = '#FFB800';
-      text = '#FFD666';
+      text = '#FFB800';
       isHatched = true;
+      isIdle = false;
     } else if (bar.state === 'visited') {
-      bg = 'rgba(212, 255, 0, 0.10)';
+      bg = 'rgba(212, 255, 0, 0.12)';
       border = '#D4FF00';
-      text = '#E8FF7A';
+      text = '#D4FF00';
       isHatched = true;
+      isIdle = false;
     }
 
-    return { bg, border, text, isHatched, isMutating };
+    return { bg, border, text, isHatched, isMutating, isIdle };
   }
 
   // Pointer lane distribution for multi-lane stacking
@@ -112,7 +118,7 @@ export const SortingStage: React.FC = () => {
       {/* Bars Stage Container */}
       <div
         key={`${activeModule}-${activeAlgo}-${runId}`}
-        className="flex items-end justify-center gap-2 w-full h-[300px] border-b border-[#262522] pb-1 relative"
+        className="flex items-end justify-center gap-2 w-full h-[300px] border-b border-[var(--border-strong)] pb-1 relative"
       >
         {bars.map((bar, index) => {
           const heightPx = Math.max(34, (bar.value / maxVal) * maxBarHeight);
@@ -141,18 +147,18 @@ export const SortingStage: React.FC = () => {
                       if (e.key === 'Enter') handleSaveEdit(index);
                       if (e.key === 'Escape') setEditingIndex(null);
                     }}
-                    className="w-11 px-1 py-0.5 text-[11px] font-mono bg-[#090908] border border-[#FF4F00] text-[#F3F2EE] text-center focus:outline-none"
+                    className="w-11 px-1 py-0.5 text-[11px] font-mono bg-[var(--bg-input)] border border-[var(--accent-primary)] text-[var(--text-primary)] text-center focus:outline-none"
                   />
                   <button
                     onClick={() => handleSaveEdit(index)}
-                    className="p-0.5 bg-[#FF4F00] text-[#090908] ml-0.5"
+                    className="p-0.5 bg-[var(--accent-primary)] text-[var(--text-on-accent)] ml-0.5"
                     title="Save edit"
                   >
                     <Check size={10} />
                   </button>
                   <button
                     onClick={(e) => handleDeleteBar(index, e)}
-                    className="p-0.5 bg-[#FF2E93] text-[#090908] ml-0.5 hover:bg-[#FF4F00]"
+                    className="p-0.5 bg-[#FF2E93] text-[var(--text-on-accent)] ml-0.5 hover:bg-[var(--accent-primary)]"
                     title="Delete element"
                   >
                     ✕
@@ -163,15 +169,15 @@ export const SortingStage: React.FC = () => {
                   <button
                     onClick={() => handleStartEdit(index, bar.value)}
                     title="Click to edit value inline"
-                    className="mb-1.5 px-1 py-0.5 text-[11px] font-mono font-semibold tracking-tight text-center hover:text-[#FF4F00] transition-colors"
-                    style={{ color: vis.text }}
+                    className="mb-1.5 px-1 py-0.5 text-[11px] font-mono font-semibold tracking-tight text-center hover:text-[var(--accent-primary)] transition-colors"
+                    style={{ color: vis.text, fontWeight: 600 }}
                   >
                     {bar.value}
                   </button>
                   <button
                     onClick={(e) => handleDeleteBar(index, e)}
                     title="Delete bar"
-                    className="absolute -top-3 right-0 hidden group-hover/btn:flex items-center justify-center w-3.5 h-3.5 bg-[#FF2E93] text-[#090908] text-[8px] font-bold"
+                    className="absolute -top-3 right-0 hidden group-hover/btn:flex items-center justify-center w-3.5 h-3.5 bg-[#FF2E93] text-[var(--text-on-accent)] text-[8px] font-bold"
                   >
                     ✕
                   </button>
@@ -186,8 +192,9 @@ export const SortingStage: React.FC = () => {
                   height: `${heightPx}px`,
                   backgroundColor: vis.bg,
                   borderColor: vis.border,
-                  borderWidth: '1px',
+                  borderWidth: vis.isIdle ? '1.5px' : '1px',
                   borderBottomWidth: '0px',
+                  boxShadow: vis.isIdle ? 'inset 0 1px 2px rgba(0, 0, 0, 0.05)' : undefined,
                 }}
               >
                 {/* Precision Top Cap Highlight Rule */}
@@ -198,7 +205,7 @@ export const SortingStage: React.FC = () => {
               </motion.div>
 
               {/* Numbered Index Ruler Beneath Baseline (00, 01, 02...) */}
-              <span className="font-mono text-[10px] text-[#5C5952] mt-2 font-medium">
+              <span className="font-mono text-[10px] text-[var(--text-secondary)] mt-2 font-medium">
                 {String(index).padStart(2, '0')}
               </span>
 

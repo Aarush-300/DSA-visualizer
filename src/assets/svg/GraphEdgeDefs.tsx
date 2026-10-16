@@ -14,7 +14,7 @@ export const GraphEdgeDefs: React.FC = () => {
           markerHeight="6"
           orient="auto-start-reverse"
         >
-          <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#5C5952" />
+          <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="var(--text-muted)" />
         </marker>
 
         <marker

@@ -54,13 +54,13 @@ export const GraphStage: React.FC = () => {
 
   function getCellClasses(cell: GridCell): string {
     if (cell.type === 'start') {
-      return 'bg-[#00E676] border-[#00E676] text-[#090908] font-bold shadow-md';
+      return 'bg-[#00E676] border-[#00E676] text-[var(--text-on-accent)] font-bold shadow-md';
     }
     if (cell.type === 'target') {
-      return 'bg-[#FF4F00] border-[#FF4F00] text-[#090908] font-bold shadow-md';
+      return 'bg-[var(--accent-primary)] border-[var(--accent-primary)] text-[var(--text-on-accent)] font-bold shadow-md';
     }
     if (cell.type === 'wall') {
-      return 'bg-[#1C1B19] border-[#33312D]';
+      return 'bg-[#262522] border-[#383632]';
     }
     if (cell.type === 'weight') {
       return 'bg-[rgba(255,184,0,0.25)] border-[#FFB800] text-[#FFB800] font-bold';
@@ -71,7 +71,7 @@ export const GraphStage: React.FC = () => {
     if (cell.type === 'visited') {
       return 'bg-[rgba(212,255,0,0.15)] border-[rgba(212,255,0,0.4)] animate-wavefront-industrial';
     }
-    return 'bg-[#111110] border-[#262522] hover:bg-[#181816]';
+    return 'bg-[var(--node-idle-bg)] border-[var(--border-hairline)] hover:bg-[var(--bg-hover)]';
   }
 
   // 1. 2D Interactive Grid
@@ -82,15 +82,15 @@ export const GraphStage: React.FC = () => {
         onMouseDown={() => setIsMouseDown(true)}
         onMouseUp={() => setIsMouseDown(false)}
       >
-        <div className="flex items-center gap-4 mb-2 text-[10px] font-mono text-[#9E9B93]">
+        <div className="flex items-center gap-4 mb-2 text-[10px] font-mono text-[var(--text-secondary)]">
           <span className="flex items-center gap-1">
             <span className="w-2.5 h-2.5 bg-[#00E676]" /> START
           </span>
           <span className="flex items-center gap-1">
-            <span className="w-2.5 h-2.5 bg-[#FF4F00]" /> TARGET
+            <span className="w-2.5 h-2.5 bg-[var(--accent-primary)]" /> TARGET
           </span>
           <span className="flex items-center gap-1">
-            <span className="w-2.5 h-2.5 bg-[#1C1B19] border border-[#33312D]" /> WALL
+            <span className="w-2.5 h-2.5 bg-[#262522] border border-[#383632]" /> WALL
           </span>
           <span className="flex items-center gap-1">
             <span className="w-2.5 h-2.5 bg-[rgba(255,184,0,0.25)] border border-[#FFB800] text-[#FFB800] text-[8px] flex items-center justify-center font-bold">5</span> WEIGHT (+5)
@@ -100,7 +100,7 @@ export const GraphStage: React.FC = () => {
           </span>
         </div>
 
-        <div className="inline-grid gap-[1px] p-2 bg-[#090908] border border-[#262522] shadow-2xl overflow-auto max-w-full max-h-[460px]">
+        <div className="inline-grid gap-[1px] p-2 bg-[var(--bg-canvas)] border border-[var(--border-hairline)] shadow-xl overflow-auto max-w-full max-h-[460px]">
           {grid.map((row, r) => (
             <div key={r} className="flex gap-[1px]">
               {row.map((cell, c) => (
@@ -125,7 +125,7 @@ export const GraphStage: React.FC = () => {
   // 2. Network Graph Mode
   return (
     <div className="flex flex-col items-center justify-center w-full max-w-4xl h-[420px] relative select-none">
-      <div className="relative w-[720px] h-[340px] bg-[#111110] border border-[#262522] shadow-2xl p-4">
+      <div className="relative w-[720px] h-[340px] bg-[var(--bg-panel)] border border-[var(--border-hairline)] shadow-xl p-4">
         {/* SVG Edges Layer */}
         <svg className="absolute inset-0 w-full h-full pointer-events-none">
           {edges.map((edge) => {
@@ -139,8 +139,8 @@ export const GraphStage: React.FC = () => {
             const strokeColor = isMst
               ? '#00E676'
               : isActive
-              ? '#FF4F00'
-              : '#33312D';
+              ? 'var(--accent-primary)'
+              : 'var(--border-strong)';
             const strokeWidth = isMst ? 3 : isActive ? 2 : 1;
 
             const midX = (v1.x + v2.x) / 2;
@@ -161,14 +161,14 @@ export const GraphStage: React.FC = () => {
                   y={midY - 7}
                   width="18"
                   height="14"
-                  fill="#090908"
+                  fill="var(--bg-canvas)"
                   stroke={strokeColor}
                   strokeWidth="1"
                 />
                 <text
                   x={midX}
                   y={midY + 4}
-                  fill={isMst ? '#66FFA6' : isActive ? '#FF9466' : '#9E9B93'}
+                  fill={isMst ? '#00E676' : isActive ? 'var(--accent-primary)' : 'var(--text-secondary)'}
                   fontSize="9"
                   fontFamily="'IBM Plex Mono', monospace"
                   fontWeight="bold"
@@ -186,24 +186,24 @@ export const GraphStage: React.FC = () => {
           const isActive = activeVertexId === v.id;
           const isSorted = v.state === 'sorted';
 
-          let bg = '#181816';
-          let border = '#33312D';
-          let textColor = '#F3F2EE';
+          let bg = 'var(--node-idle-bg)';
+          let border = 'var(--node-idle-border)';
+          let textColor = 'var(--node-idle-text)';
 
           if (isSorted) {
             bg = 'rgba(0, 230, 118, 0.2)';
             border = '#00E676';
-            textColor = '#66FFA6';
+            textColor = '#00E676';
           } else if (isActive) {
             bg = 'rgba(255, 79, 0, 0.25)';
             border = '#FF4F00';
-            textColor = '#FF9466';
+            textColor = '#FF4F00';
           }
 
           return (
             <motion.div
               key={v.id}
-              className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 border shadow-lg cursor-grab active:cursor-grabbing transition-all duration-150"
+              className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 border shadow-md cursor-grab active:cursor-grabbing transition-all duration-150"
               style={{
                 left: v.x,
                 top: v.y,

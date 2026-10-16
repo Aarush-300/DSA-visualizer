@@ -16,7 +16,7 @@ export const TreeStage: React.FC = () => {
 
   if (!rootId && Object.keys(nodes).length === 0 && Object.keys(multiKeyNodes).length === 0) {
     return (
-      <div className="flex items-center justify-center h-full text-stone-500 font-mono text-xs">
+      <div className="flex items-center justify-center h-full text-[var(--text-muted)] font-mono text-xs">
         INITIALIZING TREE REGISTER STAGE...
       </div>
     );
@@ -56,7 +56,7 @@ export const TreeStage: React.FC = () => {
                     y1={node.y + 20}
                     x2={child.x}
                     y2={child.y - 14}
-                    stroke="#3B3935"
+                    stroke="var(--border-strong)"
                     strokeWidth="1.5"
                   />
                 );
@@ -95,22 +95,22 @@ export const TreeStage: React.FC = () => {
             const isVerified =
               currentFrame?.sortedIds?.includes(node.id) || node.state === 'sorted';
 
-            let borderColor = '#262522';
-            let bgColor = '#111110';
+            let borderColor = 'var(--node-idle-border)';
+            let bgColor = 'var(--node-idle-bg)';
             let badgeText = 'NODE';
-            let badgeStyle = 'bg-[#181816] text-[#9E9B93] border-[#3B3935]';
+            let badgeStyle = 'bg-[var(--bg-elevated)] text-[var(--text-secondary)] border-[var(--border-strong)]';
 
             if (treeFamily === 'bplus') {
               if (node.isLeaf) {
                 borderColor = '#00E676';
-                bgColor = '#0F2419';
+                bgColor = 'rgba(0, 230, 118, 0.14)';
                 badgeText = 'LEAF DATA';
-                badgeStyle = 'bg-[#0F2419] text-[#00E676] border-[#00E676]/50';
+                badgeStyle = 'bg-[#00E676]/10 text-[#00E676] border-[#00E676]/40';
               } else {
-                borderColor = '#3B3935';
-                bgColor = '#181816';
+                borderColor = 'var(--border-strong)';
+                bgColor = 'var(--bg-elevated)';
                 badgeText = 'INDEX';
-                badgeStyle = 'bg-[#181816] text-[#FF4F00] border-[#FF4F00]/40';
+                badgeStyle = 'bg-[var(--bg-elevated)] text-[var(--accent-primary)] border-[var(--accent-primary)]/40';
               }
             }
 
@@ -141,30 +141,30 @@ export const TreeStage: React.FC = () => {
 
                 {/* Multi-Key Block: [ *P0 | K1 | *P1 | K2 | *P2 ] */}
                 <div
-                  className="flex items-stretch border shadow-xl"
+                  className="flex items-stretch border shadow-md"
                   style={{ backgroundColor: bgColor, borderColor }}
                 >
                   {/* Leftmost pointer *P0 */}
-                  <div className="px-1.5 py-1 border-r border-[#262522] text-[8px] text-[#5C5952] flex items-center justify-center bg-[#090908]">
+                  <div className="px-1.5 py-1 border-r border-[var(--border-hairline)] text-[8px] text-[var(--text-muted)] flex items-center justify-center bg-[var(--node-header-bg)]">
                     <span>*P0</span>
                   </div>
 
                   {node.keys.map((key, kIdx) => (
                     <React.Fragment key={`${node.id}-key-${kIdx}`}>
                       {/* Key Cell */}
-                      <div className="px-2.5 py-1 text-xs font-bold flex items-center justify-center text-[#F3F2EE] min-w-[32px]">
+                      <div className="px-2.5 py-1 text-xs font-bold flex items-center justify-center text-[var(--node-idle-text)] min-w-[32px]">
                         <span>{key}</span>
                       </div>
 
                       {/* Right Child Pointer *Pi */}
-                      <div className="px-1.5 py-1 border-l border-[#262522] text-[8px] text-[#5C5952] flex items-center justify-center bg-[#090908]">
+                      <div className="px-1.5 py-1 border-l border-[var(--border-hairline)] text-[8px] text-[var(--text-muted)] flex items-center justify-center bg-[var(--node-header-bg)]">
                         <span>*P{kIdx + 1}</span>
                       </div>
                     </React.Fragment>
                   ))}
 
                   {node.keys.length === 0 && (
-                    <div className="px-3 py-1 text-xs text-[#5C5952]">EMPTY</div>
+                    <div className="px-3 py-1 text-xs text-[var(--text-muted)]">EMPTY</div>
                   )}
                 </div>
               </motion.div>
@@ -195,29 +195,29 @@ export const TreeStage: React.FC = () => {
   }
 
   function getBFBadgeColor(bf: number) {
-    if (Math.abs(bf) > 1) return { bg: '#FF4F00', text: '#090908' }; // Imbalance
-    if (bf === 0) return { bg: '#262522', text: '#9E9B93' };
-    return { bg: 'rgba(255, 184, 0, 0.25)', text: '#FFD666' };
+    if (Math.abs(bf) > 1) return { bg: 'var(--accent-primary)', text: 'var(--text-on-accent)' }; // Imbalance
+    if (bf === 0) return { bg: 'var(--bg-elevated)', text: 'var(--text-secondary)' };
+    return { bg: 'rgba(255, 184, 0, 0.25)', text: '#FFB800' };
   }
 
   function getNodeVisuals(id: string) {
     const node = nodes[id];
-    let fill = '#181816';
-    let border = '#33312D';
-    let text = '#F3F2EE';
+    let fill = 'var(--node-idle-bg)';
+    let border = 'var(--node-idle-border)';
+    let text = 'var(--node-idle-text)';
 
     if (currentFrame?.activeIds?.includes(node.id) || node.state === 'compare' || node.state === 'comparing') {
       fill = 'rgba(255, 184, 0, 0.20)';
       border = '#FFB800';
-      text = '#FFD666';
+      text = '#FFB800';
     } else if (currentFrame?.pivotIds?.includes(node.id) || node.state === 'pivot') {
       fill = 'rgba(255, 46, 147, 0.22)';
       border = '#FF2E93';
-      text = '#FF85BF';
+      text = '#FF2E93';
     } else if (currentFrame?.mutateIds?.includes(node.id) || node.state === 'swap' || node.state === 'active') {
       fill = 'rgba(255, 79, 0, 0.24)';
       border = '#FF4F00';
-      text = '#FF9466';
+      text = '#FF4F00';
     } else if (currentFrame?.sortedIds?.includes(node.id) || node.state === 'sorted') {
       fill = 'rgba(0, 230, 118, 0.20)';
       border = '#00E676';
@@ -235,10 +235,10 @@ export const TreeStage: React.FC = () => {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="absolute top-1 right-6 z-20 px-3 py-1.5 bg-[#181816] border border-[#FF4F00] flex items-center gap-2 shadow-2xl"
+            className="absolute top-1 right-6 z-20 px-3 py-1.5 bg-[var(--bg-panel)] border border-[var(--accent-primary)] flex items-center gap-2 shadow-xl"
           >
-            <span className="w-2 h-2 bg-[#FF4F00] animate-pulse" />
-            <span className="font-mono text-xs text-[#FF4F00] font-bold uppercase">
+            <span className="w-2 h-2 bg-[var(--accent-primary)] animate-pulse" />
+            <span className="font-mono text-xs text-[var(--accent-primary)] font-bold uppercase">
               {activeRotation.description}
             </span>
           </motion.div>
@@ -255,7 +255,7 @@ export const TreeStage: React.FC = () => {
               y1={edge.from.y}
               x2={edge.to.x}
               y2={edge.to.y}
-              stroke="#33312D"
+              stroke="var(--border-strong)"
               strokeWidth="1.5"
             />
           ))}
@@ -276,7 +276,7 @@ export const TreeStage: React.FC = () => {
             >
               {/* Circular Node Bubble */}
               <div
-                className="w-11 h-11 rounded-full border flex items-center justify-center shadow-lg relative transition-all duration-150"
+                className="w-11 h-11 rounded-full border flex items-center justify-center shadow-md relative transition-all duration-150"
                 style={{
                   backgroundColor: vis.fill,
                   borderColor: vis.border,
@@ -291,7 +291,7 @@ export const TreeStage: React.FC = () => {
 
                 {/* Balance Factor Tag */}
                 <div
-                  className="absolute -top-1.5 -right-2 px-1 py-0.2 rounded text-[8px] font-mono font-bold tracking-tight border border-[#262522]"
+                  className="absolute -top-1.5 -right-2 px-1 py-0.2 rounded text-[8px] font-mono font-bold tracking-tight border border-[var(--border-hairline)] shadow-sm"
                   style={{
                     backgroundColor: bfColors.bg,
                     color: bfColors.text,
@@ -302,7 +302,7 @@ export const TreeStage: React.FC = () => {
               </div>
 
               {/* Sub-label height */}
-              <span className="font-mono text-[9px] text-[#5C5952] mt-1">
+              <span className="font-mono text-[9px] text-[var(--text-muted)] mt-1">
                 H={node.height}
               </span>
             </motion.div>

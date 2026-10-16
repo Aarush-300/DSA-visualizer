@@ -395,4 +395,90 @@ describe('Algorithm Generator Engine Suite', () => {
       }
     }
   });
+
+  it('Confirms zero occurrences of hardcoded dark surface classes (#111110, #090908, #181816, #1C1B19) in layout and canvas components', async () => {
+    const fs = await import('fs');
+    const path = await import('path');
+    const targets = ['src/components/layout', 'src/components/canvas'];
+    const forbidden = [/#111110/i, /#090908/i, /#181816/i, /#1C1B19/i];
+
+    const violations: string[] = [];
+
+    for (const targetDir of targets) {
+      const fullDir = path.resolve(process.cwd(), targetDir);
+      const files = fs.readdirSync(fullDir).filter((f: string) => f.endsWith('.tsx') || f.endsWith('.ts'));
+
+      for (const file of files) {
+        const filePath = path.join(fullDir, file);
+        const content = fs.readFileSync(filePath, 'utf-8');
+        const lines = content.split('\n');
+
+        lines.forEach((line: string, lineNum: number) => {
+          for (const pattern of forbidden) {
+            if (pattern.test(line)) {
+              violations.push(`${file}:${lineNum + 1} -> ${line.trim()}`);
+            }
+          }
+        });
+      }
+    }
+
+    expect(violations).toEqual([]);
+  });
+
+  it('Confirms complete light/dark theme semantic tokens are defined in tokens.css', async () => {
+    const fs = await import('fs');
+    const path = await import('path');
+    const tokensPath = path.resolve(process.cwd(), 'src/styles/tokens.css');
+    const cssContent = fs.readFileSync(tokensPath, 'utf-8');
+
+    const requiredTokens = [
+      '--bg-canvas',
+      '--bg-panel',
+      '--bg-hud',
+      '--bg-elevated',
+      '--bg-input',
+      '--bg-hover',
+      '--bg-code-gutter',
+      '--border-hairline',
+      '--border-strong',
+      '--canvas-dot',
+      '--text-primary',
+      '--text-secondary',
+      '--text-muted',
+      '--text-on-accent',
+      '--node-idle-bg',
+      '--node-idle-border',
+      '--node-idle-text',
+      '--node-subtext',
+      '--node-header-bg',
+      '--accent-primary',
+      '--accent-primary-hover',
+    ];
+
+    expect(cssContent).toContain('[data-theme="dark"]');
+    expect(cssContent).toContain('[data-theme="light"]');
+
+    for (const token of requiredTokens) {
+      expect(cssContent).toContain(token);
+    }
+  });
+
+  it('Confirms LogoMark and favicon contain pure 3-vertex schematic tree nodes without letters or monogram', async () => {
+    const fs = await import('fs');
+    const path = await import('path');
+    const logoContent = fs.readFileSync(path.resolve(process.cwd(), 'src/assets/svg/LogoMark.tsx'), 'utf-8');
+    const faviconContent = fs.readFileSync(path.resolve(process.cwd(), 'public/favicon.svg'), 'utf-8');
+
+    expect(logoContent).not.toMatch(/\bAF\b/);
+    expect(logoContent).not.toMatch(/monogram/i);
+    expect(logoContent).toContain('cx="14"');
+    expect(logoContent).toContain('cx="8"');
+    expect(logoContent).toContain('cx="20"');
+
+    expect(faviconContent).not.toMatch(/\bAF\b/);
+    expect(faviconContent).toContain('cx="14"');
+    expect(faviconContent).toContain('cx="8"');
+    expect(faviconContent).toContain('cx="20"');
+  });
 });
