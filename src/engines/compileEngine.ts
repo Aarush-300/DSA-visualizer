@@ -22,7 +22,7 @@ import { generateMWayTreeFrames } from './trees/mWayTree';
 import { generateBTreeFrames } from './trees/bTree';
 import { generateBPlusTreeFrames } from './trees/bPlusTree';
 import { createInitialGrid, generatePathfindingFrames } from './graphs/pathfindingGrid';
-import { generateNetworkGraphFrames, generatePrimMSTFrames } from './graphs/networkGraph';
+import { generateNetworkGraphFrames } from './graphs/networkGraph';
 
 export function getDefaultInputForModule(module: ActiveModuleId): string {
   switch (module) {
@@ -48,11 +48,14 @@ export function compileEngineFrames(
 ): StepFrame<any>[] {
   // Graphs module handling
   if (module === 'graphs') {
-    if (algo === 'networkPrim') {
-      return generatePrimMSTFrames(operation);
-    }
-    if (algo === 'networkDijkstra' || algo === 'networkBfs') {
-      return generateNetworkGraphFrames(operation);
+    if (
+      algo === 'networkPrim' ||
+      algo === 'networkDijkstra' ||
+      algo === 'networkBfs' ||
+      algo === 'bellmanFord' ||
+      algo === 'topologicalSort'
+    ) {
+      return generateNetworkGraphFrames(algo as any, operation);
     }
 
     const grid = createInitialGrid();

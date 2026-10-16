@@ -78,7 +78,8 @@ export const BottomTimelineBar: React.FC = () => {
             onClick={jumpToStart}
             disabled={totalFrames === 0 || currentStepIndex === 0}
             title="Jump to Start (Home)"
-            className="p-1.5 hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] disabled:opacity-20 disabled:pointer-events-none border border-transparent hover:border-[var(--border-strong)] transition-colors"
+            aria-label="Jump to start frame (Home)"
+            className="p-1.5 hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] disabled:opacity-20 disabled:pointer-events-none border border-transparent hover:border-[var(--border-strong)] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--accent-primary)] focus-visible:outline-offset-2"
           >
             <SkipBack size={13} />
           </button>
@@ -87,7 +88,8 @@ export const BottomTimelineBar: React.FC = () => {
             onClick={stepBackward}
             disabled={totalFrames === 0 || currentStepIndex === 0}
             title="Step Backward (ArrowLeft)"
-            className="p-1.5 hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] disabled:opacity-20 disabled:pointer-events-none border border-transparent hover:border-[var(--border-strong)] transition-colors"
+            aria-label="Step backward one frame (ArrowLeft)"
+            className="p-1.5 hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] disabled:opacity-20 disabled:pointer-events-none border border-transparent hover:border-[var(--border-strong)] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--accent-primary)] focus-visible:outline-offset-2"
           >
             <ChevronLeft size={15} />
           </button>
@@ -97,7 +99,8 @@ export const BottomTimelineBar: React.FC = () => {
             onClick={togglePlay}
             disabled={totalFrames === 0}
             title={isPlaying ? 'Pause (Space)' : 'Play (Space)'}
-            className="w-8 h-8 bg-[var(--accent-primary)] hover:bg-[var(--accent-primary-hover)] text-[var(--text-on-accent)] flex items-center justify-center font-bold shadow-md active:translate-y-[1px] disabled:opacity-20 disabled:pointer-events-none mx-1 transition-colors"
+            aria-label={isPlaying ? 'Pause algorithm playback (Space)' : 'Play algorithm playback (Space)'}
+            className="w-8 h-8 bg-[var(--accent-primary)] hover:bg-[var(--accent-primary-hover)] text-[var(--text-on-accent)] flex items-center justify-center font-bold shadow-md active:translate-y-[1px] disabled:opacity-20 disabled:pointer-events-none mx-1 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--accent-primary)] focus-visible:outline-offset-2"
           >
             {isPlaying ? <Pause size={14} fill="currentColor" /> : <Play size={14} fill="currentColor" className="ml-0.5" />}
           </button>
@@ -106,7 +109,8 @@ export const BottomTimelineBar: React.FC = () => {
             onClick={stepForward}
             disabled={totalFrames === 0 || isCompleted}
             title="Step Forward (ArrowRight)"
-            className="p-1.5 hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] disabled:opacity-20 disabled:pointer-events-none border border-transparent hover:border-[var(--border-strong)] transition-colors"
+            aria-label="Step forward one frame (ArrowRight)"
+            className="p-1.5 hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] disabled:opacity-20 disabled:pointer-events-none border border-transparent hover:border-[var(--border-strong)] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--accent-primary)] focus-visible:outline-offset-2"
           >
             <ChevronRight size={15} />
           </button>
@@ -115,7 +119,8 @@ export const BottomTimelineBar: React.FC = () => {
             onClick={jumpToEnd}
             disabled={totalFrames === 0 || isCompleted}
             title="Jump to End (End)"
-            className="p-1.5 hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] disabled:opacity-20 disabled:pointer-events-none border border-transparent hover:border-[var(--border-strong)] transition-colors"
+            aria-label="Jump to end frame (End)"
+            className="p-1.5 hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] disabled:opacity-20 disabled:pointer-events-none border border-transparent hover:border-[var(--border-strong)] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--accent-primary)] focus-visible:outline-offset-2"
           >
             <SkipForward size={13} />
           </button>
@@ -135,7 +140,8 @@ export const BottomTimelineBar: React.FC = () => {
               value={currentStepIndex}
               onChange={(e) => setStepIndex(Number(e.target.value))}
               disabled={totalFrames === 0}
-              className="w-full h-1 bg-[var(--border-strong)] appearance-none cursor-pointer accent-[var(--accent-primary)] disabled:opacity-20 border border-[var(--border-hairline)]"
+              aria-label="Playback frame scrubber"
+              className="w-full h-1 bg-[var(--border-strong)] appearance-none cursor-pointer accent-[var(--accent-primary)] disabled:opacity-20 border border-[var(--border-hairline)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--accent-primary)] focus-visible:outline-offset-2"
             />
           </div>
 
@@ -153,7 +159,8 @@ export const BottomTimelineBar: React.FC = () => {
             <button
               key={speed}
               onClick={() => setPlaybackSpeed(speed)}
-              className={`relative px-2 py-0.5 text-[10px] font-mono tracking-wider font-bold transition-colors ${
+              aria-label={`Set playback speed to ${speed}x`}
+              className={`relative px-2 py-0.5 text-[10px] font-mono tracking-wider font-bold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--accent-primary)] focus-visible:outline-offset-2 ${
                 isActive ? 'text-[var(--accent-primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
               }`}
             >

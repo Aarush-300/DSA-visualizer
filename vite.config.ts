@@ -18,5 +18,32 @@ export default defineConfig({
     port: 3000,
     host: true,
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (
+            id.includes('node_modules/react') ||
+            id.includes('node_modules/react-dom') ||
+            id.includes('node_modules/zustand') ||
+            id.includes('node_modules\\react') ||
+            id.includes('node_modules\\react-dom') ||
+            id.includes('node_modules\\zustand')
+          ) {
+            return 'vendor-react';
+          }
+          if (id.includes('framer-motion') || id.includes('lucide-react')) {
+            return 'vendor-motion';
+          }
+          if (
+            id.includes('codeSnippets') ||
+            id.includes('algorithmCatalog')
+          ) {
+            return 'dsa-code-catalog';
+          }
+        },
+      },
+    },
+  },
 });
 

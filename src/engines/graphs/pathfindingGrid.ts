@@ -427,26 +427,39 @@ export function generatePathfindingFrames(
 
     metrics.swaps = totalCost;
 
+    const stepCount = Math.max(0, path.length - 1);
+
     for (let i = 0; i < path.length; i++) {
       const p = path[i];
       if (grid[p.row][p.col].type !== 'start' && grid[p.row][p.col].type !== 'target') {
         grid[p.row][p.col].type = 'path';
       }
 
+      const pathLabel =
+        algorithm === 'dfs'
+          ? 'DFS Traversal Path'
+          : algorithm === 'bfs'
+          ? 'Hop Path'
+          : 'Shortest Path';
+
       emitFrame(
-        `Shortest Path reconstructed! Lighting up step ${i + 1}/${path.length} at (${p.row}, ${p.col}).`,
+        `${pathLabel} reconstructed! Lighting up step ${i + 1}/${path.length} at (${p.row}, ${p.col}).`,
         p,
         { cpp: 7, python: 6, pseudo: 5 },
         ['reconstructPath()']
       );
     }
 
-    emitFrame(
-      `Optimal Shortest Path verified! Total Path Cost: ${totalCost} (${path.length - 1} steps across ${weightedCount} weighted nodes). Visited cells: ${metrics.comparisons}.`,
-      null,
-      { cpp: 7, python: 6, pseudo: 5 },
-      []
-    );
+    let finalNarration = '';
+    if (algorithm === 'dijkstra' || algorithm === 'aStar') {
+      finalNarration = `Optimal shortest path found and verified! Total Path Cost: ${totalCost} across ${stepCount} steps (${weightedCount} weighted nodes). Visited cells: ${metrics.comparisons}.`;
+    } else if (algorithm === 'bfs') {
+      finalNarration = `Minimum-hop path found! ${stepCount} steps (Total traversal cost: ${totalCost}; note: BFS is unweighted). Visited cells: ${metrics.comparisons}.`;
+    } else {
+      finalNarration = `Target reached via DFS traversal! Path length: ${stepCount} steps (Total cost: ${totalCost} — DFS does not guarantee a shortest path). Visited cells: ${metrics.comparisons}.`;
+    }
+
+    emitFrame(finalNarration, null, { cpp: 7, python: 6, pseudo: 5 }, []);
   } else {
     emitFrame(
       `No feasible path exists between Start and Target due to wall obstructions.`,

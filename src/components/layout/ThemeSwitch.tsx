@@ -45,8 +45,8 @@ export const ThemeSwitch: React.FC = () => {
     <button
       onClick={handleToggle}
       title={`Switch to ${isLight ? 'Carbon Dark' : 'Drafting Light'} Mode`}
-      aria-label="Toggle visual theme"
-      className="relative flex items-center h-7 px-1 bg-[var(--bg-elevated)] border border-[var(--border-strong)] hover:border-[var(--accent-primary)] cursor-pointer transition-colors select-none group"
+      aria-label="Toggle theme between dark and light mode"
+      className="relative flex items-center h-7 px-1 bg-[var(--bg-elevated)] border border-[var(--border-strong)] hover:border-[var(--accent-primary)] cursor-pointer transition-colors select-none group focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--accent-primary)] focus-visible:outline-offset-2"
       style={{ width: '84px' }}
     >
       {/* Background Labels */}

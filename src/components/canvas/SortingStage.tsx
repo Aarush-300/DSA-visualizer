@@ -16,8 +16,12 @@ export const SortingStage: React.FC = () => {
 
   if (bars.length === 0) return null;
 
-  const maxVal = Math.max(...bars.map((b) => b.value), 1);
+  const values = bars.map((b) => b.value);
+  const minVal = Math.min(...values);
+  const maxVal = Math.max(...values);
+  const valRange = maxVal - minVal;
   const maxBarHeight = 250;
+  const minBarHeight = 36; // 12% minimum visible height for zero and negative elements
   const pointers = currentFrame?.pointers ?? {};
 
   const handleStartEdit = (idx: number, currentVal: number) => {
@@ -27,7 +31,7 @@ export const SortingStage: React.FC = () => {
 
   const handleSaveEdit = (idx: number) => {
     const val = Number(editValue);
-    if (!Number.isNaN(val) && val >= 1 && val <= 999) {
+    if (!Number.isNaN(val) && val >= -999 && val <= 999) {
       const currentValues = bars.map(b => b.value);
       currentValues[idx] = val;
       const newStr = currentValues.join(', ');
@@ -121,7 +125,8 @@ export const SortingStage: React.FC = () => {
         className="flex items-end justify-center gap-2 w-full h-[300px] border-b border-[var(--border-strong)] pb-1 relative"
       >
         {bars.map((bar, index) => {
-          const heightPx = Math.max(34, (bar.value / maxVal) * maxBarHeight);
+          const normalized = valRange === 0 ? 0.5 : (bar.value - minVal) / valRange;
+          const heightPx = Math.round(minBarHeight + normalized * (maxBarHeight - minBarHeight));
           const vis = getBarVisuals(bar, index);
           const activePointers = getPointersForIndex(index);
           const isEditing = editingIndex === index;

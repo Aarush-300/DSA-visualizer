@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { usePlaygroundStore } from '../../store/usePlaygroundStore';
 import { ALGORITHM_CATALOG } from '../../data/algorithmCatalog';
-import { parseIntegerList, generateRandomDataset } from '../../utils/inputValidator';
+import { validateModuleInput, generateRandomDataset } from '../../utils/inputValidator';
 import { HardwareNumberInput } from '../shared/HardwareNumberInput';
 import {
   generatePathfindingFrames,
@@ -21,6 +21,7 @@ import {
   Search,
   RotateCw,
   Eye,
+  AlertTriangle,
 } from 'lucide-react';
 
 export const LeftControlDock: React.FC = () => {
@@ -49,7 +50,7 @@ export const LeftControlDock: React.FC = () => {
 
   const handleCompile = (forcedAlgo?: string) => {
     if (activeModule !== 'graphs') {
-      const valResult = parseIntegerList(customInput);
+      const valResult = validateModuleInput(activeModule, customInput);
       if (!valResult.isValid) {
         setInputError(valResult.error ?? 'Invalid input sequence');
         return;
@@ -95,7 +96,12 @@ export const LeftControlDock: React.FC = () => {
     (a) => a.module === activeModule
   );
 
-  const isNetworkGraph = activeAlgo === 'networkPrim' || activeAlgo === 'networkKruskal';
+  const isNetworkGraph =
+    activeAlgo === 'networkPrim' ||
+    activeAlgo === 'networkDijkstra' ||
+    activeAlgo === 'networkBfs' ||
+    activeAlgo === 'bellmanFord' ||
+    activeAlgo === 'topologicalSort';
 
   if (isLeftDockCollapsed) {
     return (
@@ -175,19 +181,24 @@ export const LeftControlDock: React.FC = () => {
               <label className="text-[10px] font-mono font-semibold text-[var(--text-muted)] uppercase tracking-wider">
                 INITIAL DATASET [ARRAY]
               </label>
-              <span className="font-mono text-[9px] text-[var(--text-muted)]">1–999 INT</span>
+              <span className="font-mono text-[9px] text-[var(--text-muted)]">-999–999 INT</span>
             </div>
             <textarea
               rows={2}
               value={customInput}
               onChange={(e) => setCustomInput(e.target.value)}
               placeholder="e.g. 64, 34, 25, 12, 22, 11, 90"
-              className="w-full px-2.5 py-2 text-xs font-mono bg-[var(--bg-input)] border border-[var(--border-strong)] focus:border-[var(--accent-primary)] text-[var(--text-primary)] focus:outline-none resize-none leading-relaxed"
+              className={`w-full px-2.5 py-2 text-xs font-mono bg-[var(--bg-input)] border text-[var(--text-primary)] focus:outline-none resize-none leading-relaxed ${
+                inputError
+                  ? 'border-[#FF4F00] bg-[rgba(255,79,0,0.06)]'
+                  : 'border-[var(--border-strong)] focus:border-[var(--accent-primary)]'
+              }`}
             />
             {inputError && (
-              <p className="text-[11px] font-mono text-[var(--accent-primary)] mt-1 leading-snug">
-                {inputError}
-              </p>
+              <div className="mt-1.5 p-2 bg-[rgba(255,79,0,0.12)] border border-[#FF4F00] text-[#FF4F00] font-mono text-[10px] flex items-start gap-1.5 leading-snug">
+                <AlertTriangle size={13} className="shrink-0 mt-0.5" />
+                <span>{inputError}</span>
+              </div>
             )}
           </div>
         )}
@@ -204,7 +215,7 @@ export const LeftControlDock: React.FC = () => {
             <HardwareNumberInput
               value={operandVal}
               onChange={setOperandVal}
-              min={1}
+              min={-999}
               max={999}
               label="ELEMENT VALUE"
             />
@@ -229,7 +240,7 @@ export const LeftControlDock: React.FC = () => {
                 <HardwareNumberInput
                   value={targetValue}
                   onChange={setTargetValue}
-                  min={1}
+                  min={-999}
                   max={999}
                   label="SEARCH TARGET"
                 />

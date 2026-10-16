@@ -1,0 +1,52 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  verify:
+    name: Typecheck, Test & Build Verification
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22 LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: TypeScript Typecheck
+        run: npm run typecheck
+
+      - name: Run Engine Regression Test Suite
+        run: npm run test:engine
+
+      - name: Build Production Assets
+        run: npm run build
+
+      - name: Verify Cloudflare Assets and Chunk Sizes (< 500 kB)
+        run: |
+          if [ -f "dist/_redirects" ]; then
+            echo "ERROR: dist/_redirects exists, which triggers Cloudflare code 100324!"
+            exit 1
+          fi
+          echo "Verifying all JS chunk sizes are below 500 kB..."
+          for f in dist/assets/*.js; do
+            size_kb=$(du -k "$f" | cut -f1)
+            echo "Chunk: $f -> ${size_kb} kB"
+            if [ "$size_kb" -gt 500 ]; then
+              echo "ERROR: Chunk $f exceeds 500 kB (${size_kb} kB)"
+              exit 1
+            fi
+          done
+          echo "All verification checks passed cleanly."
+

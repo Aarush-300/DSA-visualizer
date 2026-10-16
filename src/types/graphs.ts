@@ -35,6 +35,8 @@ export interface NetworkOperation {
   y?: number;
   source?: string;
   target?: string;
+  sourceId?: string;
+  targetId?: string;
   weight?: number;
   edgeId?: string;
 }
@@ -70,5 +72,6 @@ export interface GraphSnapshot {
   activeEdgeId?: string | null;
   mstEdges?: string[];
   frontierCount?: number;
+  vertexDistances?: Record<string, number>;
 }
 

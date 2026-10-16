@@ -21,11 +21,17 @@ import { generateMWayTreeFrames } from '../src/engines/trees/mWayTree';
 import { generateBTreeFrames } from '../src/engines/trees/bTree';
 import { generateBPlusTreeFrames } from '../src/engines/trees/bPlusTree';
 import { createInitialGrid, generatePathfindingFrames } from '../src/engines/graphs/pathfindingGrid';
-import { generateNetworkGraphFrames, generatePrimMSTFrames } from '../src/engines/graphs/networkGraph';
+import {
+  generateNetworkGraphFrames,
+  generatePrimMSTFrames,
+  executeNetworkMutation,
+  getSampleNetwork,
+} from '../src/engines/graphs/networkGraph';
 import { compileEngineFrames, getDefaultInputForModule } from '../src/engines/compileEngine';
 import { CODE_SNIPPETS } from '../src/data/codeSnippets';
 import { ALGORITHM_CATALOG } from '../src/data/algorithmCatalog';
 import { usePlaygroundStore } from '../src/store/usePlaygroundStore';
+import { validateModuleInput } from '../src/utils/inputValidator';
 
 describe('Algorithm Generator Engine Suite', () => {
   const sampleData = [64, 34, 25, 12, 22, 11, 90];
@@ -692,6 +698,138 @@ describe('Algorithm Generator Engine Suite', () => {
       store.toggleTheme();
       expect(usePlaygroundStore.getState().theme).not.toBe(currentTheme);
       store.toggleTheme(); // revert
+    });
+  });
+
+  // ---------------- PART 7: PHASE-2 AUDIT REGRESSION SUITE ----------------
+  describe('PART 7: PHASE-2 AUDIT REGRESSION SUITE', () => {
+    it('1. networkDijkstra and networkBfs produce full traversal frames with distance and hop settling', () => {
+      const dijkstraFrames = compileEngineFrames('graphs', 'networkDijkstra', '', 42);
+      expect(dijkstraFrames.length).toBeGreaterThan(5);
+      const lastDijkstra = dijkstraFrames[dijkstraFrames.length - 1];
+      expect(lastDijkstra.snapshot.vertexDistances).toBeDefined();
+      expect(lastDijkstra.snapshot.vertexDistances!['v0']).toBe(0);
+      expect(lastDijkstra.narration).toContain('Shortest-path tree rooted at A fully settled');
+
+      const bfsFrames = compileEngineFrames('graphs', 'networkBfs', '', 42);
+      expect(bfsFrames.length).toBeGreaterThan(5);
+      const lastBfs = bfsFrames[bfsFrames.length - 1];
+      expect(lastBfs.snapshot.vertexDistances).toBeDefined();
+      expect(lastBfs.snapshot.vertexDistances!['v0']).toBe(0);
+      expect(lastBfs.narration).toContain('BFS traversal complete');
+    });
+
+    it('2. Invalid user input is rejected with descriptive error without falling back to default datasets', () => {
+      const validation = validateModuleInput('sorting', '10, abc, 20');
+      expect(validation.isValid).toBe(false);
+      expect(validation.error).toContain("INVALID TOKEN 'abc'");
+
+      const store = usePlaygroundStore.getState();
+      const priorFrames = store.frames;
+      store.recompileCurrent('quick', '10, abc, 20');
+      expect(usePlaygroundStore.getState().inputError).toContain("INVALID TOKEN 'abc'");
+      // frames should NOT be recompiled or overwritten with default values
+      expect(usePlaygroundStore.getState().frames).toBe(priorFrames);
+    });
+
+    it('3. All sorting and search algorithms correctly process negative and zero integers', () => {
+      const testDataset = [-42, 0, -7, 15, -1, 8];
+      const expectedSorted = [-42, -7, -1, 0, 8, 15];
+
+      const validation = validateModuleInput('sorting', '-42, 0, -7, 15, -1, 8');
+      expect(validation.isValid).toBe(true);
+      expect(validation.parsedValues).toEqual(testDataset);
+
+      // QuickSort
+      const qFrames = generateQuickSortFrames(testDataset);
+      expect(qFrames[qFrames.length - 1].snapshot.bars.map((b) => b.value)).toEqual(expectedSorted);
+
+      // MergeSort
+      const mFrames = generateMergeSortFrames(testDataset);
+      expect(mFrames[mFrames.length - 1].snapshot.bars.map((b) => b.value)).toEqual(expectedSorted);
+
+      // HeapSort
+      const hFrames = generateHeapSortFrames(testDataset);
+      expect(hFrames[hFrames.length - 1].snapshot.bars.map((b) => b.value)).toEqual(expectedSorted);
+
+      // BubbleSort
+      const bFrames = generateBubbleSortFrames(testDataset);
+      expect(bFrames[bFrames.length - 1].snapshot.bars.map((b) => b.value)).toEqual(expectedSorted);
+
+      // InsertionSort
+      const iFrames = generateInsertionSortFrames(testDataset);
+      expect(iFrames[iFrames.length - 1].snapshot.bars.map((b) => b.value)).toEqual(expectedSorted);
+
+      // SelectionSort
+      const sFrames = generateSelectionSortFrames(testDataset);
+      expect(sFrames[sFrames.length - 1].snapshot.bars.map((b) => b.value)).toEqual(expectedSorted);
+
+      // Binary Search on negative values
+      const bsFrames = generateBinarySearchFrames(expectedSorted, 0);
+      const lastBs = bsFrames[bsFrames.length - 1];
+      expect(lastBs.narration).toContain('index 3');
+    });
+
+    it('4. Dijkstra reports true weighted cost while DFS explicitly notes lack of shortest path guarantee', () => {
+      const start = { row: 2, col: 2 };
+      const target = { row: 2, col: 8 };
+      const grid = createInitialGrid(10, 15, start, target);
+
+      // Add weighted cells between start and target
+      grid[2][4].weight = 5;
+      grid[2][5].weight = 5;
+
+      const dijkstraFrames = generatePathfindingFrames(grid, 'dijkstra', start, target);
+      const lastDijkstra = dijkstraFrames[dijkstraFrames.length - 1];
+      expect(lastDijkstra.narration).toContain('Optimal shortest path found');
+      expect(lastDijkstra.narration).toMatch(/cost[:=]\s*\d+/i);
+
+      const dfsFrames = generatePathfindingFrames(grid, 'dfs', start, target);
+      const lastDfs = dfsFrames[dfsFrames.length - 1];
+      expect(lastDfs.narration).toContain('Target reached via DFS traversal');
+      expect(lastDfs.narration).toContain('DFS does not guarantee a shortest path');
+    });
+
+    it('5. Network graph mutation validates vertex existence, forbids self-loops, and prevents duplicate edges', () => {
+      // Non-existent vertex
+      const invalidEdgeFrames = executeNetworkMutation({
+        type: 'insertEdge',
+        sourceId: 'v0',
+        targetId: 'v999',
+        weight: 5,
+      });
+      const lastInvalidFrame = invalidEdgeFrames[invalidEdgeFrames.length - 1];
+      expect(lastInvalidFrame.narration).toContain('REJECTED: Vertex not found');
+      expect(lastInvalidFrame.snapshot.edges?.some((e) => e.target === 'v999')).toBe(false);
+
+      // Self-loop
+      const selfLoopFrames = executeNetworkMutation({
+        type: 'insertEdge',
+        sourceId: 'v0',
+        targetId: 'v0',
+        weight: 5,
+      });
+      const lastSelfLoopFrame = selfLoopFrames[selfLoopFrames.length - 1];
+      expect(lastSelfLoopFrame.narration).toContain('REJECTED: Self-loops are not permitted');
+
+      // Update existing edge weight without creating duplicates
+      const baseNetwork = getSampleNetwork();
+      const originalEdgeCount = baseNetwork.edges.length;
+      const updateFrames = executeNetworkMutation(
+        {
+          type: 'insertEdge',
+          sourceId: 'v0',
+          targetId: 'v1',
+          weight: 99,
+        },
+        baseNetwork
+      );
+      const finalEdges = updateFrames[updateFrames.length - 1].snapshot.edges;
+      expect(finalEdges?.length).toBe(originalEdgeCount);
+      const updatedEdge = finalEdges?.find(
+        (e) => (e.source === 'v0' && e.target === 'v1') || (e.source === 'v1' && e.target === 'v0')
+      );
+      expect(updatedEdge?.weight).toBe(99);
     });
   });
 });

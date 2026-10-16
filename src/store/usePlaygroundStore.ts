@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { ActiveModuleId, CodeLanguage, StepFrame } from '../types/engine';
 import { compileEngineFrames, getDefaultInputForModule } from '../engines/compileEngine';
+import { validateModuleInput } from '../utils/inputValidator';
 
 export type PlaybackSpeed = 0.25 | 0.5 | 1 | 2 | 4 | 8;
 
@@ -162,6 +163,15 @@ export const usePlaygroundStore = create<PlaygroundState>((set, get) => ({
     const { activeModule, activeAlgo, customInput, targetValue, treeOrder } = get();
     const algoToUse = forcedAlgo ?? activeAlgo;
     const inputToUse = forcedInput ?? customInput;
+
+    if (activeModule !== 'graphs') {
+      const valResult = validateModuleInput(activeModule, inputToUse);
+      if (!valResult.isValid) {
+        set({ inputError: valResult.error ?? 'Invalid input sequence' });
+        return; // Halt compilation! Keep existing canvas state intact!
+      }
+    }
+
     const opWithOrder = { ...operation, order: operation?.order ?? treeOrder };
     const newFrames = compileEngineFrames(activeModule, algoToUse, inputToUse, targetValue, opWithOrder);
 

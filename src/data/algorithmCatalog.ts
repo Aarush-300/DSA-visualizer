@@ -504,4 +504,40 @@ export const ALGORITHM_CATALOG: Record<AlgorithmId | string, AlgorithmMetadata> 
       { label: '7-Vertex Network', values: 'network-default' },
     ],
   },
+  networkDijkstra: {
+    id: 'networkDijkstra',
+    name: 'Network Dijkstra (Shortest Path)',
+    module: 'graphs',
+    category: 'Weighted Shortest Path',
+    shortDescription: 'Settles minimum distance from source across weighted network topology.',
+    description: 'Maintains priority queue of frontier vertices, relaxing edge weights dist[v] = min(dist[v], dist[u] + w(u,v)) until all reachable nodes are settled.',
+    complexity: {
+      bestTime: 'Ω(E + V log V)',
+      averageTime: 'Θ(E + V log V)',
+      worstTime: 'O(V²)',
+      space: 'O(V + E)',
+    },
+    defaultInput: 'network-default',
+    presets: [
+      { label: '7-Vertex Network', values: 'network-default' },
+    ],
+  },
+  networkBfs: {
+    id: 'networkBfs',
+    name: 'Network BFS (Hop Traversal)',
+    module: 'graphs',
+    category: 'Unweighted Exploration',
+    shortDescription: 'FIFO queue exploring nearest topological neighbours level-by-level.',
+    description: 'Explores vertices level-by-level from start node, constructing a minimum-hop breadth-first search tree.',
+    complexity: {
+      bestTime: 'Ω(V + E)',
+      averageTime: 'Θ(V + E)',
+      worstTime: 'O(V + E)',
+      space: 'O(V)',
+    },
+    defaultInput: 'network-default',
+    presets: [
+      { label: '7-Vertex Network', values: 'network-default' },
+    ],
+  },
 };
