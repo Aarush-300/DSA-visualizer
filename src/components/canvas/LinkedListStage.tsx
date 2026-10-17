@@ -42,25 +42,25 @@ export const LinkedListStage: React.FC = () => {
   });
 
   function getNodeStyle(node: MemoryNode) {
-    let border = 'var(--node-idle-border)';
-    let bg = 'var(--node-idle-bg)';
-    let text = 'var(--node-idle-text)';
+    let border = 'var(--border-hairline)';
+    let bg = 'var(--bg-panel)';
+    let text = 'var(--text-primary)';
 
     if (node.state === 'sorted') {
-      border = '#059669';
-      bg = 'var(--state-sorted-verified-bg)';
-      text = '#059669';
+      border = '#10B981';
+      bg = 'rgba(16, 185, 129, 0.08)';
+      text = '#10B981';
     } else if (node.state === 'active' || node.state === 'swap') {
-      border = '#EA580C';
-      bg = 'var(--state-mutate-swap-bg)';
-      text = '#EA580C';
+      border = 'var(--accent-primary)';
+      bg = 'var(--accent-subtle)';
+      text = 'var(--accent-primary)';
     } else if (activePointers.curr === node.address) {
-      border = '#4F46E5';
-      bg = 'var(--state-active-window-bg)';
-      text = '#4F46E5';
+      border = '#3B82F6';
+      bg = 'rgba(59, 130, 246, 0.1)';
+      text = '#3B82F6';
     } else if (activePointers.prev === node.address) {
       border = '#F59E0B';
-      bg = 'var(--state-active-compare-bg)';
+      bg = 'rgba(245, 158, 11, 0.1)';
       text = '#F59E0B';
     }
 
@@ -346,14 +346,8 @@ export const LinkedListStage: React.FC = () => {
 
               {/* Node Card Shell */}
               <div
-                className="flex flex-col rounded-md overflow-hidden h-full transition-colors"
-                style={{
-                  backgroundColor: style.bg,
-                  borderColor: style.border,
-                  borderWidth: '1.5px',
-                  borderStyle: 'solid',
-                  boxShadow: 'var(--node-idle-shadow)',
-                }}
+                className="flex flex-col border rounded-md shadow-xs overflow-hidden h-full transition-colors"
+                style={{ backgroundColor: style.bg, borderColor: style.border }}
               >
                 {/* Header Bar */}
                 <div className="flex items-center justify-between px-2 py-0.5 bg-[var(--bg-elevated)] border-b border-[var(--border-hairline)] text-[10px] text-[var(--text-secondary)]">

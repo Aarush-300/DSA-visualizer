@@ -52,7 +52,7 @@ export const SortingStage: React.FC = () => {
     let bg = 'var(--node-idle-bg)';
     let border = 'var(--node-idle-border)';
     let text = 'var(--node-idle-text)';
-    let hatchClass = '';
+    let isHatched = false;
     let isIdle = true;
 
     const isMutating = currentFrame?.mutateIds?.includes(bar.id);
@@ -61,58 +61,58 @@ export const SortingStage: React.FC = () => {
     const isSorted = currentFrame?.sortedIds?.includes(index) || bar.state === 'sorted';
 
     if (isSorted) {
-      bg = 'var(--state-sorted-verified-bg)';
-      border = '#059669';
-      text = '#059669';
-      hatchClass = 'hatch-emerald';
+      bg = 'rgba(0, 230, 118, 0.16)';
+      border = '#00E676';
+      text = '#00E676';
       isIdle = false;
     } else if (isMutating || bar.state === 'swap') {
-      bg = 'var(--state-mutate-swap-bg)';
-      border = '#EA580C';
-      text = '#EA580C';
-      hatchClass = 'hatch-vermilion';
+      bg = 'rgba(255, 79, 0, 0.22)';
+      border = '#FF4F00';
+      text = '#FF4F00';
+      isHatched = true;
       isIdle = false;
     } else if (isPivot || bar.state === 'pivot') {
-      bg = 'var(--state-pivot-target-bg)';
-      border = '#E11D48';
-      text = '#E11D48';
+      bg = 'rgba(255, 46, 147, 0.20)';
+      border = '#FF2E93';
+      text = '#FF2E93';
       isIdle = false;
     } else if (isActive || bar.state === 'compare') {
-      bg = 'var(--state-active-compare-bg)';
-      border = '#F59E0B';
-      text = '#F59E0B';
-      hatchClass = 'hatch-amber';
+      bg = 'rgba(255, 184, 0, 0.18)';
+      border = '#FFB800';
+      text = '#FFB800';
+      isHatched = true;
       isIdle = false;
-    } else if (bar.state === 'visited' || bar.state === 'inspecting') {
-      bg = 'var(--state-active-window-bg)';
-      border = '#4F46E5';
-      text = '#4F46E5';
+    } else if (bar.state === 'visited') {
+      bg = 'rgba(212, 255, 0, 0.12)';
+      border = '#D4FF00';
+      text = '#D4FF00';
+      isHatched = true;
       isIdle = false;
     }
 
-    return { bg, border, text, hatchClass, isMutating, isIdle };
+    return { bg, border, text, isHatched, isMutating, isIdle };
   }
 
   // Pointer lane distribution for multi-lane stacking
   function getPointersForIndex(index: number) {
     const list: { label: string; color: string; border: string; bg: string }[] = [];
     if (pointers.pivot === index) {
-      list.push({ label: 'pivot', color: '#E11D48', border: '#E11D48', bg: 'rgba(225,29,72,0.12)' });
+      list.push({ label: 'PIVOT', color: '#FF85BF', border: '#FF2E93', bg: 'rgba(255,46,147,0.15)' });
     }
     if (pointers.i === index) {
-      list.push({ label: `i=${index}`, color: '#F59E0B', border: '#F59E0B', bg: 'rgba(245,158,11,0.12)' });
+      list.push({ label: `i=${index}`, color: '#FFD666', border: '#FFB800', bg: 'rgba(255,184,0,0.15)' });
     }
     if (pointers.j === index) {
-      list.push({ label: `j=${index}`, color: '#4F46E5', border: '#4F46E5', bg: 'rgba(79,70,229,0.12)' });
+      list.push({ label: `j=${index}`, color: '#E8FF7A', border: '#D4FF00', bg: 'rgba(212,255,0,0.15)' });
     }
     if (pointers.mid === index) {
-      list.push({ label: 'mid', color: '#E11D48', border: '#E11D48', bg: 'rgba(225,29,72,0.12)' });
+      list.push({ label: 'MID', color: '#FF85BF', border: '#FF2E93', bg: 'rgba(255,46,147,0.15)' });
     }
     if (pointers.low === index && pointers.mid !== index) {
-      list.push({ label: 'low', color: '#059669', border: '#059669', bg: 'rgba(5,150,105,0.12)' });
+      list.push({ label: 'LOW', color: '#66FFA6', border: '#00E676', bg: 'rgba(0,230,118,0.15)' });
     }
     if (pointers.high === index && pointers.mid !== index) {
-      list.push({ label: 'high', color: '#EA580C', border: '#EA580C', bg: 'rgba(234,88,12,0.12)' });
+      list.push({ label: 'HIGH', color: '#FF9466', border: '#FF4F00', bg: 'rgba(255,79,0,0.15)' });
     }
     return list;
   }
@@ -189,22 +189,22 @@ export const SortingStage: React.FC = () => {
                 </div>
               )}
 
-              {/* Tactile Architectural Column */}
+              {/* Architectural Vertical Column */}
               <motion.div
                 layout
-                className={`w-full relative rounded-t-md transition-all duration-150 ${vis.hatchClass}`}
+                className={`w-full relative transition-all duration-150 ${vis.isHatched ? 'diagonal-hatch' : ''}`}
                 style={{
                   height: `${heightPx}px`,
                   backgroundColor: vis.bg,
                   borderColor: vis.border,
-                  borderWidth: '1.5px',
-                  borderBottomWidth: '1.5px',
-                  boxShadow: 'var(--node-idle-shadow)',
+                  borderWidth: vis.isIdle ? '1.5px' : '1px',
+                  borderBottomWidth: '0px',
+                  boxShadow: vis.isIdle ? 'inset 0 1px 2px rgba(0, 0, 0, 0.05)' : undefined,
                 }}
               >
-                {/* Precision Top Highlight Rule */}
+                {/* Precision Top Cap Highlight Rule */}
                 <div
-                  className="absolute top-0 left-0 right-0 h-[2px] rounded-t-sm"
+                  className="absolute top-0 left-0 right-0 h-[2px]"
                   style={{ backgroundColor: vis.border }}
                 />
               </motion.div>

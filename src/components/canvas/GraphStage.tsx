@@ -54,22 +54,22 @@ export const GraphStage: React.FC = () => {
 
   function getCellClasses(cell: GridCell): string {
     if (cell.type === 'start') {
-      return 'bg-[#059669] border-[#059669] text-white font-bold shadow-xs';
+      return 'bg-[#00E676] border-[#00E676] text-[var(--text-on-accent)] font-bold shadow-md';
     }
     if (cell.type === 'target') {
-      return 'bg-[#E11D48] border-[#E11D48] text-white font-bold shadow-xs';
+      return 'bg-[var(--accent-primary)] border-[var(--accent-primary)] text-[var(--text-on-accent)] font-bold shadow-md';
     }
     if (cell.type === 'wall') {
-      return 'bg-[var(--border-strong)] border-[var(--border-strong)]';
+      return 'bg-[#262522] border-[#383632]';
     }
     if (cell.type === 'weight') {
-      return 'bg-[var(--state-active-compare-bg)] border-[#F59E0B] text-[#F59E0B] font-bold';
+      return 'bg-[rgba(255,184,0,0.25)] border-[#FFB800] text-[#FFB800] font-bold';
     }
     if (cell.type === 'path') {
-      return 'bg-[#059669] border-[#059669] text-white animate-beacon-emerald';
+      return 'bg-[#00E676] border-[#00E676] animate-beacon-emerald';
     }
     if (cell.type === 'visited') {
-      return 'bg-[var(--state-active-window-bg)] border-[#4F46E5] text-[#4F46E5] animate-wavefront-industrial';
+      return 'bg-[rgba(212,255,0,0.15)] border-[rgba(212,255,0,0.4)] animate-wavefront-industrial';
     }
     return 'bg-[var(--node-idle-bg)] border-[var(--border-hairline)] hover:bg-[var(--bg-hover)]';
   }
@@ -84,23 +84,23 @@ export const GraphStage: React.FC = () => {
       >
         <div className="flex items-center gap-4 mb-2 text-[10px] font-mono text-[var(--text-secondary)]">
           <span className="flex items-center gap-1">
-            <span className="w-2.5 h-2.5 bg-[#059669] rounded-xs" /> START
+            <span className="w-2.5 h-2.5 bg-[#00E676]" /> START
           </span>
           <span className="flex items-center gap-1">
-            <span className="w-2.5 h-2.5 bg-[#E11D48] rounded-xs" /> TARGET
+            <span className="w-2.5 h-2.5 bg-[var(--accent-primary)]" /> TARGET
           </span>
           <span className="flex items-center gap-1">
-            <span className="w-2.5 h-2.5 bg-[var(--border-strong)] rounded-xs" /> WALL
+            <span className="w-2.5 h-2.5 bg-[#262522] border border-[#383632]" /> WALL
           </span>
           <span className="flex items-center gap-1">
-            <span className="w-2.5 h-2.5 bg-[var(--state-active-compare-bg)] border border-[#F59E0B] text-[#F59E0B] text-[8px] flex items-center justify-center font-bold rounded-xs">5</span> WEIGHT (+5)
+            <span className="w-2.5 h-2.5 bg-[rgba(255,184,0,0.25)] border border-[#FFB800] text-[#FFB800] text-[8px] flex items-center justify-center font-bold">5</span> WEIGHT (+5)
           </span>
           <span className="flex items-center gap-1">
-            <span className="w-2.5 h-2.5 bg-[#059669] rounded-xs" /> PATH
+            <span className="w-2.5 h-2.5 bg-[#00E676]" /> PATH
           </span>
         </div>
 
-        <div className="inline-grid gap-[1px] p-2 bg-[var(--bg-island)] border border-[var(--border-hairline)] rounded-xl shadow-[var(--node-idle-shadow)] overflow-auto max-w-full max-h-[460px]">
+        <div className="inline-grid gap-[1px] p-2 bg-[var(--bg-canvas)] border border-[var(--border-hairline)] shadow-xl overflow-auto max-w-full max-h-[460px]">
           {grid.map((row, r) => (
             <div key={r} className="flex gap-[1px]">
               {row.map((cell, c) => (
@@ -125,7 +125,7 @@ export const GraphStage: React.FC = () => {
   // 2. Network Graph Mode
   return (
     <div className="flex flex-col items-center justify-center w-full max-w-4xl h-[420px] relative select-none">
-      <div className="relative w-[720px] h-[340px] bg-[var(--bg-island)] border border-[var(--border-hairline)] rounded-xl shadow-[var(--node-idle-shadow)] p-4">
+      <div className="relative w-[720px] h-[340px] bg-[var(--bg-panel)] border border-[var(--border-hairline)] shadow-xl p-4">
         {/* SVG Edges Layer */}
         <svg className="absolute inset-0 w-full h-full pointer-events-none">
           {edges.map((edge) => {
@@ -137,9 +137,9 @@ export const GraphStage: React.FC = () => {
             const isActive = activeEdgeId === edge.id || edge.state === 'compare';
 
             const strokeColor = isMst
-              ? '#059669'
+              ? '#00E676'
               : isActive
-              ? '#EA580C'
+              ? 'var(--accent-primary)'
               : 'var(--border-strong)';
             const strokeWidth = isMst ? 3 : isActive ? 2 : 1;
 
@@ -161,15 +161,14 @@ export const GraphStage: React.FC = () => {
                   y={midY - 7}
                   width="18"
                   height="14"
-                  fill="var(--bg-island)"
+                  fill="var(--bg-canvas)"
                   stroke={strokeColor}
                   strokeWidth="1"
-                  rx="2"
                 />
                 <text
                   x={midX}
                   y={midY + 4}
-                  fill={isMst ? '#059669' : isActive ? '#EA580C' : 'var(--text-secondary)'}
+                  fill={isMst ? '#00E676' : isActive ? 'var(--accent-primary)' : 'var(--text-secondary)'}
                   fontSize="9"
                   fontFamily="'IBM Plex Mono', monospace"
                   fontWeight="bold"
@@ -192,19 +191,19 @@ export const GraphStage: React.FC = () => {
           let textColor = 'var(--node-idle-text)';
 
           if (isSorted) {
-            bg = 'var(--state-sorted-verified-bg)';
-            border = '#059669';
-            textColor = '#059669';
+            bg = 'rgba(0, 230, 118, 0.2)';
+            border = '#00E676';
+            textColor = '#00E676';
           } else if (isActive) {
-            bg = 'var(--state-mutate-swap-bg)';
-            border = '#EA580C';
-            textColor = '#EA580C';
+            bg = 'rgba(255, 79, 0, 0.25)';
+            border = '#FF4F00';
+            textColor = '#FF4F00';
           }
 
           return (
             <motion.div
               key={v.id}
-              className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 border-[1.5px] rounded-md shadow-[var(--node-idle-shadow)] cursor-grab active:cursor-grabbing transition-all duration-150"
+              className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 border shadow-md cursor-grab active:cursor-grabbing transition-all duration-150"
               style={{
                 left: v.x,
                 top: v.y,

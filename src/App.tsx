@@ -56,7 +56,7 @@ export const App: React.FC = () => {
         jumpToEnd();
       } else if (e.key === 'r' || e.key === 'R') {
         e.preventDefault();
-        const rand = generateRandomDataset(12, 10, 95);
+        const rand = generateRandomDataset(14, 10, 95);
         recompileCurrent(undefined, rand.join(', '));
       } else if (e.key === '?' || (e.key === '/' && e.shiftKey)) {
         e.preventDefault();
@@ -80,23 +80,21 @@ export const App: React.FC = () => {
   ]);
 
   return (
-    <div className="fixed inset-0 w-screen h-screen overflow-hidden bg-[var(--bg-canvas)] text-[var(--text-primary)] font-sans select-none">
-      {/* 1. Full-Bleed Interactive Canvas (100vw × 100vh) */}
-      <StageContainer />
-
-      {/* 2. Top-Center Floating Module & Algorithm Toolbar */}
+    <div className="flex flex-col h-screen w-screen overflow-hidden bg-[var(--bg-canvas)] text-[var(--text-primary)]">
+      {/* 1. Top Navbar */}
       <TopNavbar />
 
-      {/* 3. Left Floating Compact Workbench Card */}
-      <LeftControlDock />
+      {/* 2. Middle Workstage: Left Dock + Center Stage + Right Inspector */}
+      <div className="flex flex-1 min-h-0 w-full overflow-hidden relative">
+        <LeftControlDock />
+        <StageContainer />
+        <RightInspectorDrawer />
+      </div>
 
-      {/* 4. Right Floating Code & Telemetry Drawer */}
-      <RightInspectorDrawer />
-
-      {/* 5. Bottom-Center Floating Playback & Narration Dock */}
+      {/* 3. Bottom Transport & Scrubber Bar */}
       <BottomTimelineBar />
 
-      {/* 6. Keyboard Shortcuts Modal */}
+      {/* 4. Keyboard Shortcuts Modal */}
       <ShortcutsModal />
     </div>
   );
