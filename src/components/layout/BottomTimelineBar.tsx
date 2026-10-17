@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { usePlaygroundStore, PlaybackSpeed } from '../../store/usePlaygroundStore';
 import {
   Play,
@@ -26,6 +25,7 @@ export const BottomTimelineBar: React.FC = () => {
   } = usePlaygroundStore();
 
   const totalFrames = frames.length;
+  const currentFrame = frames[currentStepIndex];
   const isCompleted = totalFrames > 0 && currentStepIndex >= totalFrames - 1;
 
   // Auto-advancing playback loop scaled inversely by playbackSpeed
@@ -46,40 +46,37 @@ export const BottomTimelineBar: React.FC = () => {
     return () => clearInterval(timer);
   }, [isPlaying, playbackSpeed]);
 
-  const speedOptions: PlaybackSpeed[] = [0.25, 0.5, 1, 2, 4, 8];
+  const speedOptions: PlaybackSpeed[] = [0.5, 1, 2, 4, 8];
+
+  const handleCycleSpeed = () => {
+    const currentIdx = speedOptions.indexOf(playbackSpeed);
+    const nextIdx = (currentIdx + 1) % speedOptions.length;
+    setPlaybackSpeed(speedOptions[nextIdx]);
+  };
 
   return (
-    <footer className="h-14 border-t border-[var(--border-hairline)] bg-[var(--bg-panel)] text-[var(--text-primary)] flex items-center justify-between px-4 z-30 shrink-0 select-none">
-      {/* Left: Status Indicator LED */}
-      <div className="flex items-center gap-2 min-w-[140px]">
-        <span
-          className={`w-2 h-2 rounded-full ${
-            isPlaying
-              ? 'bg-[var(--accent-primary)] animate-pulse'
-              : isCompleted
-              ? 'bg-emerald-500'
-              : 'bg-amber-500'
-          }`}
-        />
-        <span className="font-sans text-xs font-medium text-[var(--text-secondary)]">
-          {isPlaying
-            ? 'Executing'
-            : isCompleted
-            ? 'Completed'
-            : 'Paused'}
+    <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 w-[min(680px,92vw)] pointer-events-none select-none">
+      {/* Upper Floating Pill: Live Step Explanation (Untruncated) */}
+      <div className="px-4 py-1.5 rounded-xl bg-[var(--bg-island)] border border-[var(--border-island)] shadow-[var(--shadow-island)] text-xs text-[var(--text-primary)] font-sans max-w-full text-center leading-normal backdrop-blur-md pointer-events-auto flex items-center justify-center gap-2">
+        <span className="font-mono text-[11px] font-semibold text-[var(--accent-brand)] shrink-0">
+          Step {currentStepIndex + 1}/{Math.max(1, totalFrames)}
+        </span>
+        <span className="text-[var(--border-strong)]">·</span>
+        <span className="font-sans font-normal text-[12px] text-[var(--text-primary)]">
+          {currentFrame?.narration || 'Algorithm initialized. Ready for execution.'}
         </span>
       </div>
 
-      {/* Center: Transport Controls & Scrubber Slider */}
-      <div className="flex items-center gap-4 flex-1 max-w-2xl px-4">
-        {/* Buttons Row */}
-        <div className="flex items-center gap-1">
+      {/* Lower Playback Island: Media Transport Controls */}
+      <footer className="h-12 px-4 rounded-xl bg-[var(--bg-island)] border border-[var(--border-island)] shadow-[var(--shadow-island)] flex items-center gap-3 w-full backdrop-blur-md pointer-events-auto">
+        {/* Playback Action Buttons */}
+        <div className="flex items-center gap-0.5">
           <button
             onClick={jumpToStart}
             disabled={totalFrames === 0 || currentStepIndex === 0}
             title="Jump to Start (Home)"
             aria-label="Jump to start frame (Home)"
-            className="p-1.5 rounded-md hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] disabled:opacity-20 disabled:pointer-events-none border border-transparent hover:border-[var(--border-hairline)] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--accent-primary)]"
+            className="p-1 rounded-md text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)] disabled:opacity-25 disabled:pointer-events-none transition-colors cursor-pointer"
           >
             <SkipBack size={13} />
           </button>
@@ -89,20 +86,24 @@ export const BottomTimelineBar: React.FC = () => {
             disabled={totalFrames === 0 || currentStepIndex === 0}
             title="Step Backward (ArrowLeft)"
             aria-label="Step backward one frame (ArrowLeft)"
-            className="p-1.5 rounded-md hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] disabled:opacity-20 disabled:pointer-events-none border border-transparent hover:border-[var(--border-hairline)] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--accent-primary)]"
+            className="p-1 rounded-md text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)] disabled:opacity-25 disabled:pointer-events-none transition-colors cursor-pointer"
           >
             <ChevronLeft size={15} />
           </button>
 
-          {/* Play / Pause Button */}
+          {/* Round Ink / Alabaster Play Button */}
           <button
             onClick={togglePlay}
             disabled={totalFrames === 0}
             title={isPlaying ? 'Pause (Space)' : 'Play (Space)'}
-            aria-label={isPlaying ? 'Pause algorithm playback (Space)' : 'Play algorithm playback (Space)'}
-            className="w-8 h-8 rounded-md bg-[var(--accent-primary)] hover:bg-[var(--accent-primary-hover)] text-white flex items-center justify-center font-medium shadow-xs active:scale-95 disabled:opacity-20 disabled:pointer-events-none mx-1 transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--accent-primary)]"
+            aria-label={isPlaying ? 'Pause playback' : 'Play playback'}
+            className="w-8 h-8 rounded-full bg-[var(--accent-primary)] hover:bg-[var(--accent-brand)] text-[var(--text-on-accent)] flex items-center justify-center shadow-xs active:scale-95 disabled:opacity-25 disabled:pointer-events-none mx-1 transition-all cursor-pointer"
           >
-            {isPlaying ? <Pause size={14} fill="currentColor" /> : <Play size={14} fill="currentColor" className="ml-0.5" />}
+            {isPlaying ? (
+              <Pause size={13} fill="currentColor" />
+            ) : (
+              <Play size={13} fill="currentColor" className="ml-0.5" />
+            )}
           </button>
 
           <button
@@ -110,7 +111,7 @@ export const BottomTimelineBar: React.FC = () => {
             disabled={totalFrames === 0 || isCompleted}
             title="Step Forward (ArrowRight)"
             aria-label="Step forward one frame (ArrowRight)"
-            className="p-1.5 rounded-md hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] disabled:opacity-20 disabled:pointer-events-none border border-transparent hover:border-[var(--border-hairline)] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--accent-primary)]"
+            className="p-1 rounded-md text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)] disabled:opacity-25 disabled:pointer-events-none transition-colors cursor-pointer"
           >
             <ChevronRight size={15} />
           </button>
@@ -120,58 +121,36 @@ export const BottomTimelineBar: React.FC = () => {
             disabled={totalFrames === 0 || isCompleted}
             title="Jump to End (End)"
             aria-label="Jump to end frame (End)"
-            className="p-1.5 rounded-md hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] disabled:opacity-20 disabled:pointer-events-none border border-transparent hover:border-[var(--border-hairline)] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--accent-primary)]"
+            className="p-1 rounded-md text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)] disabled:opacity-25 disabled:pointer-events-none transition-colors cursor-pointer"
           >
             <SkipForward size={13} />
           </button>
         </div>
 
-        {/* Tabular Scrubber Slider */}
-        <div className="flex items-center gap-3 flex-1">
-          <span className="font-mono text-xs text-[var(--text-primary)] font-medium shrink-0 tabular-nums">
-            Step {currentStepIndex + 1} of {Math.max(1, totalFrames)}
-          </span>
-
-          <div className="relative flex-1 flex items-center">
-            <input
-              type="range"
-              min={0}
-              max={Math.max(0, totalFrames - 1)}
-              value={currentStepIndex}
-              onChange={(e) => setStepIndex(Number(e.target.value))}
-              disabled={totalFrames === 0}
-              aria-label="Playback frame scrubber"
-              className="w-full h-1.5 bg-[var(--bg-elevated)] rounded-full appearance-none cursor-pointer accent-[var(--accent-primary)] disabled:opacity-20 border border-[var(--border-hairline)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--accent-primary)]"
-            />
-          </div>
+        {/* Scrubber Timeline */}
+        <div className="flex items-center gap-2.5 flex-1 px-1">
+          <input
+            type="range"
+            min={0}
+            max={Math.max(0, totalFrames - 1)}
+            value={currentStepIndex}
+            onChange={(e) => setStepIndex(Number(e.target.value))}
+            disabled={totalFrames === 0}
+            aria-label="Playback frame scrubber"
+            className="w-full h-1.5 bg-[var(--bg-elevated)] rounded-full appearance-none cursor-pointer accent-[var(--accent-brand)] disabled:opacity-20 border border-[var(--border-subtle)] focus:outline-none"
+          />
         </div>
-      </div>
 
-      {/* Right: Playback Speed Selector */}
-      <div className="flex items-center bg-[var(--bg-elevated)] border border-[var(--border-hairline)] rounded-md text-[var(--text-secondary)] p-0.5">
-        {speedOptions.map((speed) => {
-          const isActive = playbackSpeed === speed;
-          return (
-            <button
-              key={speed}
-              onClick={() => setPlaybackSpeed(speed)}
-              aria-label={`Set playback speed to ${speed}x`}
-              className={`relative px-2 py-0.5 text-[11px] font-sans font-medium rounded transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--accent-primary)] ${
-                isActive ? 'text-[var(--accent-primary)] font-semibold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-              }`}
-            >
-              {isActive && (
-                <motion.div
-                  layoutId="active-speed-pill"
-                  transition={{ type: 'spring', stiffness: 500, damping: 35 }}
-                  className="absolute inset-0 bg-[var(--bg-panel)] rounded border border-[var(--border-strong)]"
-                />
-              )}
-              <span className="relative z-10">{speed}x</span>
-            </button>
-          );
-        })}
-      </div>
-    </footer>
+        {/* Speed Badge Pill (Click to cycle 0.5x -> 1x -> 2x -> 4x -> 8x) */}
+        <button
+          onClick={handleCycleSpeed}
+          title="Click to cycle speed"
+          aria-label={`Current speed ${playbackSpeed}x. Click to change.`}
+          className="px-2 py-0.5 rounded-lg bg-[var(--bg-elevated)] hover:bg-[var(--bg-hover)] border border-[var(--border-subtle)] text-[11px] font-mono font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer shrink-0"
+        >
+          {playbackSpeed}x ▾
+        </button>
+      </footer>
+    </div>
   );
 };

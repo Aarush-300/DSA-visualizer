@@ -81,7 +81,7 @@ export const TreeStage: React.FC = () => {
                   <g key={`leaf-bus-${node.id}->${nextLeaf.id}`}>
                     <path
                       d={`M ${node.x + nodeWidth / 2} ${node.y} L ${nextLeaf.x - nodeWidth / 2 - 4} ${nextLeaf.y}`}
-                      stroke="#00E676"
+                      stroke="#059669"
                       strokeWidth="2"
                       markerEnd="url(#leaf-chain-arrow)"
                     />
@@ -108,10 +108,10 @@ export const TreeStage: React.FC = () => {
 
             if (treeFamily === 'bplus') {
               if (node.isLeaf) {
-                borderColor = '#00E676';
-                bgColor = 'rgba(0, 230, 118, 0.14)';
+                borderColor = '#059669';
+                bgColor = 'var(--state-sorted-verified-bg)';
                 badgeText = 'LEAF DATA';
-                badgeStyle = 'bg-[#00E676]/10 text-[#00E676] border-[#00E676]/40';
+                badgeStyle = 'bg-[#059669]/10 text-[#059669] border-[#059669]/40';
               } else {
                 borderColor = 'var(--border-strong)';
                 bgColor = 'var(--bg-elevated)';
@@ -121,11 +121,11 @@ export const TreeStage: React.FC = () => {
             }
 
             if (isHighlight) {
-              borderColor = '#FF4F00';
-              bgColor = 'rgba(255, 79, 0, 0.22)';
+              borderColor = '#EA580C';
+              bgColor = 'var(--state-mutate-swap-bg)';
             } else if (isVerified) {
-              borderColor = '#00E676';
-              bgColor = 'rgba(0, 230, 118, 0.20)';
+              borderColor = '#059669';
+              bgColor = 'var(--state-sorted-verified-bg)';
             }
 
             return (
@@ -147,7 +147,7 @@ export const TreeStage: React.FC = () => {
 
                 {/* Multi-Key Block: [ *P0 | K1 | *P1 | K2 | *P2 ] */}
                 <div
-                  className="flex items-stretch border shadow-md"
+                  className="flex items-stretch border-[1.5px] rounded-sm shadow-[var(--node-idle-shadow)]"
                   style={{ backgroundColor: bgColor, borderColor }}
                 >
                   {/* Leftmost pointer *P0 */}
@@ -201,9 +201,9 @@ export const TreeStage: React.FC = () => {
   }
 
   function getBFBadgeColor(bf: number) {
-    if (Math.abs(bf) > 1) return { bg: 'var(--accent-primary)', text: 'var(--text-on-accent)' }; // Imbalance
+    if (Math.abs(bf) > 1) return { bg: '#E11D48', text: '#FFFFFF' }; // Imbalance
     if (bf === 0) return { bg: 'var(--bg-elevated)', text: 'var(--text-secondary)' };
-    return { bg: 'rgba(255, 184, 0, 0.25)', text: '#FFB800' };
+    return { bg: 'var(--state-active-compare-bg)', text: '#F59E0B' };
   }
 
   function getNodeVisuals(id: string) {
@@ -213,21 +213,21 @@ export const TreeStage: React.FC = () => {
     let text = 'var(--node-idle-text)';
 
     if (currentFrame?.activeIds?.includes(node.id) || node.state === 'compare' || node.state === 'comparing') {
-      fill = 'rgba(255, 184, 0, 0.20)';
-      border = '#FFB800';
-      text = '#FFB800';
+      fill = 'var(--state-active-compare-bg)';
+      border = '#F59E0B';
+      text = '#F59E0B';
     } else if (currentFrame?.pivotIds?.includes(node.id) || node.state === 'pivot') {
-      fill = 'rgba(255, 46, 147, 0.22)';
-      border = '#FF2E93';
-      text = '#FF2E93';
+      fill = 'var(--state-active-window-bg)';
+      border = '#4F46E5';
+      text = '#4F46E5';
     } else if (currentFrame?.mutateIds?.includes(node.id) || node.state === 'swap' || node.state === 'active') {
-      fill = 'rgba(255, 79, 0, 0.24)';
-      border = '#FF4F00';
-      text = '#FF4F00';
+      fill = 'var(--state-mutate-swap-bg)';
+      border = '#EA580C';
+      text = '#EA580C';
     } else if (currentFrame?.sortedIds?.includes(node.id) || node.state === 'sorted') {
-      fill = 'rgba(0, 230, 118, 0.20)';
-      border = '#00E676';
-      text = '#00E676';
+      fill = 'var(--state-sorted-verified-bg)';
+      border = '#059669';
+      text = '#059669';
     }
 
     return { fill, border, text };
@@ -241,7 +241,7 @@ export const TreeStage: React.FC = () => {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="absolute top-1 right-6 z-20 px-3 py-1.5 bg-[var(--bg-panel)] border border-[var(--accent-primary)] flex items-center gap-2 shadow-xl"
+            className="absolute top-1 right-6 z-20 px-3 py-1.5 bg-[var(--bg-island)] border border-[var(--accent-primary)] rounded-md flex items-center gap-2 shadow-[var(--node-idle-shadow)]"
           >
             <span className="w-2 h-2 bg-[var(--accent-primary)] animate-pulse" />
             <span className="font-mono text-xs text-[var(--accent-primary)] font-bold uppercase">
@@ -282,7 +282,7 @@ export const TreeStage: React.FC = () => {
             >
               {/* Circular Node Bubble */}
               <div
-                className="w-11 h-11 rounded-full border flex items-center justify-center shadow-md relative transition-all duration-150"
+                className="w-11 h-11 rounded-full border-[1.5px] flex items-center justify-center shadow-[var(--node-idle-shadow)] relative transition-all duration-150"
                 style={{
                   backgroundColor: vis.fill,
                   borderColor: vis.border,

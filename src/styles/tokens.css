@@ -1,140 +1,163 @@
-:root,
-[data-theme="dark"] {
-  /* Surfaces & Structural Grid (Dark / Linear Zinc Mode) */
-  --bg-canvas: #090A0F;
-  --bg-panel: #11131A;
-  --bg-hud: #161922;
-  --bg-elevated: #1C202B;
-  --bg-input: #0D0F14;
-  --bg-hover: #222634;
-  --bg-code-gutter: #11131A;
+/* ==========================================================================
+   STRUCTVIEW DESIGN TOKENS — WARM EDITORIAL STUDIO & OBSIDIAN GRAPHITE
+   Tactile drafting paper, crisp floating islands, and print textbook diagrams.
+   ========================================================================== */
 
-  --border-hairline: #222634;
-  --border-strong: #33384B;
-  --canvas-dot: rgba(255, 255, 255, 0.08);
-  --dot-color: rgba(255, 255, 255, 0.08);
+:root,
+[data-theme="light"],
+.light {
+  /* Surfaces & Canvas (Warm Tactical Drafting Paper & Crisp Floating Islands) */
+  --bg-canvas: #F4F2EC;                   /* Warm tactile drafting paper */
+  --bg-island: rgba(255, 255, 255, 0.94); /* Crisp floating white islands */
+  --bg-panel: var(--bg-island);
+  --bg-hud: #ECE9E0;                     /* Warm stone control fill */
+  --bg-elevated: #ECE9E0;                 /* Warm stone elevated fill */
+  --bg-input: #FFFFFF;
+  --bg-hover: #ECE9E0;
+  --bg-code-gutter: #F4F2EC;
+
+  /* Borders & Shadows */
+  --border-island: rgba(24, 24, 27, 0.10);
+  --border-subtle: rgba(24, 24, 27, 0.07);
+  --border-hairline: rgba(24, 24, 27, 0.10);
+  --border-strong: rgba(24, 24, 27, 0.18);
+  --shadow-island: 0 10px 30px -10px rgba(24, 24, 27, 0.08), 0 2px 6px -1px rgba(24, 24, 27, 0.04);
+  --canvas-dot: rgba(24, 24, 27, 0.12);
+  --dot-color: rgba(24, 24, 27, 0.12);
 
   /* Typography Colors */
-  --text-primary: #F1F5F9;
-  --text-secondary: #94A3B8;
-  --text-muted: #64748B;
-  --text-on-accent: #FFFFFF;
+  --text-primary: #18181B;                /* Deep charcoal ink */
+  --text-secondary: #52525B;
+  --text-muted: #A1A1AA;
+  --text-on-accent: #FAF9F6;
 
-  /* Data Structure Node & Bar Tokens (Dark) */
-  --node-idle-bg: #161922;
-  --node-idle-border: #2A3042;
-  --node-idle-text: #F1F5F9;
-  --node-subtext: #94A3B8;
-  --node-header-bg: #11131A;
+  /* Action Accents: Deep Ink & Warm Terracotta */
+  --accent-primary: #18181B;              /* Solid charcoal ink buttons */
+  --accent-primary-hover: #27272A;
+  --accent-brand: #D94E34;                /* Warm editorial terracotta highlight */
+  --accent-subtle: rgba(217, 78, 52, 0.08);
 
-  /* Font Families: Inter & JetBrains Mono */
+  /* Tactile Architectural Node & Bar Tokens (Textbook Print) */
+  --node-idle-bg: #FFFFFF;
+  --node-idle-border: #27272A;            /* Crisp 1.5px ink border */
+  --node-idle-shadow: 2px 2px 0px rgba(24, 24, 27, 0.10); /* Tactile offset shadow */
+  --node-idle-text: #18181B;
+  --node-subtext: #52525B;
+  --node-header-bg: #ECE9E0;
+
+  /* Font Families: Newsreader, Inter & JetBrains Mono */
+  --font-serif: 'Newsreader', Georgia, serif;
   --font-display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
 
-  /* Brand Primary Accent (Refined Blue) */
-  --accent-primary: #3B82F6;
-  --accent-primary-hover: #2563EB;
-  --accent-signal: #3B82F6;
-  --accent-signal-hover: #2563EB;
-  --accent-signal-text: #FFFFFF;
+  /* 6 Distinct Semantic State Colors */
+  --state-idle-color: #D6D3CD;            /* 1. Warm Stone */
+  --state-compare-color: #F59E0B;         /* 2. Warm Amber */
+  --state-mutate-color: #EA580C;          /* 3. Vermilion Red-Orange */
+  --state-partition-color: #4F46E5;       /* 4. Indigo */
+  --state-target-color: #E11D48;          /* 5. Magenta Rose */
+  --state-sorted-color: #059669;          /* 6. Forest Emerald */
 
-  /* State 1: Idle / Unvisited */
-  --state-idle-bg: #161922;
-  --state-idle-border: #2A3042;
-  --state-idle-text: #94A3B8;
+  --state-idle-bg: #FFFFFF;
+  --state-idle-border: #27272A;
+  --state-idle-text: #18181B;
 
-  /* State 2: Active Comparison (Amber) */
-  --state-active-compare-bg: rgba(245, 158, 11, 0.14);
+  --state-active-compare-bg: rgba(245, 158, 11, 0.12);
+  --state-active-compare-border: #F59E0B;
+  --state-active-compare-text: #B45309;
+
+  --state-mutate-swap-bg: rgba(234, 88, 12, 0.12);
+  --state-mutate-swap-border: #EA580C;
+  --state-mutate-swap-text: #C2410C;
+
+  --state-active-window-bg: rgba(79, 70, 229, 0.10);
+  --state-active-window-border: #4F46E5;
+  --state-active-window-text: #4338CA;
+
+  --state-pivot-target-bg: rgba(225, 29, 72, 0.10);
+  --state-pivot-target-border: #E11D48;
+  --state-pivot-target-text: #BE123C;
+
+  --state-sorted-verified-bg: rgba(5, 150, 105, 0.10);
+  --state-sorted-verified-border: #059669;
+  --state-sorted-verified-text: #047857;
+}
+
+/* ==========================================================================
+   WARM OBSIDIAN GRAPHITE DARK MODE (ZERO COLD BLUE/NAVY TINT)
+   ========================================================================== */
+
+[data-theme="dark"],
+.dark {
+  /* Surfaces & Canvas (Warm Charcoal Matte & Obsidian Islands) */
+  --bg-canvas: #10100E;                   /* Warm charcoal matte canvas */
+  --bg-island: rgba(24, 24, 22, 0.92);    /* Warm obsidian graphite islands */
+  --bg-panel: var(--bg-island);
+  --bg-hud: #22221F;
+  --bg-elevated: #22221F;
+  --bg-input: #141412;
+  --bg-hover: #2A2A26;
+  --bg-code-gutter: #10100E;
+
+  /* Borders & Shadows */
+  --border-island: rgba(255, 255, 255, 0.09);
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-hairline: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --shadow-island: 0 16px 36px -10px rgba(0, 0, 0, 0.55);
+  --canvas-dot: rgba(255, 255, 255, 0.08);
+  --dot-color: rgba(255, 255, 255, 0.08);
+
+  /* Typography Colors */
+  --text-primary: #F4F3EF;                /* Warm alabaster */
+  --text-secondary: #A1A09A;
+  --text-muted: #63625D;
+  --text-on-accent: #10100E;
+
+  /* Action Accents: Alabaster & Warm Terracotta */
+  --accent-primary: #F4F3EF;              /* High-contrast alabaster buttons in dark mode */
+  --accent-primary-hover: #E4E3DF;
+  --accent-brand: #E05A40;
+  --accent-subtle: rgba(224, 90, 64, 0.12);
+
+  /* Tactile Architectural Node & Bar Tokens (Dark) */
+  --node-idle-bg: #1C1C19;
+  --node-idle-border: #52514C;
+  --node-idle-shadow: 2px 2px 0px rgba(0, 0, 0, 0.45);
+  --node-idle-text: #F4F3EF;
+  --node-subtext: #A1A09A;
+  --node-header-bg: #22221F;
+
+  /* 6 Distinct Semantic State Colors */
+  --state-idle-color: #3F3F46;            /* 1. Warm Zinc Stone */
+  --state-compare-color: #F59E0B;         /* 2. Warm Amber */
+  --state-mutate-color: #EA580C;          /* 3. Vermilion Red-Orange */
+  --state-partition-color: #6366F1;       /* 4. Indigo */
+  --state-target-color: #F43F5E;          /* 5. Magenta Rose */
+  --state-sorted-color: #10B981;          /* 6. Forest Emerald */
+
+  --state-idle-bg: #1C1C19;
+  --state-idle-border: #52514C;
+  --state-idle-text: #A1A09A;
+
+  --state-active-compare-bg: rgba(245, 158, 11, 0.16);
   --state-active-compare-border: #F59E0B;
   --state-active-compare-text: #FBBF24;
-  --state-active-compare-glow: 0 0 14px rgba(245, 158, 11, 0.25);
 
-  /* State 3: Mutation / Swap / Rotation (Rose) */
-  --state-mutate-swap-bg: rgba(244, 63, 94, 0.14);
-  --state-mutate-swap-border: #F43F5E;
-  --state-mutate-swap-text: #FB7185;
-  --state-mutate-swap-glow: 0 0 16px rgba(244, 63, 94, 0.30);
+  --state-mutate-swap-bg: rgba(234, 88, 12, 0.16);
+  --state-mutate-swap-border: #EA580C;
+  --state-mutate-swap-text: #FB923C;
 
-  /* State 4: Active Window / Partition (Sky Blue) */
-  --state-active-window-bg: rgba(14, 165, 233, 0.14);
-  --state-active-window-border: #0EA5E9;
-  --state-active-window-text: #38BDF8;
-  --state-active-window-glow: 0 0 14px rgba(14, 165, 233, 0.25);
+  --state-active-window-bg: rgba(99, 102, 241, 0.14);
+  --state-active-window-border: #6366F1;
+  --state-active-window-text: #818CF8;
 
-  /* State 5: Pivot / Search Target (Violet) */
-  --state-pivot-target-bg: rgba(139, 92, 246, 0.14);
-  --state-pivot-target-border: #8B5CF6;
-  --state-pivot-target-text: #A78BFA;
-  --state-pivot-target-glow: 0 0 16px rgba(139, 92, 246, 0.30);
+  --state-pivot-target-bg: rgba(244, 63, 94, 0.14);
+  --state-pivot-target-border: #F43F5E;
+  --state-pivot-target-text: #FB7185;
 
-  /* State 6: Verified / Sorted (Emerald) */
   --state-sorted-verified-bg: rgba(16, 185, 129, 0.14);
   --state-sorted-verified-border: #10B981;
   --state-sorted-verified-text: #34D399;
-  --state-sorted-verified-glow: 0 0 14px rgba(16, 185, 129, 0.25);
-}
-
-/* Figma / Linear Crisp Slate Light Mode */
-[data-theme="light"],
-.light {
-  --bg-canvas: #F8FAFC;          /* Clean alabaster slate */
-  --bg-panel: #FFFFFF;           /* Crisp white panels */
-  --bg-hud: #F1F5F9;             /* Soft slate pill/header background */
-  --bg-elevated: #F8FAFC;        /* Light elevated cards */
-  --bg-input: #FFFFFF;           /* Pure white input fields */
-  --bg-hover: #F1F5F9;           /* Slate hover state */
-  --bg-code-gutter: #F8FAFC;     /* Code line-number gutter */
-
-  --border-hairline: #E2E8F0;    /* Soft 1px slate border */
-  --border-strong: #CBD5E1;      /* Defined structural borders */
-  --canvas-dot: rgba(15, 23, 42, 0.08); /* Subtle slate dot grid */
-  --dot-color: rgba(15, 23, 42, 0.08);
-
-  --text-primary: #0F172A;       /* Deep slate ink black */
-  --text-secondary: #475569;     /* Slate body text */
-  --text-muted: #94A3B8;         /* Subdued label text */
-  --text-on-accent: #FFFFFF;
-
-  /* Data Structure Node & Bar Tokens (Light Mode) */
-  --node-idle-bg: #FFFFFF;       /* Crisp white node fill */
-  --node-idle-border: #CBD5E1;   /* Soft slate border */
-  --node-idle-text: #0F172A;     /* Deep slate text */
-  --node-subtext: #64748B;       /* Subdued secondary info */
-  --node-header-bg: #F8FAFC;     /* Node header strip */
-
-  --accent-primary: #2563EB;     /* Royal Blue accent */
-  --accent-primary-hover: #1D4ED8;
-  --accent-signal: #2563EB;
-  --accent-signal-hover: #1D4ED8;
-  --accent-signal-text: #FFFFFF;
-
-  --state-idle-bg: #F8FAFC;
-  --state-idle-border: #CBD5E1;
-  --state-idle-text: #475569;
-
-  --state-active-compare-bg: rgba(245, 158, 11, 0.12);
-  --state-active-compare-border: #D97706;
-  --state-active-compare-text: #B45309;
-  --state-active-compare-glow: 0 0 10px rgba(245, 158, 11, 0.20);
-
-  --state-mutate-swap-bg: rgba(244, 63, 94, 0.12);
-  --state-mutate-swap-border: #E11D48;
-  --state-mutate-swap-text: #BE123C;
-  --state-mutate-swap-glow: 0 0 12px rgba(244, 63, 94, 0.22);
-
-  --state-active-window-bg: rgba(14, 165, 233, 0.12);
-  --state-active-window-border: #0284C7;
-  --state-active-window-text: #0369A1;
-  --state-active-window-glow: 0 0 10px rgba(14, 165, 233, 0.20);
-
-  --state-pivot-target-bg: rgba(139, 92, 246, 0.12);
-  --state-pivot-target-border: #7C3AED;
-  --state-pivot-target-text: #6D28D9;
-  --state-pivot-target-glow: 0 0 12px rgba(139, 92, 246, 0.22);
-
-  --state-sorted-verified-bg: rgba(16, 185, 129, 0.12);
-  --state-sorted-verified-border: #059669;
-  --state-sorted-verified-text: #047857;
-  --state-sorted-verified-glow: 0 0 10px rgba(16, 185, 129, 0.20);
 }

@@ -35,6 +35,10 @@
   }
 }
 
+.font-serif {
+  font-family: var(--font-serif);
+}
+
 .font-display {
   font-family: var(--font-display);
 }
@@ -48,47 +52,72 @@
   font-feature-settings: "tnum" 1, "zero" 1;
 }
 
-/* Industrial Solid Surfaces (Teenage Engineering / Linear Aesthetic) */
-.industrial-panel {
-  background-color: var(--bg-panel);
-  border: 1px solid var(--border-hairline);
+/* Tactile Architectural Print Nodes (Textbook Style) */
+.tactile-node {
+  border: 1.5px solid var(--node-idle-border);
+  background-color: var(--node-idle-bg);
+  box-shadow: var(--node-idle-shadow);
+  color: var(--node-idle-text);
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.tactile-surface {
-  background-color: var(--bg-elevated);
-  border: 1px solid var(--border-hairline);
+/* Diagonal Hatch Patterns for Visual State Distinctions */
+.hatch-amber {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(245, 158, 11, 0.20),
+    rgba(245, 158, 11, 0.20) 4px,
+    transparent 4px,
+    transparent 8px
+  );
 }
 
-.tactile-surface-hover:hover {
-  background-color: var(--bg-hover);
+.hatch-vermilion {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(234, 88, 12, 0.20),
+    rgba(234, 88, 12, 0.20) 4px,
+    transparent 4px,
+    transparent 8px
+  );
 }
 
-/* Clean Modern Button (Figma / Linear Aesthetic) */
+.hatch-emerald {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(5, 150, 105, 0.18),
+    rgba(5, 150, 105, 0.18) 4px,
+    transparent 4px,
+    transparent 8px
+  );
+}
+
+/* Clean Editorial Button (Figma / Linear / Excalidraw Aesthetic) */
 .btn-hardware-primary {
-  background-color: var(--accent-signal);
-  color: var(--accent-signal-text);
+  background-color: var(--accent-primary);
+  color: var(--text-on-accent);
   font-family: var(--font-sans);
   font-weight: 500;
-  border-radius: 6px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  border: 1px solid transparent;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-subtle);
   transition: all 0.15s ease;
 }
 .btn-hardware-primary:hover {
-  background-color: var(--accent-signal-hover);
+  background-color: var(--accent-primary-hover);
 }
 .btn-hardware-primary:active {
   transform: translateY(1px);
 }
 
 .btn-hardware-secondary {
-  background-color: var(--bg-panel);
+  background-color: var(--bg-elevated);
   color: var(--text-primary);
   font-family: var(--font-sans);
   font-size: 12px;
   font-weight: 500;
-  border-radius: 6px;
-  border: 1px solid var(--border-hairline);
+  border-radius: 8px;
+  border: 1px solid var(--border-island);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
   transition: all 0.15s ease;
 }
@@ -100,28 +129,17 @@
   transform: translateY(1px);
 }
 
-/* Diagonal Hatch Pattern for Active Partitions */
-.diagonal-hatch {
-  background-image: repeating-linear-gradient(
-    45deg,
-    rgba(14, 165, 233, 0.06),
-    rgba(14, 165, 233, 0.06) 6px,
-    transparent 6px,
-    transparent 12px
-  );
-}
-
-/* Architectural Dot Grid */
+/* Full-Bleed Architectural Dot Grid */
 .canvas-grid-pattern {
   background-color: var(--bg-canvas);
-  background-image: radial-gradient(var(--canvas-dot) 1px, transparent 1px);
-  background-size: 20px 20px;
+  background-image: radial-gradient(circle, var(--canvas-dot) 1.25px, transparent 1.25px);
+  background-size: 24px 24px;
 }
 
-/* Subtle Active Line Indicator for Code Inspector */
+/* Active Line Indicator for Code Inspector */
 .laser-code-highlight {
-  background-color: rgba(37, 99, 235, 0.08);
-  border-left: 2px solid var(--accent-primary);
+  background-color: var(--accent-subtle);
+  border-left: 2px solid var(--accent-brand);
 }
 
 /* Algorithmic Keyframe Animations */

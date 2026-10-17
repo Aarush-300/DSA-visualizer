@@ -23,14 +23,14 @@ export const StackQueueStage: React.FC = () => {
     switch (state) {
       case 'active':
       case 'mutate':
-        return { bg: 'rgba(255, 79, 0, 0.18)', border: '#FF4F00', text: '#FF4F00' };
+        return { bg: 'var(--state-mutate-swap-bg)', border: '#EA580C', text: '#EA580C' };
       case 'comparing':
       case 'compare':
-        return { bg: 'rgba(255, 184, 0, 0.16)', border: '#FFB800', text: '#FFB800' };
+        return { bg: 'var(--state-active-compare-bg)', border: '#F59E0B', text: '#F59E0B' };
       case 'inspecting':
-        return { bg: 'rgba(212, 255, 0, 0.14)', border: '#D4FF00', text: '#D4FF00' };
+        return { bg: 'var(--state-active-window-bg)', border: '#4F46E5', text: '#4F46E5' };
       case 'sorted':
-        return { bg: 'rgba(0, 230, 118, 0.16)', border: '#00E676', text: '#00E676' };
+        return { bg: 'var(--state-sorted-verified-bg)', border: '#059669', text: '#059669' };
       default:
         return { bg: 'var(--node-idle-bg)', border: 'var(--node-idle-border)', text: 'var(--node-idle-text)' };
     }

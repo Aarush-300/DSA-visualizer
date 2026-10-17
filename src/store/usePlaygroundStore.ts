@@ -74,7 +74,7 @@ const getInitialTheme = (): 'dark' | 'light' => {
     const saved = window.localStorage.getItem('algoforge-theme');
     if (saved === 'light' || saved === 'dark') return saved;
   }
-  return 'dark';
+  return 'light';
 };
 
 export const usePlaygroundStore = create<PlaygroundState>((set, get) => ({
