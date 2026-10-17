@@ -61,59 +61,59 @@ export const RightInspectorDrawer: React.FC = () => {
 
   const languages: { id: CodeLanguage; label: string }[] = [
     { id: 'c', label: 'C' },
-    { id: 'cpp', label: 'C++20' },
-    { id: 'java', label: 'JAVA' },
-    { id: 'python', label: 'PYTHON' },
-    { id: 'pseudo', label: 'PSEUDO' },
-    { id: 'algorithm', label: 'ALGO' },
+    { id: 'cpp', label: 'C++' },
+    { id: 'java', label: 'Java' },
+    { id: 'python', label: 'Python' },
+    { id: 'pseudo', label: 'Pseudo' },
+    { id: 'algorithm', label: 'Algorithm' },
   ];
 
   return (
-    <aside className="w-[380px] min-w-[360px] h-full border-l border-[var(--border-hairline)] bg-[var(--bg-panel)] text-[var(--text-primary)] flex flex-col z-20 shrink-0 select-none">
-      {/* Drawer Tab Headers with Hardware Keycaps */}
-      <div className="flex items-center justify-between border-b border-[var(--border-hairline)] px-3 py-2 bg-[var(--bg-hud)]">
-        <div className="flex items-center gap-1">
+    <aside className="w-[400px] min-w-[360px] h-full border-l border-[var(--border-hairline)] bg-[var(--bg-panel)] text-[var(--text-primary)] flex flex-col z-20 shrink-0 select-none">
+      {/* Drawer Header Tabs */}
+      <div className="flex items-center justify-between border-b border-[var(--border-hairline)] px-3 py-2 bg-[var(--bg-panel)]">
+        <div className="flex items-center gap-1 bg-[var(--bg-elevated)] p-0.5 rounded-md border border-[var(--border-hairline)]">
           <button
             onClick={() => setActiveInspectorTab('code')}
-            className={`flex items-center gap-1.5 px-2.5 py-1 text-xs font-display tracking-wider font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded transition-colors ${
               activeInspectorTab === 'code'
-                ? 'bg-[var(--bg-elevated)] text-[var(--accent-primary)] border-t-2 border-t-[var(--accent-primary)] border-x border-b border-[var(--border-strong)]'
+                ? 'bg-[var(--bg-panel)] text-[var(--text-primary)] font-semibold shadow-xs'
                 : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
             }`}
           >
-            <Code size={12} />
-            <span>LIVE CODE</span>
+            <Code size={13} />
+            <span>Code</span>
           </button>
 
           <button
             onClick={() => setActiveInspectorTab('telemetry')}
-            className={`flex items-center gap-1.5 px-2.5 py-1 text-xs font-display tracking-wider font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded transition-colors ${
               activeInspectorTab === 'telemetry'
-                ? 'bg-[var(--bg-elevated)] text-[var(--accent-primary)] border-t-2 border-t-[var(--accent-primary)] border-x border-b border-[var(--border-strong)]'
+                ? 'bg-[var(--bg-panel)] text-[var(--text-primary)] font-semibold shadow-xs'
                 : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
             }`}
           >
-            <Activity size={12} />
-            <span>TELEMETRY</span>
+            <Activity size={13} />
+            <span>Metrics</span>
           </button>
 
           <button
             onClick={() => setActiveInspectorTab('stack')}
-            className={`flex items-center gap-1.5 px-2.5 py-1 text-xs font-display tracking-wider font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded transition-colors ${
               activeInspectorTab === 'stack'
-                ? 'bg-[var(--bg-elevated)] text-[var(--accent-primary)] border-t-2 border-t-[var(--accent-primary)] border-x border-b border-[var(--border-strong)]'
+                ? 'bg-[var(--bg-panel)] text-[var(--text-primary)] font-semibold shadow-xs'
                 : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
             }`}
           >
-            <Layers size={12} />
-            <span>STACK</span>
+            <Layers size={13} />
+            <span>Call Stack</span>
           </button>
         </div>
 
         <button
           onClick={toggleRightDrawer}
           title="Collapse Drawer"
-          className="p-1 text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)] transition-colors"
+          className="p-1 rounded-md text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)] transition-colors"
         >
           <ChevronRight size={15} />
         </button>
@@ -122,27 +122,27 @@ export const RightInspectorDrawer: React.FC = () => {
       {/* Tab 1: Live Code Trace */}
       {activeInspectorTab === 'code' && (
         <div className="flex-1 flex flex-col min-h-0 bg-[var(--bg-canvas)]">
-          {/* Language Switcher Bar with Sliding layoutId Active Indicator */}
-          <div className="px-3 py-1.5 border-b border-[var(--border-hairline)] flex items-center justify-between bg-[var(--bg-hud)]">
-            <span className="text-[10px] font-mono uppercase font-bold text-[var(--text-muted)]">
-              TARGET SYNTAX
+          {/* Language Switcher Bar */}
+          <div className="px-3 py-2 border-b border-[var(--border-hairline)] flex items-center justify-between bg-[var(--bg-panel)]">
+            <span className="text-xs font-medium text-[var(--text-secondary)]">
+              Language
             </span>
-            <div className="flex items-center bg-[var(--bg-panel)] border border-[var(--border-hairline)] p-0.5">
+            <div className="flex items-center bg-[var(--bg-elevated)] border border-[var(--border-hairline)] rounded-md p-0.5">
               {languages.map((lang) => {
                 const isActive = codeLanguage === lang.id;
                 return (
                   <button
                     key={lang.id}
                     onClick={() => setCodeLanguage(lang.id)}
-                    className={`relative px-2 py-0.5 text-[10px] font-mono tracking-wider font-bold transition-colors ${
-                      isActive ? 'text-[var(--accent-primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                    className={`relative px-2 py-0.5 text-[11px] font-sans font-medium rounded transition-colors ${
+                      isActive ? 'text-[var(--accent-primary)] font-semibold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                     }`}
                   >
                     {isActive && (
                       <motion.div
                         layoutId="active-lang-tab"
                         transition={{ type: 'spring', stiffness: 500, damping: 35 }}
-                        className="absolute inset-0 bg-[var(--bg-elevated)] border border-[var(--border-strong)]"
+                        className="absolute inset-0 bg-[var(--bg-panel)] rounded border border-[var(--border-strong)]"
                       />
                     )}
                     <span className="relative z-10">{lang.label}</span>
@@ -152,13 +152,15 @@ export const RightInspectorDrawer: React.FC = () => {
             </div>
           </div>
 
-          <div className="px-3 py-1 bg-[var(--bg-hud)] text-[10px] font-mono text-[var(--text-muted)] border-b border-[var(--border-hairline)] flex items-center justify-between">
-            <span>SYNCED EXECUTION TRACE</span>
-            <span className="text-[var(--accent-primary)]">LINE: {String(activeLineNumber).padStart(2, '0')}</span>
+          <div className="px-3 py-1.5 bg-[var(--bg-canvas)] text-xs text-[var(--text-secondary)] border-b border-[var(--border-hairline)] flex items-center justify-between">
+            <span className="font-medium text-[var(--text-primary)]">Implementation</span>
+            <span className="font-mono text-[11px] text-[var(--accent-primary)] bg-[var(--accent-primary)]/10 px-2 py-0.5 rounded font-semibold">
+              Line {activeLineNumber}
+            </span>
           </div>
 
-          {/* Line-by-Line Code Viewer with Laser Bar Indicator */}
-          <div className="flex-1 overflow-auto p-2 font-mono text-[12.5px] leading-relaxed bg-[var(--bg-canvas)]">
+          {/* Clean Grid-based Code Viewer with Zero Clipping */}
+          <div className="flex-1 overflow-auto py-2 bg-[var(--bg-canvas)]">
             {currentLines.map((line, idx) => {
               const lineNum = idx + 1;
               const isCurrent = lineNum === activeLineNumber;
@@ -166,28 +168,32 @@ export const RightInspectorDrawer: React.FC = () => {
               return (
                 <div
                   key={lineNum}
-                  className="relative flex items-center min-w-max py-0.5"
+                  style={{ display: 'grid', gridTemplateColumns: '36px 1fr' }}
+                  className={`items-baseline transition-colors ${
+                    isCurrent
+                      ? 'bg-[var(--accent-subtle)] border-l-2 border-[var(--accent-primary)]'
+                      : 'border-l-2 border-transparent hover:bg-[var(--bg-hover)]'
+                  }`}
                 >
-                  {isCurrent && (
-                    <motion.div
-                      layoutId="active-code-line"
-                      transition={{ type: 'spring', stiffness: 450, damping: 32 }}
-                      className="absolute inset-0 laser-code-highlight"
-                    />
-                  )}
+                  {/* Column 1: Line Number Gutter */}
+                  <div className="flex items-center justify-end pr-2.5 py-0.5 select-none border-r border-[var(--border-hairline)]">
+                    <span
+                      className={`font-mono text-[11px] tabular-nums ${
+                        isCurrent
+                          ? 'text-[var(--accent-primary)] font-semibold'
+                          : 'text-[var(--text-muted)]'
+                      }`}
+                    >
+                      {lineNum}
+                    </span>
+                  </div>
 
-                  {/* Execution Gutter Arrow & Sticky Line Number */}
-                  <span className="relative z-10 w-4 text-center text-[10px] font-bold text-[var(--accent-primary)]">
-                    {isCurrent ? '▶' : ''}
-                  </span>
-                  <span className="relative z-10 w-7 shrink-0 text-right pr-2 text-[var(--text-muted)] select-none text-[10px] font-mono sticky left-0 bg-[var(--bg-code-gutter)]">
-                    {String(lineNum).padStart(2, '0')}
-                  </span>
-
-                  {/* Code Line */}
-                  <pre className="relative z-10 font-mono text-[12px] whitespace-pre pl-1 text-[var(--text-primary)] m-0">
-                    {line}
-                  </pre>
+                  {/* Column 2: Code Text */}
+                  <div className="pl-3 pr-4 py-0.5 overflow-x-visible">
+                    <pre className="font-mono text-[12px] leading-[1.65] text-[var(--text-primary)] m-0 whitespace-pre">
+                      {line || ' '}
+                    </pre>
+                  </div>
                 </div>
               );
             })}
@@ -200,63 +206,63 @@ export const RightInspectorDrawer: React.FC = () => {
         <div className="flex-1 overflow-y-auto p-3 space-y-3 bg-[var(--bg-canvas)]">
           <div className="grid grid-cols-2 gap-2">
             <MetricCounterCard
-              label="COMPARISONS"
+              label="Comparisons"
               value={metrics.comparisons}
               subtext="Key Tests"
-              color="#FFB800"
+              color="#3B82F6"
             />
             <MetricCounterCard
-              label="MUTATIONS / SWAPS"
+              label="Mutations / Swaps"
               value={metrics.swaps}
               subtext="Memory Reassignments"
               color="var(--accent-primary)"
             />
             <MetricCounterCard
-              label="AUX MEMORY"
+              label="Aux Memory"
               value={metrics.auxiliaryMemory ?? 'O(1)'}
               subtext="Space Overhead"
-              color="#D4FF00"
+              color="#10B981"
             />
             <MetricCounterCard
-              label="EXECUTION STEP"
+              label="Execution Step"
               value={`${currentStepIndex + 1} / ${Math.max(1, frames.length)}`}
               subtext="Timeline Position"
-              color="#00E676"
+              color="#6366F1"
             />
           </div>
 
           {/* Complexity Reference Matrix */}
           {algoMeta && (
-            <div className="p-3 bg-[var(--bg-panel)] border border-[var(--border-hairline)] space-y-2.5">
+            <div className="p-3 bg-[var(--bg-panel)] border border-[var(--border-hairline)] rounded-md space-y-2.5">
               <div className="flex items-center justify-between pb-1.5 border-b border-[var(--border-hairline)]">
-                <span className="text-[10px] font-display uppercase tracking-wider font-bold text-[var(--text-primary)]">
-                  ASYMPTOTIC SPECIFICATION
+                <span className="text-xs font-semibold text-[var(--text-primary)]">
+                  Complexity Analysis
                 </span>
-                <span className="font-mono text-[9px] text-[var(--accent-primary)] font-bold">
+                <span className="font-mono text-[10px] text-[var(--accent-primary)] font-semibold">
                   {algoMeta.name}
                 </span>
               </div>
 
               <div className="grid grid-cols-2 gap-1.5 text-xs font-mono">
-                <div className="p-2 bg-[var(--bg-elevated)] border border-[var(--border-hairline)]">
-                  <span className="text-[9px] text-[var(--text-muted)] block font-mono">BEST CASE</span>
-                  <span className="text-[#00E676] font-bold">{algoMeta.complexity.bestTime}</span>
+                <div className="p-2 bg-[var(--bg-elevated)] border border-[var(--border-hairline)] rounded">
+                  <span className="text-[10px] text-[var(--text-muted)] block font-sans">Best Case</span>
+                  <span className="text-emerald-500 font-semibold">{algoMeta.complexity.bestTime}</span>
                 </div>
-                <div className="p-2 bg-[var(--bg-elevated)] border border-[var(--border-hairline)]">
-                  <span className="text-[9px] text-[var(--text-muted)] block font-mono">AVERAGE CASE</span>
-                  <span className="text-[#FFB800] font-bold">{algoMeta.complexity.averageTime}</span>
+                <div className="p-2 bg-[var(--bg-elevated)] border border-[var(--border-hairline)] rounded">
+                  <span className="text-[10px] text-[var(--text-muted)] block font-sans">Average Case</span>
+                  <span className="text-amber-500 font-semibold">{algoMeta.complexity.averageTime}</span>
                 </div>
-                <div className="p-2 bg-[var(--bg-elevated)] border border-[var(--border-hairline)]">
-                  <span className="text-[9px] text-[var(--text-muted)] block font-mono">WORST CASE</span>
-                  <span className="text-[var(--accent-primary)] font-bold">{algoMeta.complexity.worstTime}</span>
+                <div className="p-2 bg-[var(--bg-elevated)] border border-[var(--border-hairline)] rounded">
+                  <span className="text-[10px] text-[var(--text-muted)] block font-sans">Worst Case</span>
+                  <span className="text-rose-500 font-semibold">{algoMeta.complexity.worstTime}</span>
                 </div>
-                <div className="p-2 bg-[var(--bg-elevated)] border border-[var(--border-hairline)]">
-                  <span className="text-[9px] text-[var(--text-muted)] block font-mono">AUX SPACE</span>
-                  <span className="text-[#D4FF00] font-bold">{algoMeta.complexity.space}</span>
+                <div className="p-2 bg-[var(--bg-elevated)] border border-[var(--border-hairline)] rounded">
+                  <span className="text-[10px] text-[var(--text-muted)] block font-sans">Aux Space</span>
+                  <span className="text-blue-500 font-semibold">{algoMeta.complexity.space}</span>
                 </div>
               </div>
 
-              <p className="text-[11px] font-sans text-[var(--text-secondary)] leading-relaxed pt-1 border-t border-[var(--border-hairline)]">
+              <p className="text-xs font-sans text-[var(--text-secondary)] leading-relaxed pt-1 border-t border-[var(--border-hairline)]">
                 {algoMeta.description}
               </p>
             </div>
@@ -268,30 +274,30 @@ export const RightInspectorDrawer: React.FC = () => {
       {activeInspectorTab === 'stack' && (
         <div className="flex-1 overflow-y-auto p-3 space-y-2 bg-[var(--bg-canvas)]">
           <div className="flex items-center justify-between pb-2 border-b border-[var(--border-hairline)]">
-            <span className="text-[10px] font-display uppercase tracking-wider font-bold text-[var(--text-secondary)]">
-              LIFO RECURSION CALL STACK
+            <span className="text-xs font-semibold text-[var(--text-primary)]">
+              Call Stack
             </span>
-            <span className="font-mono text-[10px] text-[var(--accent-primary)]">
-              DEPTH: {String(currentFrame?.callStack.length ?? 0).padStart(2, '0')}
+            <span className="font-mono text-xs text-[var(--accent-primary)] font-medium">
+              Depth: {currentFrame?.callStack.length ?? 0}
             </span>
           </div>
 
-          <div className="space-y-1">
+          <div className="space-y-1.5">
             {(!currentFrame?.callStack || currentFrame.callStack.length === 0) ? (
-              <div className="text-center py-8 text-xs text-[var(--text-muted)] font-mono">
-                [STACK IDLE]
+              <div className="text-center py-8 text-xs text-[var(--text-muted)]">
+                Call stack is empty
               </div>
             ) : (
               currentFrame.callStack.slice().reverse().map((call, idx) => (
                 <div
                   key={idx}
-                  className={`p-2 border text-xs font-mono flex items-center gap-2 ${
+                  className={`p-2 rounded-md border text-xs font-mono flex items-center gap-2 ${
                     idx === 0
-                      ? 'bg-[var(--bg-elevated)] border-[var(--accent-primary)] text-[var(--text-primary)]'
+                      ? 'bg-[var(--accent-subtle)] border-[var(--accent-primary)] text-[var(--text-primary)]'
                       : 'bg-[var(--bg-panel)] border-[var(--border-hairline)] text-[var(--text-secondary)]'
                   }`}
                 >
-                  <GitBranch size={12} className={idx === 0 ? 'text-[var(--accent-primary)]' : 'text-[var(--text-muted)]'} />
+                  <GitBranch size={13} className={idx === 0 ? 'text-[var(--accent-primary)]' : 'text-[var(--text-muted)]'} />
                   <span className="truncate">{call}</span>
                 </div>
               ))

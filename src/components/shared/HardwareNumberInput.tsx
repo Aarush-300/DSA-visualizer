@@ -29,19 +29,20 @@ export const HardwareNumberInput: React.FC<HardwareNumberInputProps> = ({
   };
 
   return (
-    <div className={`flex items-center gap-1.5 ${className}`}>
+    <div className={`flex items-center justify-between gap-2 ${className}`}>
       {label && (
-        <span className="text-[10px] font-mono text-[var(--text-secondary)] uppercase font-bold shrink-0">
-          {label}:
+        <span className="text-xs font-sans text-[var(--text-secondary)] font-medium shrink-0">
+          {label}
         </span>
       )}
-      <div className="flex items-center bg-[var(--bg-input)] border border-[var(--border-strong)]">
+      <div className="flex items-center bg-[var(--bg-input)] border border-[var(--border-hairline)] hover:border-[var(--border-strong)] focus-within:border-[var(--accent-primary)] rounded-md overflow-hidden transition-colors">
         <button
           type="button"
           onClick={handleDecrement}
           disabled={value <= min}
-          className="w-6 h-6 flex items-center justify-center bg-[var(--bg-elevated)] hover:bg-[var(--bg-hover)] text-[var(--text-primary)] border-r border-[var(--border-strong)] disabled:opacity-30 disabled:pointer-events-none active:translate-y-[1px] transition-colors"
-          title="Decrement"
+          className="w-7 h-7 flex items-center justify-center bg-[var(--bg-panel)] hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border-r border-[var(--border-hairline)] disabled:opacity-30 disabled:pointer-events-none transition-colors cursor-pointer"
+          title="Decrease"
+          aria-label="Decrease value"
         >
           <Minus size={11} />
         </button>
@@ -54,14 +55,15 @@ export const HardwareNumberInput: React.FC<HardwareNumberInputProps> = ({
             const num = Number(e.target.value);
             if (!Number.isNaN(num)) onChange(num);
           }}
-          className="w-14 px-1.5 py-0.5 text-xs font-mono text-[var(--text-primary)] bg-transparent text-center focus:outline-none"
+          className="w-14 px-1 py-1 text-xs font-mono text-[var(--text-primary)] bg-transparent text-center focus:outline-none"
         />
         <button
           type="button"
           onClick={handleIncrement}
           disabled={value >= max}
-          className="w-6 h-6 flex items-center justify-center bg-[var(--bg-elevated)] hover:bg-[var(--bg-hover)] text-[var(--text-primary)] border-l border-[var(--border-strong)] disabled:opacity-30 disabled:pointer-events-none active:translate-y-[1px] transition-colors"
-          title="Increment"
+          className="w-7 h-7 flex items-center justify-center bg-[var(--bg-panel)] hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border-l border-[var(--border-hairline)] disabled:opacity-30 disabled:pointer-events-none transition-colors cursor-pointer"
+          title="Increase"
+          aria-label="Increase value"
         >
           <Plus size={11} />
         </button>

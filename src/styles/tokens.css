@@ -1,140 +1,140 @@
 :root,
 [data-theme="dark"] {
-  /* Surfaces & Structural Grid (Dark / Carbon Mode) */
-  --bg-canvas: #090908;
-  --bg-panel: #111110;
-  --bg-hud: #0D0D0C;
-  --bg-elevated: #181816;
-  --bg-input: #0B0B0A;
-  --bg-hover: #22221F;
-  --bg-code-gutter: #0D0D0C;
+  /* Surfaces & Structural Grid (Dark / Linear Zinc Mode) */
+  --bg-canvas: #090A0F;
+  --bg-panel: #11131A;
+  --bg-hud: #161922;
+  --bg-elevated: #1C202B;
+  --bg-input: #0D0F14;
+  --bg-hover: #222634;
+  --bg-code-gutter: #11131A;
 
-  --border-hairline: #262522;
-  --border-strong: #3B3935;
-  --canvas-dot: rgba(255, 255, 255, 0.09);
-  --dot-color: rgba(255, 255, 255, 0.09);
+  --border-hairline: #222634;
+  --border-strong: #33384B;
+  --canvas-dot: rgba(255, 255, 255, 0.08);
+  --dot-color: rgba(255, 255, 255, 0.08);
 
   /* Typography Colors */
-  --text-primary: #F3F2EE;
-  --text-secondary: #9E9B93;
-  --text-muted: #5C5952;
-  --text-on-accent: #090908;
-
-  /* Data Structure Node & Bar Tokens (Dark) */
-  --node-idle-bg: #1C1B19;
-  --node-idle-border: #383632;
-  --node-idle-text: #F3F2EE;
-  --node-subtext: #9E9B93;
-  --node-header-bg: #141311;
-
-  /* Font Families */
-  --font-display: 'Chakra Petch', sans-serif;
-  --font-sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: 'IBM Plex Mono', monospace;
-
-  /* Brand Primary Accent */
-  --accent-primary: #FF4F00;
-  --accent-primary-hover: #FF6622;
-  --accent-signal: #FF4F00;
-  --accent-signal-hover: #FF6622;
-  --accent-signal-text: #090908;
-
-  /* State 1: Idle / Unvisited */
-  --state-idle-bg: #1C1B19;
-  --state-idle-border: #33312D;
-  --state-idle-text: #D6D3CD;
-
-  /* State 2: Active Comparison (Phosphor Amber) */
-  --state-active-compare-bg: rgba(255, 184, 0, 0.14);
-  --state-active-compare-border: #FFB800;
-  --state-active-compare-text: #FFD666;
-  --state-active-compare-glow: 0 0 16px rgba(255, 184, 0, 0.35);
-
-  /* State 3: Mutation / Swap / Rotation (International Orange) */
-  --state-mutate-swap-bg: rgba(255, 79, 0, 0.18);
-  --state-mutate-swap-border: #FF4F00;
-  --state-mutate-swap-text: #FF9466;
-  --state-mutate-swap-glow: 0 0 20px rgba(255, 79, 0, 0.40);
-
-  /* State 4: Active Sub-Array Partition / Queue (Acid Chartreuse) */
-  --state-active-window-bg: rgba(212, 255, 0, 0.10);
-  --state-active-window-border: #D4FF00;
-  --state-active-window-text: #E8FF7A;
-  --state-active-window-glow: 0 0 14px rgba(212, 255, 0, 0.30);
-
-  /* State 5: Pivot / Search Target (Signal Magenta) */
-  --state-pivot-target-bg: rgba(255, 46, 147, 0.16);
-  --state-pivot-target-border: #FF2E93;
-  --state-pivot-target-text: #FF85BF;
-  --state-pivot-target-glow: 0 0 18px rgba(255, 46, 147, 0.40);
-
-  /* State 6: Verified / Sorted / Shortest Path (Oscilloscope Emerald) */
-  --state-sorted-verified-bg: rgba(0, 230, 118, 0.14);
-  --state-sorted-verified-border: #00E676;
-  --state-sorted-verified-text: #66FFA6;
-  --state-sorted-verified-glow: 0 0 16px rgba(0, 230, 118, 0.35);
-}
-
-/* Dieter Rams / Teenage Engineering Warm Paper Light Mode */
-[data-theme="light"],
-.light {
-  --bg-canvas: #EFECE6;          /* Warm architectural drafting grid paper */
-  --bg-panel: #F8F6F0;           /* Crisp matte ivory structural panels */
-  --bg-hud: #F2EFE9;             /* Sub-header & telemetry HUD surface */
-  --bg-elevated: #E6E2D8;        /* Tactile anodized warm grey cards & buttons */
-  --bg-input: #FFFFFF;           /* Crisp white input fields */
-  --bg-hover: #DBD6C9;           /* Warm stone hover state */
-  --bg-code-gutter: #EAE6DC;     /* Code line-number gutter */
-
-  --border-hairline: #D4CFC3;    /* Crisp 1px drafting grid lines */
-  --border-strong: #B5AFA0;      /* Defined structural borders */
-  --canvas-dot: rgba(18, 18, 16, 0.14); /* Crisp dark dots on light canvas */
-  --dot-color: rgba(18, 18, 16, 0.14);
-
-  --text-primary: #141413;       /* Deep drafting ink black */
-  --text-secondary: #52504A;     /* High-contrast charcoal slate */
-  --text-muted: #858075;         /* Muted warm graphite */
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
   --text-on-accent: #FFFFFF;
 
-  /* Data Structure Node & Bar Tokens (Light — NEVER use black bars in light mode!) */
-  --node-idle-bg: #FFFFFF;       /* Crisp white/ivory card & bar fill */
-  --node-idle-border: #ABA598;   /* Distinct architectural border on idle bars/nodes */
-  --node-idle-text: #141413;     /* Deep ink-black numbers above/inside bars and nodes */
-  --node-subtext: #57534E;       /* Legible hex addresses and indices */
-  --node-header-bg: #E6E2D8;     /* Linked-list/Tree node header strip */
+  /* Data Structure Node & Bar Tokens (Dark) */
+  --node-idle-bg: #161922;
+  --node-idle-border: #2A3042;
+  --node-idle-text: #F1F5F9;
+  --node-subtext: #94A3B8;
+  --node-header-bg: #11131A;
 
-  --accent-primary: #FF4F00;
-  --accent-primary-hover: #E04500;
-  --accent-signal: #FF4F00;
-  --accent-signal-hover: #E04500;
+  /* Font Families: Inter & JetBrains Mono */
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+
+  /* Brand Primary Accent (Refined Blue) */
+  --accent-primary: #3B82F6;
+  --accent-primary-hover: #2563EB;
+  --accent-signal: #3B82F6;
+  --accent-signal-hover: #2563EB;
   --accent-signal-text: #FFFFFF;
 
-  --state-idle-bg: #EAE6D9;
-  --state-idle-border: #C2BDAF;
-  --state-idle-text: #4A4842;
+  /* State 1: Idle / Unvisited */
+  --state-idle-bg: #161922;
+  --state-idle-border: #2A3042;
+  --state-idle-text: #94A3B8;
 
-  --state-active-compare-bg: rgba(217, 119, 6, 0.15);
+  /* State 2: Active Comparison (Amber) */
+  --state-active-compare-bg: rgba(245, 158, 11, 0.14);
+  --state-active-compare-border: #F59E0B;
+  --state-active-compare-text: #FBBF24;
+  --state-active-compare-glow: 0 0 14px rgba(245, 158, 11, 0.25);
+
+  /* State 3: Mutation / Swap / Rotation (Rose) */
+  --state-mutate-swap-bg: rgba(244, 63, 94, 0.14);
+  --state-mutate-swap-border: #F43F5E;
+  --state-mutate-swap-text: #FB7185;
+  --state-mutate-swap-glow: 0 0 16px rgba(244, 63, 94, 0.30);
+
+  /* State 4: Active Window / Partition (Sky Blue) */
+  --state-active-window-bg: rgba(14, 165, 233, 0.14);
+  --state-active-window-border: #0EA5E9;
+  --state-active-window-text: #38BDF8;
+  --state-active-window-glow: 0 0 14px rgba(14, 165, 233, 0.25);
+
+  /* State 5: Pivot / Search Target (Violet) */
+  --state-pivot-target-bg: rgba(139, 92, 246, 0.14);
+  --state-pivot-target-border: #8B5CF6;
+  --state-pivot-target-text: #A78BFA;
+  --state-pivot-target-glow: 0 0 16px rgba(139, 92, 246, 0.30);
+
+  /* State 6: Verified / Sorted (Emerald) */
+  --state-sorted-verified-bg: rgba(16, 185, 129, 0.14);
+  --state-sorted-verified-border: #10B981;
+  --state-sorted-verified-text: #34D399;
+  --state-sorted-verified-glow: 0 0 14px rgba(16, 185, 129, 0.25);
+}
+
+/* Figma / Linear Crisp Slate Light Mode */
+[data-theme="light"],
+.light {
+  --bg-canvas: #F8FAFC;          /* Clean alabaster slate */
+  --bg-panel: #FFFFFF;           /* Crisp white panels */
+  --bg-hud: #F1F5F9;             /* Soft slate pill/header background */
+  --bg-elevated: #F8FAFC;        /* Light elevated cards */
+  --bg-input: #FFFFFF;           /* Pure white input fields */
+  --bg-hover: #F1F5F9;           /* Slate hover state */
+  --bg-code-gutter: #F8FAFC;     /* Code line-number gutter */
+
+  --border-hairline: #E2E8F0;    /* Soft 1px slate border */
+  --border-strong: #CBD5E1;      /* Defined structural borders */
+  --canvas-dot: rgba(15, 23, 42, 0.08); /* Subtle slate dot grid */
+  --dot-color: rgba(15, 23, 42, 0.08);
+
+  --text-primary: #0F172A;       /* Deep slate ink black */
+  --text-secondary: #475569;     /* Slate body text */
+  --text-muted: #94A3B8;         /* Subdued label text */
+  --text-on-accent: #FFFFFF;
+
+  /* Data Structure Node & Bar Tokens (Light Mode) */
+  --node-idle-bg: #FFFFFF;       /* Crisp white node fill */
+  --node-idle-border: #CBD5E1;   /* Soft slate border */
+  --node-idle-text: #0F172A;     /* Deep slate text */
+  --node-subtext: #64748B;       /* Subdued secondary info */
+  --node-header-bg: #F8FAFC;     /* Node header strip */
+
+  --accent-primary: #2563EB;     /* Royal Blue accent */
+  --accent-primary-hover: #1D4ED8;
+  --accent-signal: #2563EB;
+  --accent-signal-hover: #1D4ED8;
+  --accent-signal-text: #FFFFFF;
+
+  --state-idle-bg: #F8FAFC;
+  --state-idle-border: #CBD5E1;
+  --state-idle-text: #475569;
+
+  --state-active-compare-bg: rgba(245, 158, 11, 0.12);
   --state-active-compare-border: #D97706;
   --state-active-compare-text: #B45309;
-  --state-active-compare-glow: 0 0 12px rgba(217, 119, 6, 0.25);
+  --state-active-compare-glow: 0 0 10px rgba(245, 158, 11, 0.20);
 
-  --state-mutate-swap-bg: rgba(255, 79, 0, 0.15);
-  --state-mutate-swap-border: #FF4F00;
-  --state-mutate-swap-text: #EA580C;
-  --state-mutate-swap-glow: 0 0 14px rgba(255, 79, 0, 0.28);
+  --state-mutate-swap-bg: rgba(244, 63, 94, 0.12);
+  --state-mutate-swap-border: #E11D48;
+  --state-mutate-swap-text: #BE123C;
+  --state-mutate-swap-glow: 0 0 12px rgba(244, 63, 94, 0.22);
 
-  --state-active-window-bg: rgba(2, 132, 199, 0.12);
+  --state-active-window-bg: rgba(14, 165, 233, 0.12);
   --state-active-window-border: #0284C7;
   --state-active-window-text: #0369A1;
-  --state-active-window-glow: 0 0 12px rgba(2, 132, 199, 0.25);
+  --state-active-window-glow: 0 0 10px rgba(14, 165, 233, 0.20);
 
-  --state-pivot-target-bg: rgba(219, 39, 119, 0.14);
-  --state-pivot-target-border: #DB2777;
-  --state-pivot-target-text: #BE185D;
-  --state-pivot-target-glow: 0 0 14px rgba(219, 39, 119, 0.30);
+  --state-pivot-target-bg: rgba(139, 92, 246, 0.12);
+  --state-pivot-target-border: #7C3AED;
+  --state-pivot-target-text: #6D28D9;
+  --state-pivot-target-glow: 0 0 12px rgba(139, 92, 246, 0.22);
 
-  --state-sorted-verified-bg: rgba(5, 150, 105, 0.15);
+  --state-sorted-verified-bg: rgba(16, 185, 129, 0.12);
   --state-sorted-verified-border: #059669;
   --state-sorted-verified-text: #047857;
-  --state-sorted-verified-glow: 0 0 12px rgba(5, 150, 105, 0.25);
+  --state-sorted-verified-glow: 0 0 10px rgba(16, 185, 129, 0.20);
 }

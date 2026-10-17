@@ -452,11 +452,16 @@ export function generatePathfindingFrames(
 
     let finalNarration = '';
     if (algorithm === 'dijkstra' || algorithm === 'aStar') {
-      finalNarration = `Optimal shortest path found and verified! Total Path Cost: ${totalCost} across ${stepCount} steps (${weightedCount} weighted nodes). Visited cells: ${metrics.comparisons}.`;
+      finalNarration = `Minimum-cost path found! Total cost: ${totalCost} across ${stepCount} steps. Total Path Cost: ${totalCost}.`;
     } else if (algorithm === 'bfs') {
-      finalNarration = `Minimum-hop path found! ${stepCount} steps (Total traversal cost: ${totalCost}; note: BFS is unweighted). Visited cells: ${metrics.comparisons}.`;
+      const hasWeighted = weightedCount > 0 || grid.some((row) => row.some((c) => (c.weight ?? 1) > 1));
+      if (hasWeighted) {
+        finalNarration = `Minimum-hop path found via BFS in ${stepCount} steps (accumulated weight cost: ${totalCost}; BFS minimizes step count, not weighted cost).`;
+      } else {
+        finalNarration = `Shortest unweighted path found via BFS in ${stepCount} steps.`;
+      }
     } else {
-      finalNarration = `Target reached via DFS traversal! Path length: ${stepCount} steps (Total cost: ${totalCost} — DFS does not guarantee a shortest path). Visited cells: ${metrics.comparisons}.`;
+      finalNarration = `Target reached via Depth-First Search in ${stepCount} steps (total cost: ${totalCost}). Note: DFS explores depth-first and does not guarantee minimum steps or minimal edge weight.`;
     }
 
     emitFrame(finalNarration, null, { cpp: 7, python: 6, pseudo: 5 }, []);

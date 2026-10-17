@@ -16,12 +16,12 @@ export const MetricCounterCard: React.FC<MetricCounterCardProps> = ({
   color = 'var(--accent-primary)',
   icon,
 }) => {
-  const displayVal = typeof value === 'number' ? String(value).padStart(4, '0') : value;
+  const displayVal = typeof value === 'number' ? value : value;
 
   return (
-    <div className="flex flex-col p-3 bg-[var(--bg-elevated)] border border-[var(--border-hairline)] relative overflow-hidden group select-none">
-      <div className="flex items-center justify-between text-xs mb-1.5">
-        <span className="font-display uppercase text-[10px] font-bold tracking-wider text-[var(--text-secondary)]">
+    <div className="flex flex-col p-3 bg-[var(--bg-elevated)] border border-[var(--border-hairline)] rounded-md relative overflow-hidden group select-none">
+      <div className="flex items-center justify-between text-xs mb-1">
+        <span className="font-sans text-[11px] font-medium text-[var(--text-secondary)]">
           {label}
         </span>
         {icon && <span style={{ color }}>{icon}</span>}
@@ -31,11 +31,11 @@ export const MetricCounterCard: React.FC<MetricCounterCardProps> = ({
         <AnimatePresence mode="popLayout">
           <motion.span
             key={String(value)}
-            initial={{ y: 12, opacity: 0 }}
+            initial={{ y: 8, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -12, opacity: 0 }}
+            exit={{ y: -8, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-            className="font-mono text-xl font-bold tracking-tight text-[var(--text-primary)]"
+            className="font-mono text-lg font-semibold tracking-tight text-[var(--text-primary)]"
           >
             {displayVal}
           </motion.span>
@@ -43,7 +43,7 @@ export const MetricCounterCard: React.FC<MetricCounterCardProps> = ({
       </div>
 
       {subtext && (
-        <span className="font-mono text-[9px] text-[var(--text-muted)] mt-1 truncate">
+        <span className="font-mono text-[10px] text-[var(--text-muted)] mt-0.5 truncate">
           {subtext}
         </span>
       )}

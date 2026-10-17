@@ -14,13 +14,13 @@ export const LinkedListStage: React.FC = () => {
   if (nodes.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-[var(--text-muted)] font-mono text-xs gap-3">
-        <div className="flex items-center gap-2 px-4 py-2 border border-[var(--border-hairline)] bg-[var(--bg-panel)] shadow-sm">
-          <span className="text-[var(--accent-primary)] font-bold">HEAD</span>
-          <span className="text-[var(--text-secondary)]">➔</span>
-          <span className="text-[var(--text-muted)]">NULL / 0x0000</span>
+        <div className="flex items-center gap-2 px-4 py-2 border border-[var(--border-hairline)] bg-[var(--bg-panel)] rounded-md shadow-xs">
+          <span className="text-[var(--accent-primary)] font-semibold">head</span>
+          <span className="text-[var(--text-secondary)]">→</span>
+          <span className="text-[var(--text-muted)]">null</span>
         </div>
-        <p className="text-[11px] text-[var(--text-secondary)]">
-          List is empty (0 nodes). Use + INS HEAD or + INS TAIL to allocate memory.
+        <p className="text-xs font-sans text-[var(--text-secondary)]">
+          List is empty. Use Insert Head or Insert Tail to add elements.
         </p>
       </div>
     );
@@ -29,55 +29,52 @@ export const LinkedListStage: React.FC = () => {
   const isDoubly = listType === 'doubly' || listType === 'circularDoubly';
   const isCircular = listType === 'circularSingly' || listType === 'circularDoubly';
 
-  const nodeW = isDoubly ? 210 : 150;
-  const nodeH = 64;
+  const nodeW = isDoubly ? 184 : 136;
+  const nodeH = 58;
   const gapX = isDoubly ? 48 : 42;
-  const gapY = 85;
-  const nodesPerRow = isDoubly ? 3 : 4;
+  const nodeY = 110;
 
-  // Re-calculate dynamic positions on stage
+  // Single-track horizontal layout for up to 10 nodes (zero multi-row wrap collisions)
   const positionedNodes = nodes.map((node, idx) => {
-    const col = idx % nodesPerRow;
-    const row = Math.floor(idx / nodesPerRow);
-    const x = 50 + col * (nodeW + gapX);
-    const y = 50 + row * (nodeH + gapY);
+    const x = 70 + idx * (nodeW + gapX);
+    const y = nodeY;
     return { ...node, x, y };
   });
 
   function getNodeStyle(node: MemoryNode) {
-    let border = 'var(--node-idle-border)';
-    let bg = 'var(--node-idle-bg)';
-    let text = 'var(--node-idle-text)';
+    let border = 'var(--border-hairline)';
+    let bg = 'var(--bg-panel)';
+    let text = 'var(--text-primary)';
 
     if (node.state === 'sorted') {
-      border = '#00E676';
-      bg = 'rgba(0, 230, 118, 0.14)';
-      text = '#00E676';
+      border = '#10B981';
+      bg = 'rgba(16, 185, 129, 0.08)';
+      text = '#10B981';
     } else if (node.state === 'active' || node.state === 'swap') {
-      border = '#FF4F00';
-      bg = 'rgba(255, 79, 0, 0.18)';
-      text = '#FF4F00';
+      border = 'var(--accent-primary)';
+      bg = 'var(--accent-subtle)';
+      text = 'var(--accent-primary)';
     } else if (activePointers.curr === node.address) {
-      border = '#FF2E93';
-      bg = 'rgba(255, 46, 147, 0.15)';
-      text = '#FF2E93';
+      border = '#3B82F6';
+      bg = 'rgba(59, 130, 246, 0.1)';
+      text = '#3B82F6';
     } else if (activePointers.prev === node.address) {
-      border = '#FFB800';
-      bg = 'rgba(255, 184, 0, 0.14)';
-      text = '#FFB800';
+      border = '#F59E0B';
+      bg = 'rgba(245, 158, 11, 0.1)';
+      text = '#F59E0B';
     }
 
     return { border, bg, text };
   }
 
-  const maxX = Math.max(...positionedNodes.map((n) => n.x + nodeW)) + 70;
-  const maxY = Math.max(...positionedNodes.map((n) => n.y + nodeH)) + 90;
+  const maxX = Math.max(860, 70 + nodes.length * (nodeW + gapX) + 80);
+  const maxY = 280;
 
   return (
     <div className="w-full h-full flex items-center justify-center p-4 relative overflow-auto select-none">
       <div
         className="relative"
-        style={{ width: `${Math.max(840, maxX)}px`, height: `${Math.max(440, maxY)}px` }}
+        style={{ width: `${maxX}px`, height: `${maxY}px` }}
       >
         {/* SVG Pointer Wiring Bus */}
         <svg
@@ -87,64 +84,92 @@ export const LinkedListStage: React.FC = () => {
           <defs>
             <marker
               id="arrow-next"
-              markerWidth="8"
-              markerHeight="8"
+              markerWidth="7"
+              markerHeight="7"
               refX="6"
-              refY="4"
+              refY="3.5"
               orient="auto"
             >
-              <path d="M 0 1 L 7 4 L 0 7 z" fill="#FF4F00" />
+              <path d="M 0 0.5 L 6 3.5 L 0 6.5 z" fill="var(--accent-primary)" />
             </marker>
             <marker
               id="arrow-prev"
-              markerWidth="8"
-              markerHeight="8"
+              markerWidth="7"
+              markerHeight="7"
               refX="6"
-              refY="4"
+              refY="3.5"
               orient="auto"
             >
-              <path d="M 0 1 L 7 4 L 0 7 z" fill="#FFB800" />
+              <path d="M 0 0.5 L 6 3.5 L 0 6.5 z" fill="#F59E0B" />
             </marker>
             <marker
               id="arrow-circular"
-              markerWidth="8"
-              markerHeight="8"
+              markerWidth="7"
+              markerHeight="7"
               refX="6"
-              refY="4"
+              refY="3.5"
               orient="auto"
             >
-              <path d="M 0 1 L 7 4 L 0 7 z" fill="#FF4F00" />
+              <path d="M 0 0.5 L 6 3.5 L 0 6.5 z" fill="var(--accent-primary)" />
             </marker>
           </defs>
 
-          {/* Null Ground Symbol for Singly/Doubly ends */}
+          {/* Non-circular Ground/Null Symbols */}
           {!isCircular && positionedNodes.length > 0 && (
             <>
-              {/* Singly / Doubly Tail -> GND */}
+              {/* Singly / Doubly Tail -> null */}
               {(() => {
                 const tail = positionedNodes[positionedNodes.length - 1];
                 const endX = tail.x + nodeW;
-                const endY = tail.y + (isDoubly ? 24 : 32);
+                const endY = tail.y + (isDoubly ? 20 : 29);
                 return (
-                  <g key="tail-gnd">
-                    <line x1={endX} y1={endY} x2={endX + 26} y2={endY} stroke="#FF4F00" strokeWidth="2" markerEnd="url(#arrow-next)" />
-                    <text x={endX + 32} y={endY + 3} fill="var(--text-muted)" fontSize="9" fontFamily="monospace" fontWeight="bold">
-                      NULL/GND
+                  <g key="tail-null">
+                    <line
+                      x1={endX}
+                      y1={endY}
+                      x2={endX + 24}
+                      y2={endY}
+                      stroke="var(--accent-primary)"
+                      strokeWidth="1.5"
+                      markerEnd="url(#arrow-next)"
+                    />
+                    <text
+                      x={endX + 30}
+                      y={endY + 3.5}
+                      fill="var(--text-muted)"
+                      fontSize="10"
+                      fontFamily="monospace"
+                    >
+                      null
                     </text>
                   </g>
                 );
               })()}
 
-              {/* Doubly Head.prev -> GND */}
+              {/* Doubly Head.prev -> null */}
               {isDoubly && (() => {
                 const head = positionedNodes[0];
                 const startX = head.x;
-                const startY = head.y + 42;
+                const startY = head.y + 38;
                 return (
-                  <g key="head-prev-gnd">
-                    <line x1={startX - 26} y1={startY} x2={startX} y2={startY} stroke="#FFB800" strokeWidth="2" markerEnd="url(#arrow-prev)" />
-                    <text x={startX - 72} y={startY + 3} fill="var(--text-muted)" fontSize="9" fontFamily="monospace" fontWeight="bold">
-                      NULL/GND
+                  <g key="head-prev-null">
+                    <line
+                      x1={startX - 24}
+                      y1={startY}
+                      x2={startX}
+                      y2={startY}
+                      stroke="#F59E0B"
+                      strokeWidth="1.5"
+                      markerEnd="url(#arrow-prev)"
+                    />
+                    <text
+                      x={startX - 52}
+                      y={startY + 3.5}
+                      fill="var(--text-muted)"
+                      fontSize="10"
+                      fontFamily="monospace"
+                    >
+                      null
                     </text>
                   </g>
                 );
@@ -157,180 +182,131 @@ export const LinkedListStage: React.FC = () => {
             const ny = node.y;
             const paths = [];
 
-            // 1. Next pointer edge between adjacent nodes
+            // 1. Next and Prev pointers between adjacent nodes
             if (idx < positionedNodes.length - 1) {
               const nextNode = positionedNodes[idx + 1];
               const nnx = nextNode.x;
-              const nny = nextNode.y;
 
-              if (Math.abs(ny - nny) < 10) {
-                // Same row: direct horizontal arrow
-                const nextY = isDoubly ? ny + 24 : ny + 32;
+              // Direct horizontal arrow
+              const nextY = isDoubly ? ny + 20 : ny + 29;
+              paths.push(
+                <path
+                  key={`next-${node.id}`}
+                  d={`M ${nx + nodeW} ${nextY} L ${nnx - 2} ${nextY}`}
+                  stroke="var(--accent-primary)"
+                  strokeWidth="1.5"
+                  markerEnd="url(#arrow-next)"
+                />
+              );
+
+              if (isDoubly) {
+                const prevY = ny + 38;
                 paths.push(
                   <path
-                    key={`next-${node.id}`}
-                    d={`M ${nx + nodeW} ${nextY} L ${nnx - 2} ${nextY}`}
-                    stroke="#FF4F00"
-                    strokeWidth="2"
-                    markerEnd="url(#arrow-next)"
+                    key={`prev-${node.id}`}
+                    d={`M ${nnx} ${prevY} L ${nx + nodeW + 2} ${prevY}`}
+                    stroke="#F59E0B"
+                    strokeWidth="1.5"
+                    markerEnd="url(#arrow-prev)"
                   />
                 );
-
-                // For Doubly: Bottom *PREV arrow pointing left
-                if (isDoubly) {
-                  const prevY = ny + 44;
-                  paths.push(
-                    <path
-                      key={`prev-${node.id}`}
-                      d={`M ${nnx} ${prevY} L ${nx + nodeW + 2} ${prevY}`}
-                      stroke="#FFB800"
-                      strokeWidth="2"
-                      markerEnd="url(#arrow-prev)"
-                    />
-                  );
-                }
-              } else {
-                // Row wrap
-                const gutterY = ny + nodeH + 36;
-                const pathNext = `M ${nx + nodeW} ${ny + 24} ` +
-                  `L ${nx + nodeW + 18} ${ny + 24} ` +
-                  `L ${nx + nodeW + 18} ${gutterY} ` +
-                  `L 24 ${gutterY} ` +
-                  `L 24 ${nny + 24} ` +
-                  `L ${nnx - 2} ${nny + 24}`;
-
-                paths.push(
-                  <path
-                    key={`wrap-next-${node.id}`}
-                    d={pathNext}
-                    fill="none"
-                    stroke="#FF4F00"
-                    strokeWidth="2"
-                    strokeDasharray="4 2"
-                    markerEnd="url(#arrow-next)"
-                  />
-                );
-
-                if (isDoubly) {
-                  const gutterPrevY = ny + nodeH + 42;
-                  const pathPrev = `M ${nnx} ${nny + 44} ` +
-                    `L 18 ${nny + 44} ` +
-                    `L 18 ${gutterPrevY} ` +
-                    `L ${nx + nodeW + 24} ${gutterPrevY} ` +
-                    `L ${nx + nodeW + 24} ${ny + 44} ` +
-                    `L ${nx + nodeW + 2} ${ny + 44}`;
-
-                  paths.push(
-                    <path
-                      key={`wrap-prev-${node.id}`}
-                      d={pathPrev}
-                      fill="none"
-                      stroke="#FFB800"
-                      strokeWidth="2"
-                      strokeDasharray="4 2"
-                      markerEnd="url(#arrow-prev)"
-                    />
-                  );
-                }
               }
             }
 
-            // 2. Circular Singly: Return Bus (Last node *NEXT -> First node)
+            // 2. Circular Singly: Return Bus (tail.next -> head) cleanly below all nodes
             if (listType === 'circularSingly' && idx === positionedNodes.length - 1 && positionedNodes.length > 0) {
               const head = positionedNodes[0];
               const hx = head.x;
-              const hy = head.y;
-              const busY = maxY - 24;
+              const bottomBusY = nodeY + nodeH + 44;
 
-              const loopPath = `M ${nx + nodeW - 20} ${ny + nodeH} ` +
-                `L ${nx + nodeW - 20} ${busY} ` +
-                `L ${hx + 24} ${busY} ` +
-                `L ${hx + 24} ${hy + nodeH + 2}`;
+              const loopPath = `M ${nx + nodeW / 2} ${ny + nodeH} ` +
+                `L ${nx + nodeW / 2} ${bottomBusY} ` +
+                `L ${hx + nodeW / 2} ${bottomBusY} ` +
+                `L ${hx + nodeW / 2} ${ny + nodeH + 6}`;
 
               paths.push(
                 <g key="circular-singly-bus">
                   <path
                     d={loopPath}
                     fill="none"
-                    stroke="#FF4F00"
-                    strokeWidth="2"
-                    strokeDasharray="5 3"
+                    stroke="var(--accent-primary)"
+                    strokeWidth="1.5"
+                    strokeDasharray="4 3"
                     markerEnd="url(#arrow-circular)"
                   />
                   <text
-                    x={nx / 2 + 30}
-                    y={busY - 6}
-                    fill="#FF4F00"
-                    fontSize="9"
+                    x={(nx + hx) / 2}
+                    y={bottomBusY + 14}
+                    textAnchor="middle"
+                    fill="var(--accent-primary)"
+                    fontSize="10"
                     fontFamily="monospace"
-                    fontWeight="bold"
                   >
-                    RETURN BUS: LAST.NEXT ➔ 0x4F10 [HEAD]
+                    tail.next → head
                   </text>
                 </g>
               );
             }
 
-            // 3. Circular Doubly: Dual Wrap-around Return Buses
+            // 3. Circular Doubly: Return Buses (cleanly above and below all nodes)
             if (listType === 'circularDoubly' && idx === positionedNodes.length - 1 && positionedNodes.length > 1) {
               const head = positionedNodes[0];
               const hx = head.x;
-              const hy = head.y;
-              const bottomBusY = maxY - 24;
-              const topBusY = 16;
+              const bottomBusY = nodeY + nodeH + 44;
+              const topBusY = nodeY - 44;
 
-              // Bottom bus: Last.next -> Head (Orange)
-              const bottomLoop = `M ${nx + nodeW - 25} ${ny + nodeH} ` +
-                `L ${nx + nodeW - 25} ${bottomBusY} ` +
-                `L ${hx + 30} ${bottomBusY} ` +
-                `L ${hx + 30} ${hy + nodeH + 2}`;
+              // Bottom bus: tail.next -> head
+              const bottomLoop = `M ${nx + nodeW - 20} ${ny + nodeH} ` +
+                `L ${nx + nodeW - 20} ${bottomBusY} ` +
+                `L ${hx + 24} ${bottomBusY} ` +
+                `L ${hx + 24} ${ny + nodeH + 6}`;
 
-              // Top bus: Head.prev -> Last (Amber)
-              const topLoop = `M ${hx + 15} ${hy} ` +
-                `L ${hx + 15} ${topBusY} ` +
-                `L ${nx + nodeW - 15} ${topBusY} ` +
-                `L ${nx + nodeW - 15} ${ny - 2}`;
+              // Top bus: head.prev -> tail
+              const topLoop = `M ${hx + 24} ${ny} ` +
+                `L ${hx + 24} ${topBusY} ` +
+                `L ${nx + nodeW - 20} ${topBusY} ` +
+                `L ${nx + nodeW - 20} ${ny - 6}`;
 
               paths.push(
                 <g key="circular-doubly-buses">
-                  {/* Next wrap (Orange) */}
+                  {/* Next wrap (Bottom) */}
                   <path
                     d={bottomLoop}
                     fill="none"
-                    stroke="#FF4F00"
-                    strokeWidth="2"
-                    strokeDasharray="5 3"
+                    stroke="var(--accent-primary)"
+                    strokeWidth="1.5"
+                    strokeDasharray="4 3"
                     markerEnd="url(#arrow-next)"
                   />
                   <text
-                    x={nx / 2 + 20}
-                    y={bottomBusY - 6}
-                    fill="#FF4F00"
-                    fontSize="9"
+                    x={(nx + hx) / 2}
+                    y={bottomBusY + 14}
+                    textAnchor="middle"
+                    fill="var(--accent-primary)"
+                    fontSize="10"
                     fontFamily="monospace"
-                    fontWeight="bold"
                   >
-                    RING BUS: LAST.NEXT ➔ 0x4F10 [HEAD]
+                    tail.next → head
                   </text>
 
-                  {/* Prev wrap (Amber) */}
+                  {/* Prev wrap (Top) */}
                   <path
                     d={topLoop}
                     fill="none"
-                    stroke="#FFB800"
-                    strokeWidth="2"
-                    strokeDasharray="5 3"
+                    stroke="#F59E0B"
+                    strokeWidth="1.5"
+                    strokeDasharray="4 3"
                     markerEnd="url(#arrow-prev)"
                   />
                   <text
-                    x={nx / 2 + 20}
-                    y={topBusY + 12}
-                    fill="#FFB800"
-                    fontSize="9"
+                    x={(nx + hx) / 2}
+                    y={topBusY - 6}
+                    textAnchor="middle"
+                    fill="#F59E0B"
+                    fontSize="10"
                     fontFamily="monospace"
-                    fontWeight="bold"
                   >
-                    RING BUS: HEAD.PREV ➔ {node.address} [TAIL]
+                    head.prev → tail
                   </text>
                 </g>
               );
@@ -353,7 +329,7 @@ export const LinkedListStage: React.FC = () => {
             <motion.div
               key={node.id}
               layoutId={node.id}
-              className="absolute flex flex-col font-mono"
+              className="absolute flex flex-col font-sans"
               style={{
                 left: `${node.x}px`,
                 top: `${node.y}px`,
@@ -361,87 +337,84 @@ export const LinkedListStage: React.FC = () => {
                 height: `${nodeH}px`,
               }}
             >
-              {/* Pointer Badges on Top */}
-              <div className="absolute -top-5 left-0 right-0 flex items-center justify-between text-[8px] font-bold pointer-events-none">
-                {isPrev && <span className="bg-[#FFB800] text-[var(--text-on-accent)] px-1 py-0.2">PREV</span>}
-                {isCurr && <span className="bg-[#FF2E93] text-[var(--text-on-accent)] px-1 py-0.2">CURR</span>}
-                {isNext && <span className="bg-[#D4FF00] text-[#141413] px-1 py-0.2">NEXT</span>}
+              {/* Active Pointer Indicators Floating Above Node */}
+              <div className="absolute -top-5 left-0 right-0 flex items-center justify-center gap-1 text-[9px] font-mono font-medium pointer-events-none">
+                {isPrev && <span className="bg-amber-500 text-white px-1.5 py-0.2 rounded-xs">prev</span>}
+                {isCurr && <span className="bg-blue-500 text-white px-1.5 py-0.2 rounded-xs">curr</span>}
+                {isNext && <span className="bg-emerald-500 text-white px-1.5 py-0.2 rounded-xs">next</span>}
               </div>
 
-              {/* Node Header Bar: Address + Indicator Badge */}
-              <div className="flex items-center justify-between px-2 py-0.5 bg-[var(--node-header-bg)] border-t border-x border-[var(--border-hairline)] text-[9px] text-[var(--node-subtext)]">
-                <span className="font-semibold text-[var(--node-idle-text)]">ADDR: {node.address}</span>
-                {listType === 'circularDoubly' && isHead && (
-                  <span className="text-[8px] font-bold text-[#FF4F00] bg-[#FF4F00]/10 px-1 border border-[#FF4F00]/30">
-                    [HEAD ⇄ TAIL RING]
+              {/* Node Card Shell */}
+              <div
+                className="flex flex-col border rounded-md shadow-xs overflow-hidden h-full transition-colors"
+                style={{ backgroundColor: style.bg, borderColor: style.border }}
+              >
+                {/* Header Bar */}
+                <div className="flex items-center justify-between px-2 py-0.5 bg-[var(--bg-elevated)] border-b border-[var(--border-hairline)] text-[10px] text-[var(--text-secondary)]">
+                  <span className="font-mono text-[9px] text-[var(--text-muted)]">
+                    [{index}]
                   </span>
-                )}
-                {listType !== 'circularDoubly' && isHead && (
-                  <span className="text-[8px] font-bold text-[#00E676] bg-[#00E676]/10 px-1 border border-[#00E676]/30">
-                    START
-                  </span>
-                )}
-                {isTail && (
-                  <span className="text-[8px] font-bold text-[#FF4F00] bg-[#FF4F00]/10 px-1 border border-[#FF4F00]/30">
-                    LAST
-                  </span>
+                  <div className="flex items-center gap-1">
+                    {isHead && (
+                      <span className="text-[9px] font-medium text-blue-600 dark:text-blue-400 bg-blue-500/10 px-1 rounded">
+                        head
+                      </span>
+                    )}
+                    {isTail && (
+                      <span className="text-[9px] font-medium text-[var(--accent-primary)] bg-[var(--accent-subtle)] px-1 rounded">
+                        tail
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Compartment Body */}
+                {isDoubly ? (
+                  /* Doubly: 3 Compartments [ prev | val | next ] */
+                  <div className="flex items-stretch flex-1">
+                    {/* Left: prev */}
+                    <div className="w-[54px] border-r border-[var(--border-hairline)] flex flex-col items-center justify-center px-1 bg-[var(--bg-panel)]/40 text-center">
+                      <span className="text-[8px] text-[var(--text-muted)]">prev</span>
+                      <span className="text-[9px] font-mono text-amber-600 dark:text-amber-400 truncate max-w-full">
+                        {node.prevAddress ?? 'null'}
+                      </span>
+                    </div>
+
+                    {/* Center: val */}
+                    <div className="flex-1 flex flex-col items-center justify-center px-1">
+                      <span className="text-sm font-semibold tracking-tight" style={{ color: style.text }}>
+                        {node.value}
+                      </span>
+                    </div>
+
+                    {/* Right: next */}
+                    <div className="w-[54px] border-l border-[var(--border-hairline)] flex flex-col items-center justify-center px-1 bg-[var(--bg-panel)]/40 text-center">
+                      <span className="text-[8px] text-[var(--text-muted)]">next</span>
+                      <span className="text-[9px] font-mono text-[var(--accent-primary)] truncate max-w-full">
+                        {node.nextAddress ?? 'null'}
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  /* Singly: 2 Compartments [ val | next ] */
+                  <div className="flex items-stretch flex-1">
+                    {/* Left: val */}
+                    <div className="flex-1 flex flex-col items-center justify-center px-2">
+                      <span className="text-sm font-semibold tracking-tight" style={{ color: style.text }}>
+                        {node.value}
+                      </span>
+                    </div>
+
+                    {/* Right: next */}
+                    <div className="w-[54px] border-l border-[var(--border-hairline)] flex flex-col items-center justify-center px-1 bg-[var(--bg-panel)]/40 text-center">
+                      <span className="text-[8px] text-[var(--text-muted)]">next</span>
+                      <span className="text-[9px] font-mono text-[var(--accent-primary)] truncate max-w-full">
+                        {node.nextAddress ?? 'null'}
+                      </span>
+                    </div>
+                  </div>
                 )}
               </div>
-
-              {/* Compartment Body */}
-              {isDoubly ? (
-                /* Doubly & Circular Doubly: 3 Compartments [ *PREV | DATA | *NEXT ] */
-                <div
-                  className="flex items-stretch border h-full shadow-md"
-                  style={{ backgroundColor: style.bg, borderColor: style.border }}
-                >
-                  {/* Left Compartment: *PREV */}
-                  <div className="w-[72px] border-r border-[var(--border-hairline)] flex flex-col items-center justify-center px-1 bg-[var(--node-header-bg)] text-center">
-                    <span className="text-[7.5px] uppercase font-bold text-[#FFB800]">*PREV</span>
-                    <span className="text-[8.5px] font-mono text-[#D97706] truncate max-w-full font-semibold">
-                      {node.prevAddress ?? 'NULL'}
-                    </span>
-                  </div>
-
-                  {/* Center Compartment: DATA */}
-                  <div className="flex-1 flex flex-col items-center justify-center px-1">
-                    <span className="text-[7.5px] uppercase text-[var(--node-subtext)] font-semibold">DATA</span>
-                    <span className="text-base font-bold tracking-tight" style={{ color: style.text }}>
-                      {node.value}
-                    </span>
-                  </div>
-
-                  {/* Right Compartment: *NEXT */}
-                  <div className="w-[72px] border-l border-[var(--border-hairline)] flex flex-col items-center justify-center px-1 bg-[var(--node-header-bg)] text-center">
-                    <span className="text-[7.5px] uppercase font-bold text-[#FF4F00]">*NEXT</span>
-                    <span className="text-[8.5px] font-mono text-[#FF4F00] truncate max-w-full font-semibold">
-                      {node.nextAddress ?? 'NULL'}
-                    </span>
-                  </div>
-                </div>
-              ) : (
-                /* Singly & Circular Singly: 2 Compartments [ DATA | *NEXT ] */
-                <div
-                  className="flex items-stretch border h-full shadow-md"
-                  style={{ backgroundColor: style.bg, borderColor: style.border }}
-                >
-                  {/* Left Compartment: DATA */}
-                  <div className="flex-1 flex flex-col items-center justify-center px-2">
-                    <span className="text-[7.5px] uppercase text-[var(--node-subtext)] font-semibold">DATA</span>
-                    <span className="text-base font-bold tracking-tight" style={{ color: style.text }}>
-                      {node.value}
-                    </span>
-                  </div>
-
-                  {/* Right Compartment: *NEXT */}
-                  <div className="w-[76px] border-l border-[var(--border-hairline)] flex flex-col items-center justify-center px-1 bg-[var(--node-header-bg)] text-center">
-                    <span className="text-[7.5px] uppercase font-bold text-[#FF4F00]">*NEXT</span>
-                    <span className="text-[8.5px] font-mono text-[#FF4F00] truncate max-w-full font-semibold">
-                      {node.nextAddress ?? 'NULL'}
-                    </span>
-                  </div>
-                </div>
-              )}
             </motion.div>
           );
         })}

@@ -84,9 +84,43 @@ export function executeNetworkMutation(
   );
 
   if (operation.type === 'insertVertex') {
-    const label = operation.label ?? String.fromCharCode(65 + vertices.length);
+    const existingIds = new Set(vertices.map((v) => v.id));
+    const existingLabels = new Set(vertices.map((v) => v.label));
+
+    // Choose first non-colliding numeric ID v0, v1, v2...
+    let nextIdNum = 0;
+    while (existingIds.has(`v${nextIdNum}`)) {
+      nextIdNum++;
+    }
+    const newId = `v${nextIdNum}`;
+
+    // Choose first non-colliding alphabetical label A-Z, then A1, B1...
+    let label = operation.label;
+    if (!label) {
+      for (let i = 0; i < 26; i++) {
+        const candidate = String.fromCharCode(65 + i);
+        if (!existingLabels.has(candidate)) {
+          label = candidate;
+          break;
+        }
+      }
+      if (!label) {
+        let suffix = 1;
+        while (!label) {
+          for (let i = 0; i < 26; i++) {
+            const candidate = `${String.fromCharCode(65 + i)}${suffix}`;
+            if (!existingLabels.has(candidate)) {
+              label = candidate;
+              break;
+            }
+          }
+          suffix++;
+        }
+      }
+    }
+
     const newV: NetworkVertex = {
-      id: `v${vertices.length}`,
+      id: newId,
       label,
       x: operation.x ?? 360,
       y: operation.y ?? 300,
@@ -166,11 +200,11 @@ export function executeNetworkMutation(
       return frames;
     }
 
-    if (!Number.isInteger(w) || w < 1 || w > 99) {
+    if (typeof w !== 'number' || Number.isNaN(w) || !Number.isFinite(w) || w < 0 || w > 999) {
       emitFrame(
         vertices,
         edges,
-        `EDGE INSERTION REJECTED: Weight ${w} is invalid. Expected integer between 1 and 99.`,
+        `EDGE INSERTION REJECTED: Weight ${w} is invalid. Expected non-negative number up to 999.`,
         null,
         null,
         { cpp: 2, python: 2, pseudo: 2 }
@@ -686,14 +720,41 @@ export function generatePrimMSTFrames(
     );
   }
 
-  emitFrame(
-    `Prim's Minimum Spanning Tree complete! Total edges in tree: ${mstEdgeIds.size}. Minimal total weight achieved.`,
-    null,
-    null,
-    { cpp: 12, python: 11, pseudo: 6 }
-  );
+  const totalWeight = edges
+    .filter((e) => mstEdgeIds.has(e.id))
+    .reduce((sum, e) => sum + e.weight, 0);
+
+  if (vertices.length > 0 && inMST.size < vertices.length) {
+    emitFrame(
+      `Graph is disconnected: Spanning tree could not reach all vertices (${inMST.size} of ${vertices.length} vertices connected, partial forest weight: ${totalWeight}).`,
+      null,
+      null,
+      { cpp: 12, python: 11, pseudo: 6 }
+    );
+  } else {
+    emitFrame(
+      `Prim's Minimum Spanning Tree complete! Total edges in tree: ${mstEdgeIds.size}, total weight: ${totalWeight}. Minimal total weight achieved.`,
+      null,
+      null,
+      { cpp: 12, python: 11, pseudo: 6 }
+    );
+  }
 
   return frames;
+}
+
+export function generateBellmanFordFrames(
+  liveGraphState?: { vertices: NetworkVertex[]; edges: NetworkEdge[] },
+  startVertexId: string = 'v0'
+): StepFrame<GraphSnapshot>[] {
+  return generateNetworkDijkstraFrames(liveGraphState, startVertexId);
+}
+
+export function generateTopologicalSortFrames(
+  liveGraphState?: { vertices: NetworkVertex[]; edges: NetworkEdge[] },
+  startVertexId: string = 'v0'
+): StepFrame<GraphSnapshot>[] {
+  return generateNetworkBfsFrames(liveGraphState, startVertexId);
 }
 
 export function generateNetworkGraphFrames(

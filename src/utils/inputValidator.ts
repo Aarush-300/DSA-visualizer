@@ -108,7 +108,7 @@ export function parseIntegerList(
     allowEmpty = minCount === 0;
   }
 
-  const trimmed = input.trim();
+  const trimmed = (input ?? '').trim();
   if (!trimmed) {
     if (allowEmpty || minCount === 0) {
       return {

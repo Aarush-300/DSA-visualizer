@@ -24,6 +24,8 @@ import { createInitialGrid, generatePathfindingFrames } from '../src/engines/gra
 import {
   generateNetworkGraphFrames,
   generatePrimMSTFrames,
+  generateNetworkDijkstraFrames,
+  generateNetworkBfsFrames,
   executeNetworkMutation,
   getSampleNetwork,
 } from '../src/engines/graphs/networkGraph';
@@ -781,13 +783,13 @@ describe('Algorithm Generator Engine Suite', () => {
 
       const dijkstraFrames = generatePathfindingFrames(grid, 'dijkstra', start, target);
       const lastDijkstra = dijkstraFrames[dijkstraFrames.length - 1];
-      expect(lastDijkstra.narration).toContain('Optimal shortest path found');
+      expect(lastDijkstra.narration).toContain('Minimum-cost path found');
       expect(lastDijkstra.narration).toMatch(/cost[:=]\s*\d+/i);
 
       const dfsFrames = generatePathfindingFrames(grid, 'dfs', start, target);
       const lastDfs = dfsFrames[dfsFrames.length - 1];
-      expect(lastDfs.narration).toContain('Target reached via DFS traversal');
-      expect(lastDfs.narration).toContain('DFS does not guarantee a shortest path');
+      expect(lastDfs.narration).toContain('Target reached via Depth-First Search');
+      expect(lastDfs.narration).toContain('does not guarantee minimum steps');
     });
 
     it('5. Network graph mutation validates vertex existence, forbids self-loops, and prevents duplicate edges', () => {
@@ -832,4 +834,139 @@ describe('Algorithm Generator Engine Suite', () => {
       expect(updatedEdge?.weight).toBe(99);
     });
   });
+
+  // ---------------- PART 8: PHASE-3 AUDIT REGRESSION SUITE ----------------
+  describe('PART 8: PHASE-3 AUDIT REGRESSION SUITE', () => {
+    it('1. Network BFS performs level-order traversal, does NOT run Prim', () => {
+      const bfsFrames = generateNetworkBfsFrames();
+      expect(bfsFrames.length).toBeGreaterThan(0);
+      const lastFrame = bfsFrames[bfsFrames.length - 1];
+      expect(lastFrame.snapshot.vertexDistances).toBeDefined();
+      expect(lastFrame.narration).toContain('BFS traversal complete');
+      expect(lastFrame.narration).not.toContain('Prim');
+      expect(lastFrame.operation).toBe('network_bfs');
+      expect(lastFrame.callStack[0]).toContain('bfs');
+    });
+
+    it('2. Network Dijkstra chooses A->B->C (cost 2) over A->C (cost 10)', () => {
+      const testNet = {
+        vertices: [
+          { id: 'v0', label: 'A', x: 100, y: 100, state: 'idle' as const },
+          { id: 'v1', label: 'B', x: 200, y: 50, state: 'idle' as const },
+          { id: 'v2', label: 'C', x: 300, y: 100, state: 'idle' as const },
+        ],
+        edges: [
+          { id: 'e-0-1', source: 'v0', target: 'v1', weight: 1, state: 'idle' as const },
+          { id: 'e-1-2', source: 'v1', target: 'v2', weight: 1, state: 'idle' as const },
+          { id: 'e-0-2', source: 'v0', target: 'v2', weight: 10, state: 'idle' as const },
+        ],
+      };
+      const dijkstraFrames = generateNetworkDijkstraFrames(testNet, 'v0');
+      const lastFrame = dijkstraFrames[dijkstraFrames.length - 1];
+      expect(lastFrame.snapshot.vertexDistances!['v2']).toBe(2);
+    });
+
+    it('3. Disconnected Prim graph reports failure with explicit disconnected narration', () => {
+      const disconnectedNet = {
+        vertices: [
+          { id: 'v0', label: 'A', x: 100, y: 100, state: 'idle' as const },
+          { id: 'v1', label: 'B', x: 200, y: 100, state: 'idle' as const },
+          { id: 'v2', label: 'C', x: 300, y: 100, state: 'idle' as const },
+        ],
+        edges: [
+          { id: 'e-0-1', source: 'v0', target: 'v1', weight: 4, state: 'idle' as const },
+        ],
+      };
+      const primFrames = generatePrimMSTFrames(undefined, disconnectedNet);
+      const lastFrame = primFrames[primFrames.length - 1];
+      expect(lastFrame.narration).toContain('Graph is disconnected');
+      expect(lastFrame.snapshot.mstEdges?.length).toBe(1);
+    });
+
+    it('4. Delete middle vertex then insert new vertex -> all vertex IDs strictly unique', () => {
+      const base = getSampleNetwork();
+      const afterDelFrames = executeNetworkMutation({ type: 'deleteVertex', vertexId: 'v2' }, base);
+      const lastDel = afterDelFrames[afterDelFrames.length - 1];
+      const netAfterDel = {
+        vertices: lastDel.snapshot.vertices!,
+        edges: lastDel.snapshot.edges!,
+      };
+      expect(netAfterDel.vertices.some((v) => v.id === 'v2')).toBe(false);
+
+      const afterInsFrames = executeNetworkMutation({ type: 'insertVertex', label: 'NewNode' }, netAfterDel);
+      const lastIns = afterInsFrames[afterInsFrames.length - 1];
+      const finalVertices = lastIns.snapshot.vertices!;
+      const ids = finalVertices.map((v) => v.id);
+      const uniqueIds = new Set(ids);
+      expect(uniqueIds.size).toBe(ids.length);
+    });
+
+    it('5. Reject nonexistent edge endpoints and negative/non-finite weights without modifying edge list', () => {
+      const base = getSampleNetwork();
+      const origCount = base.edges.length;
+
+      // Nonexistent source
+      const f1 = executeNetworkMutation({ type: 'insertEdge', sourceId: 'v999', targetId: 'v1', weight: 5 }, base);
+      expect(f1[f1.length - 1].narration).toContain('REJECTED: Vertex not found');
+      expect(f1[f1.length - 1].snapshot.edges?.length).toBe(origCount);
+
+      // Nonexistent target
+      const f2 = executeNetworkMutation({ type: 'insertEdge', sourceId: 'v0', targetId: 'v999', weight: 5 }, base);
+      expect(f2[f2.length - 1].narration).toContain('REJECTED: Vertex not found');
+      expect(f2[f2.length - 1].snapshot.edges?.length).toBe(origCount);
+
+      // Self-loop
+      const f3 = executeNetworkMutation({ type: 'insertEdge', sourceId: 'v0', targetId: 'v0', weight: 5 }, base);
+      expect(f3[f3.length - 1].narration).toContain('REJECTED: Self-loops are not permitted');
+      expect(f3[f3.length - 1].snapshot.edges?.length).toBe(origCount);
+
+      // Negative weight
+      const f4 = executeNetworkMutation({ type: 'insertEdge', sourceId: 'v0', targetId: 'v1', weight: -3 }, base);
+      expect(f4[f4.length - 1].narration).toContain('EDGE INSERTION REJECTED');
+      expect(f4[f4.length - 1].narration).toContain('invalid');
+      expect(f4[f4.length - 1].snapshot.edges?.length).toBe(origCount);
+
+      // NaN weight
+      const f5 = executeNetworkMutation({ type: 'insertEdge', sourceId: 'v0', targetId: 'v1', weight: NaN }, base);
+      expect(f5[f5.length - 1].narration).toContain('EDGE INSERTION REJECTED');
+      expect(f5[f5.length - 1].narration).toContain('invalid');
+      expect(f5[f5.length - 1].snapshot.edges?.length).toBe(origCount);
+    });
+
+    it('6. Grid DFS narration does not contain "Shortest Path" or "Optimal"; weighted BFS mentions step-count minimization', () => {
+      const start = { row: 1, col: 1 };
+      const target = { row: 1, col: 6 };
+      const grid = createInitialGrid(8, 12, start, target);
+
+      // DFS check
+      const dfsFrames = generatePathfindingFrames(grid, 'dfs', start, target);
+      const lastDfs = dfsFrames[dfsFrames.length - 1];
+      expect(lastDfs.narration).not.toMatch(/shortest\s*path/i);
+      expect(lastDfs.narration).not.toMatch(/optimal/i);
+      expect(lastDfs.narration).toContain('does not guarantee minimum steps');
+
+      // Weighted BFS check
+      grid[1][3].weight = 5;
+      const bfsFrames = generatePathfindingFrames(grid, 'bfs', start, target);
+      const lastBfs = bfsFrames[bfsFrames.length - 1];
+      expect(lastBfs.narration).toContain('minimizes step count');
+    });
+
+    it('7. Every catalog algorithm produces distinct frames', () => {
+      const algoKeys = Object.keys(ALGORITHM_CATALOG);
+      expect(algoKeys.length).toBeGreaterThanOrEqual(25);
+
+      for (const algoKey of algoKeys) {
+        const meta = ALGORITHM_CATALOG[algoKey];
+        const defaultInput = meta.defaultInput ?? getDefaultInputForModule(meta.module);
+        const frames = compileEngineFrames(meta.module, algoKey, defaultInput, 42);
+
+        expect(frames.length).toBeGreaterThan(0);
+        expect(frames[0].frameIndex).toBe(0);
+        expect(frames[0].narration.length).toBeGreaterThan(0);
+        expect(frames[0].metrics).toBeDefined();
+      }
+    });
+  });
 });
+

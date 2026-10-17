@@ -22,7 +22,14 @@ import { generateMWayTreeFrames } from './trees/mWayTree';
 import { generateBTreeFrames } from './trees/bTree';
 import { generateBPlusTreeFrames } from './trees/bPlusTree';
 import { createInitialGrid, generatePathfindingFrames } from './graphs/pathfindingGrid';
-import { generateNetworkGraphFrames } from './graphs/networkGraph';
+import {
+  generateNetworkDijkstraFrames,
+  generateNetworkBfsFrames,
+  generatePrimMSTFrames,
+  generateBellmanFordFrames,
+  generateTopologicalSortFrames,
+  executeNetworkMutation,
+} from './graphs/networkGraph';
 
 export function getDefaultInputForModule(module: ActiveModuleId): string {
   switch (module) {
@@ -49,13 +56,28 @@ export function compileEngineFrames(
   // Graphs module handling
   if (module === 'graphs') {
     if (
-      algo === 'networkPrim' ||
-      algo === 'networkDijkstra' ||
-      algo === 'networkBfs' ||
-      algo === 'bellmanFord' ||
-      algo === 'topologicalSort'
+      operation &&
+      (operation.type === 'insertVertex' ||
+        operation.type === 'deleteVertex' ||
+        operation.type === 'insertEdge' ||
+        operation.type === 'deleteEdge')
     ) {
-      return generateNetworkGraphFrames(algo as any, operation);
+      return executeNetworkMutation(operation);
+    }
+    if (algo === 'networkBfs') {
+      return generateNetworkBfsFrames(undefined);
+    }
+    if (algo === 'networkDijkstra') {
+      return generateNetworkDijkstraFrames(undefined);
+    }
+    if (algo === 'networkPrim') {
+      return generatePrimMSTFrames(operation);
+    }
+    if (algo === 'bellmanFord') {
+      return generateBellmanFordFrames(undefined);
+    }
+    if (algo === 'topologicalSort') {
+      return generateTopologicalSortFrames(undefined);
     }
 
     const grid = createInitialGrid();

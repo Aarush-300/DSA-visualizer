@@ -63,37 +63,37 @@
   background-color: var(--bg-hover);
 }
 
-/* Mechanical Hardware Button */
+/* Clean Modern Button (Figma / Linear Aesthetic) */
 .btn-hardware-primary {
   background-color: var(--accent-signal);
   color: var(--accent-signal-text);
-  font-family: var(--font-display);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 2px 4px rgba(0, 0, 0, 0.4);
-  border: 1px solid #FF6622;
-  transition: all 0.1s ease;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
 }
 .btn-hardware-primary:hover {
   background-color: var(--accent-signal-hover);
 }
 .btn-hardware-primary:active {
   transform: translateY(1px);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
 }
 
 .btn-hardware-secondary {
-  background-color: var(--bg-elevated);
-  color: var(--text-secondary);
-  font-family: var(--font-mono);
-  font-size: 11px;
+  background-color: var(--bg-panel);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 6px;
   border: 1px solid var(--border-hairline);
-  transition: all 0.1s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  transition: all 0.15s ease;
 }
 .btn-hardware-secondary:hover {
   background-color: var(--bg-hover);
-  color: var(--text-primary);
   border-color: var(--border-strong);
 }
 .btn-hardware-secondary:active {
@@ -104,8 +104,8 @@
 .diagonal-hatch {
   background-image: repeating-linear-gradient(
     45deg,
-    rgba(212, 255, 0, 0.06),
-    rgba(212, 255, 0, 0.06) 6px,
+    rgba(14, 165, 233, 0.06),
+    rgba(14, 165, 233, 0.06) 6px,
     transparent 6px,
     transparent 12px
   );
@@ -118,10 +118,10 @@
   background-size: 20px 20px;
 }
 
-/* Laser Highlight Bar for Code Inspector */
+/* Subtle Active Line Indicator for Code Inspector */
 .laser-code-highlight {
-  background-color: rgba(255, 79, 0, 0.12);
-  border-left: 3px solid #FF4F00;
+  background-color: rgba(37, 99, 235, 0.08);
+  border-left: 2px solid var(--accent-primary);
 }
 
 /* Algorithmic Keyframe Animations */
