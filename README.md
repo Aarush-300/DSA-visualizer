@@ -1,13 +1,16 @@
 # ALGOFORGE // INDUSTRIAL HARDWARE DSA LAB
 
+[![Live Deployment](https://img.shields.io/badge/Live_Deployment-algoforge.workers.dev-FF4F00.svg?style=flat-square&logo=cloudflare)](https://algoforge.aarush-relhan3009.workers.dev/)
 [![TypeScript 5.8](https://img.shields.io/badge/TypeScript-5.8-blue.svg?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 [![React 19](https://img.shields.io/badge/React-19.0-61DAFB.svg?style=flat-square&logo=react)](https://react.dev/)
 [![Vite 6](https://img.shields.io/badge/Vite-6.4-646CFF.svg?style=flat-square&logo=vite)](https://vitejs.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-3.4-38B2AC.svg?style=flat-square&logo=tailwindcss)](https://tailwindcss.com/)
 [![Vitest](https://img.shields.io/badge/Vitest-3.2-FCC72B.svg?style=flat-square&logo=vitest)](https://vitest.dev/)
-[![Cloudflare Pages](https://img.shields.io/badge/Deployment-Cloudflare_Pages-F38020.svg?style=flat-square&logo=cloudflare)](https://pages.cloudflare.com/)
+[![Cloudflare](https://img.shields.io/badge/Deployment-Cloudflare-F38020.svg?style=flat-square&logo=cloudflare)](https://algoforge.aarush-relhan3009.workers.dev/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
+> 🔗 **Live Demo:** [https://algoforge.aarush-relhan3009.workers.dev/](https://algoforge.aarush-relhan3009.workers.dev/)
+>
 > **ALGOFORGE** is a precision-engineered, cycle-accurate Data Structures and Algorithms visual laboratory. Built with an industrial hardware aesthetic inspired by **Teenage Engineering**, **Linear**, and **Vercel Geist**, ALGOFORGE delivers frame-exact algorithm execution, deterministic register telemetry, polyglot code synchronization across 6 languages, and interactive in-memory structural mutations.
 
 ---
@@ -149,18 +152,24 @@ npm run build
 
 ---
 
-## ☁️ Cloudflare Pages Deployment
+## ☁️ Cloudflare Deployment
 
-ALGOFORGE is optimized for zero-configuration deployment on **Cloudflare Pages**:
+ALGOFORGE is deployed live at:
+👉 **[https://algoforge.aarush-relhan3009.workers.dev/](https://algoforge.aarush-relhan3009.workers.dev/)**
 
-1. Connect your GitHub repository to Cloudflare Pages.
-2. Configure build settings:
+The application is optimized for high-performance deployment on **Cloudflare Workers Static Assets & Pages**:
+
+1. Connect your repository to Cloudflare Pages or deploy via Wrangler:
+   ```bash
+   npx wrangler deploy
+   ```
+2. Build configuration:
    - **Framework Preset**: `Vite`
    - **Build Command**: `npm run build`
    - **Build Output Directory**: `dist`
-   - **Environment Variable**: `NODE_VERSION = 22`
+   - **Runtime**: Node.js 22 LTS (matching `.nvmrc`)
 3. Preconfigured deployment assets:
-   - `public/_redirects`: Provides SPA routing rewrite rules (`/* /index.html 200`).
+   - `wrangler.jsonc`: Configures Cloudflare Workers static asset routing and SPA fallbacks.
    - `public/_headers`: Enforces strict security headers (`X-Frame-Options`, `nosniff`, `strict-origin`) and sets 1-year immutable caching on `/assets/*`.
    - `.nvmrc`: Locks deployment runtime to Node.js 22 LTS.
 
@@ -173,7 +182,6 @@ DSA-visualizer/
 ├── .gravitas/                     # Verification ledger and specifications
 ├── public/
 │   ├── _headers                   # Cloudflare security & caching rules
-│   ├── _redirects                 # Cloudflare SPA rewrite rules
 │   ├── favicon.svg                # 3-vertex schematic tree logo
 │   └── og-banner.svg              # Social preview card
 ├── src/
